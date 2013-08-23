@@ -14,13 +14,22 @@ import org.apache.maven.cli.transfer.ConsoleMavenTransferListener;
 import org.apache.maven.cli.transfer.QuietMavenTransferListener;
 import org.apache.maven.cli.transfer.Slf4jMavenTransferListener;
 import org.apache.maven.eventspy.internal.EventSpyDispatcher;
+import org.apache.maven.execution.DefaultMavenExecutionResult;
 import org.apache.maven.execution.ExecutionListener;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequestPopulator;
+import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.internal.LifecycleWeaveBuilder;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.building.ModelProblem;
+import org.apache.maven.model.building.ModelProblemUtils;
 import org.apache.maven.model.building.ModelProcessor;
+import org.apache.maven.model.building.ModelSource;
+import org.apache.maven.model.building.UrlModelSource;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingResult;
 import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
@@ -52,12 +61,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class BringPlexusOnline_Test {
+
+    private final Logger logger = LoggerFactory.getLogger(BringPlexusOnline_Test.class);
     private final Fixture fixture = new Fixture();
 
     private static final String EXT_CLASS_PATH = "maven.ext.class.path";
@@ -77,9 +90,12 @@ public class BringPlexusOnline_Test {
     private SettingsBuilder settingsBuilder;
     private DefaultSecDispatcher dispatcher;
     private ModelProcessor modelProcessor;
+    private MavenSession session;
+    private ProjectBuilder projectBuilder;
 
     @Test
     public void bringPlexusOnline() throws Exception {
+        System.setProperty("user.dir", fixture.multiModule.getParent());
         MavenCli.CliRequest cliRequest = new MavenCli.CliRequest(new String[0], null);
         initialize(cliRequest);
         cli(cliRequest);
@@ -94,10 +110,84 @@ public class BringPlexusOnline_Test {
         ProjectBuildingRequest projectBuildingRequest = cliRequest.request.getProjectBuildingRequest();
         projectBuildingRequest.setRepositorySession(repositorySession);
 
-        ProjectBuilder projectBuilder = container.lookup(ProjectBuilder.class);
-        List<ProjectBuildingResult> results = projectBuilder.build(Collections.singletonList(fixture.multiModule), true, projectBuildingRequest);
-        MavenProject project = results.get(0).getProject();
+        projectBuilder = container.lookup(ProjectBuilder.class);
+        //List<ProjectBuildingResult> projectBuildingResults= projectBuilder.build(Collections.singletonList(fixture.multiModule), true, projectBuildingRequest);
 
+
+        List<MavenProject> projects = getProjectsForMavenReactor(cliRequest.request);
+
+        MavenExecutionResult result = new DefaultMavenExecutionResult();
+        session = new MavenSession(container, repositorySession, cliRequest.request, result);
+        session.setProjects(projects);
+
+        for (MavenProject project : projects) {
+            if ("artifact".equals(project.getArtifactId())) {
+                System.out.println(project);
+                List<Dependency> dependencies = project.getDependencies();
+                for (Dependency dependency : dependencies) {
+                    if("junit".equals(dependency.getArtifactId())){
+                        assertThat(dependency.getScope(), is("test"));
+                    }
+                }
+            }
+        }
+    }
+
+    private void collectProjects(List<MavenProject> projects, List<File> files, MavenExecutionRequest request)
+            throws ProjectBuildingException {
+        ProjectBuildingRequest projectBuildingRequest = request.getProjectBuildingRequest();
+
+        List<ProjectBuildingResult> results = projectBuilder.build(files, request.isRecursive(), projectBuildingRequest);
+
+        boolean problems = false;
+
+        for (ProjectBuildingResult result : results) {
+            projects.add(result.getProject());
+
+            if (!result.getProblems().isEmpty() && logger.isWarnEnabled()) {
+                logger.warn("");
+                logger.warn("Some problems were encountered while building the effective model for "
+                        + result.getProject().getId());
+
+                for (ModelProblem problem : result.getProblems()) {
+                    String location = ModelProblemUtils.formatLocation(problem, result.getProjectId());
+                    logger.warn(problem.getMessage() + (StringUtils.isNotEmpty(location) ? " @ " + location : ""));
+                }
+
+                problems = true;
+            }
+        }
+
+        if (problems) {
+            logger.warn("");
+            logger.warn("It is highly recommended to fix these problems"
+                    + " because they threaten the stability of your build.");
+            logger.warn("");
+            logger.warn("For this reason, future Maven versions might no"
+                    + " longer support building such malformed projects.");
+            logger.warn("");
+        }
+    }
+
+    private List<MavenProject> getProjectsForMavenReactor(MavenExecutionRequest request)
+            throws ProjectBuildingException {
+        List<MavenProject> projects = new ArrayList<MavenProject>();
+
+        // We have no POM file.
+        //
+        if (request.getPom() == null) {
+            ModelSource modelSource = new UrlModelSource(DefaultMaven.class.getResource("project/standalone.xml"));
+            MavenProject project =
+                    projectBuilder.build(modelSource, request.getProjectBuildingRequest()).getProject();
+            project.setExecutionRoot(true);
+            projects.add(project);
+            request.setProjectPresent(false);
+            return projects;
+        }
+
+        List<File> files = Arrays.asList(request.getPom().getAbsoluteFile());
+        collectProjects(projects, files, request);
+        return projects;
     }
 
     private MavenExecutionRequest populateRequest(MavenCli.CliRequest cliRequest) {
