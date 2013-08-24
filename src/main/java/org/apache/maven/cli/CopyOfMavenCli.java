@@ -203,13 +203,13 @@ public class CopyOfMavenCli
         try
         {
             initialize( cliRequest );
-            cli( cliRequest );
-            logging( cliRequest );
-            version( cliRequest );
-            properties( cliRequest );
+            cli(cliRequest);
+            logging(cliRequest);
+            version(cliRequest);
+            properties(cliRequest);
             localContainer = container( cliRequest );
             standInMaven.setContainer(localContainer);
-            commands( cliRequest );
+            commands(cliRequest);
             settings( cliRequest );
             populateRequest( cliRequest );
             encryption( cliRequest );

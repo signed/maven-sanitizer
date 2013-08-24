@@ -10,27 +10,19 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class BringPlexusOnline_Test {
+public class MavenFacade_Test {
 
     private final Fixture fixture = new Fixture();
+    private final MavenFacade mavenFacade = new MavenFacade();
 
     @Test
     public void bringPlexusOnline() throws Exception {
         String pathToDirectoryWithPom = fixture.multiModule.getParent();
-        List<MavenProject> projects = getMavenProjects(pathToDirectoryWithPom);
+        List<MavenProject> projects = mavenFacade.getMavenProjects(pathToDirectoryWithPom);
 
         MavenProject project = getProjectWith(projects, "artifact");
         Dependency dependency = getDependencyWith(project, "junit");
         assertThat(dependency.getScope(), is("test"));
-    }
-
-    private List<MavenProject> getMavenProjects(String pathToDirectoryWithPom) throws Exception {
-        MavenCli.CliRequest cliRequest = new MavenCli.CliRequest(new String[0], null);
-        cliRequest.workingDirectory = pathToDirectoryWithPom;
-
-        StandInMaven standInMaven = new StandInMaven();
-        new CopyOfMavenCli(standInMaven).doMain(cliRequest);
-        return standInMaven.getProjects();
     }
 
     private MavenProject getProjectWith(List<MavenProject> projects, String artifactId) {
