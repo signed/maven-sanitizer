@@ -95,8 +95,17 @@ public class BringPlexusOnline_Test {
 
     @Test
     public void bringPlexusOnline() throws Exception {
-        System.setProperty("user.dir", fixture.multiModule.getParent());
-        MavenCli.CliRequest cliRequest = new MavenCli.CliRequest(new String[0], null);
+        String pathToDirectoryWithPom = fixture.multiModule.getParent();
+        List<MavenProject> projects = getMavenProjects(pathToDirectoryWithPom);
+
+        MavenProject project = getProjectWith(projects, "artifact");
+        Dependency dependency = getDependencyWith(project, "junit");
+        assertThat(dependency.getScope(), is("test"));
+    }
+
+    private List<MavenProject> getMavenProjects(String pathToDirectoryWithPom) throws Exception {
+        CopyOfMavenCli.CliRequest cliRequest = new CopyOfMavenCli.CliRequest(new String[0], null);
+        cliRequest.workingDirectory = pathToDirectoryWithPom;
         initialize(cliRequest);
         cli(cliRequest);
         PlexusContainer container = container(cliRequest);
@@ -118,10 +127,7 @@ public class BringPlexusOnline_Test {
         MavenExecutionResult result = new DefaultMavenExecutionResult();
         session = new MavenSession(container, repositorySession, cliRequest.request, result);
         session.setProjects(projects);
-
-        MavenProject project = getProjectWith(projects, "artifact");
-        Dependency dependency = getDependencyWith(project, "junit");
-        assertThat(dependency.getScope(), is("test"));
+        return projects;
     }
 
     private MavenProject getProjectWith(List<MavenProject> projects, String artifactId) {
@@ -200,7 +206,7 @@ public class BringPlexusOnline_Test {
         return projects;
     }
 
-    private MavenExecutionRequest populateRequest(MavenCli.CliRequest cliRequest) {
+    private MavenExecutionRequest populateRequest(CopyOfMavenCli.CliRequest cliRequest) {
         MavenExecutionRequest request = cliRequest.request;
         CommandLine commandLine = cliRequest.commandLine;
         String workingDirectory = cliRequest.workingDirectory;
@@ -329,7 +335,7 @@ public class BringPlexusOnline_Test {
             userToolchainsFile = new File(commandLine.getOptionValue(CLIManager.ALTERNATE_USER_TOOLCHAINS));
             userToolchainsFile = resolveFile(userToolchainsFile, workingDirectory);
         } else {
-            userToolchainsFile = MavenCli.DEFAULT_USER_TOOLCHAINS_FILE;
+            userToolchainsFile = CopyOfMavenCli.DEFAULT_USER_TOOLCHAINS_FILE;
         }
 
         request.setBaseDirectory(baseDirectory).setGoals(goals)
@@ -391,10 +397,10 @@ public class BringPlexusOnline_Test {
             request.setMakeBehavior(MavenExecutionRequest.REACTOR_MAKE_BOTH);
         }
 
-        String localRepoProperty = request.getUserProperties().getProperty(MavenCli.LOCAL_REPO_PROPERTY);
+        String localRepoProperty = request.getUserProperties().getProperty(CopyOfMavenCli.LOCAL_REPO_PROPERTY);
 
         if (localRepoProperty == null) {
-            localRepoProperty = request.getSystemProperties().getProperty(MavenCli.LOCAL_REPO_PROPERTY);
+            localRepoProperty = request.getSystemProperties().getProperty(CopyOfMavenCli.LOCAL_REPO_PROPERTY);
         }
 
         if (localRepoProperty != null) {
@@ -404,7 +410,7 @@ public class BringPlexusOnline_Test {
         final String threadConfiguration = commandLine.hasOption(CLIManager.THREADS)
                 ? commandLine.getOptionValue(CLIManager.THREADS)
                 : request.getSystemProperties().getProperty(
-                MavenCli.THREADS_DEPRECATED); // TODO: Remove this setting. Note that the int-tests use it
+                CopyOfMavenCli.THREADS_DEPRECATED); // TODO: Remove this setting. Note that the int-tests use it
 
         if (threadConfiguration != null) {
             request.setPerCoreThreadCount(threadConfiguration.contains("C"));
@@ -420,7 +426,7 @@ public class BringPlexusOnline_Test {
         return request;
     }
 
-    private void cli(MavenCli.CliRequest cliRequest)
+    private void cli(CopyOfMavenCli.CliRequest cliRequest)
             throws Exception {
         //
         // Parsing errors can happen during the processing of the arguments and we prefer not having to check if the logger is null
@@ -440,16 +446,16 @@ public class BringPlexusOnline_Test {
 
         if (cliRequest.commandLine.hasOption(CLIManager.HELP)) {
             cliManager.displayHelp(System.out);
-            throw new MavenCli.ExitException(0);
+            throw new CopyOfMavenCli.ExitException(0);
         }
 
         if (cliRequest.commandLine.hasOption(CLIManager.VERSION)) {
             System.out.println(CLIReportingUtils.showVersion());
-            throw new MavenCli.ExitException(0);
+            throw new CopyOfMavenCli.ExitException(0);
         }
     }
 
-    private void initialize(MavenCli.CliRequest cliRequest) {
+    private void initialize(CopyOfMavenCli.CliRequest cliRequest) {
         if (cliRequest.workingDirectory == null) {
             cliRequest.workingDirectory = System.getProperty("user.dir");
         }
@@ -465,7 +471,7 @@ public class BringPlexusOnline_Test {
         }
     }
 
-    private void settings(MavenCli.CliRequest cliRequest)
+    private void settings(CopyOfMavenCli.CliRequest cliRequest)
             throws Exception {
         File userSettingsFile;
 
@@ -530,7 +536,7 @@ public class BringPlexusOnline_Test {
         }
     }
 
-    private PlexusContainer container(MavenCli.CliRequest cliRequest)
+    private PlexusContainer container(CopyOfMavenCli.CliRequest cliRequest)
             throws Exception {
         if (cliRequest.classWorld == null) {
             cliRequest.classWorld = new ClassWorld("plexus.core", Thread.currentThread().getContextClassLoader());
@@ -589,7 +595,7 @@ public class BringPlexusOnline_Test {
         return container;
     }
 
-    private ClassRealm setupContainerRealm(MavenCli.CliRequest cliRequest)
+    private ClassRealm setupContainerRealm(CopyOfMavenCli.CliRequest cliRequest)
             throws Exception {
         ClassRealm containerRealm = null;
 

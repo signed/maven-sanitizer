@@ -1,6 +1,6 @@
 package com.github.signed.maven.sanitizer;
 
-import org.apache.maven.cli.MavenCli;
+import org.apache.maven.cli.CopyOfMavenCli;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.DefaultModelWriter;
@@ -50,6 +50,6 @@ public class Application_Test {
     @Test
     public void embedder() throws Exception {
         System.setProperty("user.dir", fixture.multiModule.getParent());
-        MavenCli.main( new String[]{"compile"});
+        CopyOfMavenCli.main(new String[]{"compile"});
     }
 }
