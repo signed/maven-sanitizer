@@ -6,7 +6,9 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.DefaultModelWriter;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.FileReader;
 import java.io.StringWriter;
@@ -16,10 +18,18 @@ import java.util.List;
 public class Application_Test {
     public final Fixture fixture = new Fixture();
 
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+
+    @Test
+    public void copyTheStuff() throws Exception {
+        new Application(fixture.multiModule.containingDirectory, folder.getRoot().toPath()).sanitize();
+        System.out.println("done");
+    }
+
     @Test
     public void testName() throws Exception {
-
-        System.out.println(fixture.testClassTargetRoot);
         MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model = reader.read(new FileReader(fixture.singleModule));
         model.setPomFile(fixture.singleModule);
@@ -49,7 +59,7 @@ public class Application_Test {
 
     @Test
     public void embedder() throws Exception {
-        System.setProperty("user.dir", fixture.multiModule.getParent());
+        System.setProperty("user.dir", fixture.multiModule.containingDirectory.toAbsolutePath().toString());
         MavenCli.main(new String[]{"compile"});
     }
 }

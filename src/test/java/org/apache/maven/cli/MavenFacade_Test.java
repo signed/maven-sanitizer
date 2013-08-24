@@ -5,6 +5,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,7 +18,7 @@ public class MavenFacade_Test {
 
     @Test
     public void bringPlexusOnline() throws Exception {
-        String pathToDirectoryWithPom = fixture.multiModule.getParent();
+        Path pathToDirectoryWithPom = fixture.multiModule.containingDirectory;
         List<MavenProject> projects = mavenFacade.getMavenProjects(pathToDirectoryWithPom);
 
         MavenProject project = getProjectWith(projects, "artifact");
