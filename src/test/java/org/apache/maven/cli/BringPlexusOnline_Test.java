@@ -111,7 +111,6 @@ public class BringPlexusOnline_Test {
         projectBuildingRequest.setRepositorySession(repositorySession);
 
         projectBuilder = container.lookup(ProjectBuilder.class);
-        //List<ProjectBuildingResult> projectBuildingResults= projectBuilder.build(Collections.singletonList(fixture.multiModule), true, projectBuildingRequest);
 
 
         List<MavenProject> projects = getProjectsForMavenReactor(cliRequest.request);
@@ -120,17 +119,28 @@ public class BringPlexusOnline_Test {
         session = new MavenSession(container, repositorySession, cliRequest.request, result);
         session.setProjects(projects);
 
+        MavenProject project = getProjectWith(projects, "artifact");
+        Dependency dependency = getDependencyWith(project, "junit");
+        assertThat(dependency.getScope(), is("test"));
+    }
+
+    private MavenProject getProjectWith(List<MavenProject> projects, String artifactId) {
         for (MavenProject project : projects) {
-            if ("artifact".equals(project.getArtifactId())) {
-                System.out.println(project);
-                List<Dependency> dependencies = project.getDependencies();
-                for (Dependency dependency : dependencies) {
-                    if("junit".equals(dependency.getArtifactId())){
-                        assertThat(dependency.getScope(), is("test"));
-                    }
-                }
+            if (artifactId.equals(project.getArtifactId())) {
+                return project;
             }
         }
+        return null;
+    }
+
+    private Dependency getDependencyWith(MavenProject project, String artifactId) {
+        List<Dependency> dependencies = project.getDependencies();
+        for (Dependency dependency : dependencies) {
+            if(artifactId.equals(dependency.getArtifactId())){
+                return dependency;
+            }
+        }
+        return null;
     }
 
     private void collectProjects(List<MavenProject> projects, List<File> files, MavenExecutionRequest request)
