@@ -11,6 +11,11 @@
 
     <artifactId>artifact</artifactId>
 
+
+    <properties>
+        <some.control.property>true</some.control.property>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>joda-time</groupId>
@@ -25,5 +30,4 @@
             <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
-
 </project>

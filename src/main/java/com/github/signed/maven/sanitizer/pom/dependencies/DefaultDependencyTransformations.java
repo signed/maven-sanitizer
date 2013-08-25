@@ -1,12 +1,14 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.sanitizer.pom.dependencies;
 
+import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Dependency;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class DefaultDependencyTransformations implements CopyProject.DependencyTransformations {
+public class DefaultDependencyTransformations implements DependencyTransformations {
     private final List<Dependency> dependencies;
+    private final Strings strings = new Strings();
 
     public DefaultDependencyTransformations(List<Dependency> dependencies) {
         this.dependencies = dependencies;
@@ -41,19 +43,15 @@ public class DefaultDependencyTransformations implements CopyProject.DependencyT
     }
 
     private boolean matchingVersion(Dependency dependency, Dependency toDrop) {
-        return matching(dependency.getVersion(), toDrop.getVersion());
+        return strings.matching(dependency.getVersion(), toDrop.getVersion());
     }
 
     private boolean matchingType(Dependency dependency, Dependency toDrop) {
-        return matching(dependency.getType(), toDrop.getType());
+        return strings.matching(dependency.getType(), toDrop.getType());
     }
 
     private boolean matchingClassifier(Dependency dependency, Dependency toDrop) {
-        return matching(dependency.getClassifier(), toDrop.getClassifier());
-    }
-
-    private boolean matching(String dependency, String toDrop) {
-        return null == dependency || dependency.equals(toDrop);
+        return strings.matching(dependency.getClassifier(), toDrop.getClassifier());
     }
 
     private boolean sameArtifactId(Dependency dependency, Dependency toDrop) {
