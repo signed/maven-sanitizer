@@ -18,31 +18,31 @@ public class CopyProject {
     }
 
     void copy(MavenProject mavenProject) {
-        Path baseDir = mavenProject.getBasedir().toPath();
-        cleanRoom.createDirectoryAssociatedTo(baseDir);
+        cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(mavenProject));
 
-        copyPom(mavenProject);
-        copySourceRoots(mavenProject, baseDir);
-        copyResources(mavenProject, baseDir);
-    }
-
-    private void copyPom(MavenProject mavenProject) {
         copyPom.from(mavenProject);
+        copySourceRootsOf(mavenProject);
+        copyResourcesOf(mavenProject);
     }
 
-    private void copySourceRoots(MavenProject mavenProject, Path baseDir) {
+    private void copySourceRootsOf(MavenProject mavenProject) {
         List<String> compileSourceRoots = mavenProject.getCompileSourceRoots();
         for (String compileSourceRoot : compileSourceRoots) {
-            Path sourceCompileSourceRoot = baseDir.resolve(compileSourceRoot);
+            Path sourceCompileSourceRoot = baseDirectoryOf(mavenProject).resolve(compileSourceRoot);
             cleanRoom.copyContentBelowInAssociatedDirectory(sourceCompileSourceRoot);
         }
     }
 
-    private void copyResources(MavenProject mavenProject, Path baseDir) {
+    private void copyResourcesOf(MavenProject mavenProject) {
         List<Resource> resources = mavenProject.getResources();
         for (Resource resource : resources) {
-            Path sourceResource = baseDir.resolve(resource.getDirectory());
+            Path sourceResource = baseDirectoryOf(mavenProject).resolve(resource.getDirectory());
             cleanRoom.copyContentBelowInAssociatedDirectory(sourceResource);
         }
     }
+
+    private Path baseDirectoryOf(MavenProject mavenProject) {
+        return mavenProject.getBasedir().toPath();
+    }
+
 }
