@@ -2,7 +2,7 @@ package com.github.signed.maven.sanitizer.pom;
 
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManaegment;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependenciesInTestScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
@@ -40,8 +40,8 @@ public class CopyPom {
 
         DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
         criticise(model, dependenciesFromDependencies, dependencyCritic, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
-        DependenciesFromDependencyManaegment dependenciesFromDependencyManaegment = new DependenciesFromDependencyManaegment();
-        criticise(model, dependenciesFromDependencyManaegment, dependencyCritic, new DropDependency(dependenciesFromDependencyManaegment.elements(targetModelToWrite)));
+        DependenciesFromDependencyManagement dependenciesFromDependencyManagement = new DependenciesFromDependencyManagement();
+        criticise(model, dependenciesFromDependencyManagement, dependencyCritic, new DropDependency(dependenciesFromDependencyManagement.elements(targetModelToWrite)));
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite) {

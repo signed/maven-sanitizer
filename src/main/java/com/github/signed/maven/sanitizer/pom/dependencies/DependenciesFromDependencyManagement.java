@@ -8,7 +8,7 @@ import org.apache.maven.model.Model;
 import java.util.Collections;
 import java.util.List;
 
-public class DependenciesFromDependencyManaegment implements Extractor<Dependency> {
+public class DependenciesFromDependencyManagement implements Extractor<Dependency> {
     @Override
     public Iterable<Dependency> elements(Model model) {
         DependencyManagement dependencyManagement = model.getDependencyManagement();
