@@ -1,5 +1,7 @@
 package com.github.signed.maven.sanitizer;
 
+import com.github.signed.maven.sanitizer.pom.CleanRoom;
+import com.github.signed.maven.sanitizer.pom.CopyPom;
 import org.apache.maven.cli.MavenFacade;
 import org.apache.maven.project.MavenProject;
 
@@ -20,7 +22,9 @@ public class Application {
 
     public Application(Path source, Path destination) {
         this.source = source;
-        copyProject = new CopyProject(new SourceToDestinationTreeMapper(source, destination));
+        final SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
+        final CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
+        copyProject = new CopyProject(cleanRoom, new CopyPom(cleanRoom));
     }
 
     public void sanitize() {

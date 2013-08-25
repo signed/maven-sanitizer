@@ -2,7 +2,6 @@ package com.github.signed.maven.sanitizer.pom;
 
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagment;
-import com.github.signed.maven.sanitizer.FileSystem;
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DefaultDependencyTransformations;
 import com.github.signed.maven.sanitizer.pom.dependencies.DefaultPluginTransformations;
@@ -23,18 +22,20 @@ import java.nio.file.Path;
 public class CopyPom {
 
     private final ModelSerializer serializer = new ModelSerializer();
-    private final FileSystem fileSystem;
+    private final CleanRoom cleanRoom;
 
-    public CopyPom(FileSystem fileSystem) {
-        this.fileSystem = fileSystem;
+    public CopyPom(CleanRoom cleanRoom) {
+        this.cleanRoom = cleanRoom;
     }
 
-    public void copyPom(MavenProject mavenProject, Path pom, Path targetPom) {
+    public void from(MavenProject mavenProject) {
+        Path pom = mavenProject.getFile().toPath();
         Model model = mavenProject.getModel();
         Model targetModelToWrite = mavenProject.getOriginalModel().clone();
         criticiseDependencies(model, targetModelToWrite);
         criticisePlugins(model, targetModelToWrite);
-        this.fileSystem.writeStringTo(targetPom, serializer.serializeModelToString(targetModelToWrite));
+        String content = serializer.serializeModelToString(targetModelToWrite);
+        cleanRoom.writeStringToPathAssociatedWith(pom, content);
     }
 
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
