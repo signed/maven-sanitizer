@@ -9,7 +9,7 @@ import org.apache.maven.model.PluginManagement;
 import java.util.Collections;
 import java.util.List;
 
-public class PluginsFromPluginManagment implements Extractor<Plugin> {
+public class PluginsFromPluginManagement implements Extractor<Plugin> {
     @Override
     public Iterable<Plugin> elements(Model model) {
         Build build = model.getBuild();

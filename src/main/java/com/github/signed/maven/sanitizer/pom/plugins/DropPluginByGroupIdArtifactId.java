@@ -1,9 +1,10 @@
 package com.github.signed.maven.sanitizer.pom.plugins;
 
+import com.github.signed.maven.sanitizer.pom.Critic;
 import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Plugin;
 
-public class DropPluginByGroupIdArtifactId implements PluginCritic {
+public class DropPluginByGroupIdArtifactId implements Critic<Plugin> {
 
     private final String groupId;
     private final String artifactId;
