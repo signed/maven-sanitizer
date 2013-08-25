@@ -2,7 +2,7 @@ package com.github.signed.maven.sanitizer.pom;
 
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
-import com.github.signed.maven.sanitizer.pom.dependencies.DefaultPluginTransformations;
+import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagment;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyCritic;
@@ -59,7 +59,7 @@ public class CopyPom {
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite, Extractor<Plugin> pluginsFromBuild, PluginCritic pluginCritic) {
-        Transformation<Plugin> transformations = new DefaultPluginTransformations(pluginsFromBuild.elements(targetModelToWrite));
+        Transformation<Plugin> transformations = new DropPlugin(pluginsFromBuild.elements(targetModelToWrite));
         for (Plugin plugin : pluginsFromBuild.elements(model)) {
             pluginCritic.criticise(plugin, transformations);
         }

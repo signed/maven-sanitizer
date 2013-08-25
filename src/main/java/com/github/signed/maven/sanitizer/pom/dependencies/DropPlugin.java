@@ -6,11 +6,11 @@ import org.apache.maven.model.Plugin;
 
 import java.util.Iterator;
 
-public class DefaultPluginTransformations implements Transformation<Plugin> {
+public class DropPlugin implements Transformation<Plugin> {
     private final Strings strings = new Strings();
     private final Iterable<Plugin> plugins;
 
-    public DefaultPluginTransformations(Iterable<Plugin> plugins) {
+    public DropPlugin(Iterable<Plugin> plugins) {
         this.plugins = plugins;
     }
 
