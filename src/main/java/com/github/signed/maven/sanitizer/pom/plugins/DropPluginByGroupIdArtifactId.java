@@ -1,5 +1,6 @@
 package com.github.signed.maven.sanitizer.pom.plugins;
 
+import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Plugin;
 
 public class DropPluginByGroupIdArtifactId implements PluginCritic {
@@ -13,9 +14,9 @@ public class DropPluginByGroupIdArtifactId implements PluginCritic {
     }
 
     @Override
-    public void criticise(Plugin plugin, PluginTransformations transformations) {
+    public void criticise(Plugin plugin, Transformation<Plugin> transformations) {
         if(groupId.equals(plugin.getGroupId()) && artifactId.equals(plugin.getArtifactId()) ){
-            transformations.drop(plugin);
+            transformations.execute(plugin);
         }
     }
 }

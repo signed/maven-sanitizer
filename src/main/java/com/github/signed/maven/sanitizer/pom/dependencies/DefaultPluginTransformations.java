@@ -1,12 +1,12 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
 import com.github.signed.maven.sanitizer.pom.Strings;
-import com.github.signed.maven.sanitizer.pom.plugins.PluginTransformations;
+import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Plugin;
 
 import java.util.Iterator;
 
-public class DefaultPluginTransformations implements PluginTransformations {
+public class DefaultPluginTransformations implements Transformation<Plugin> {
     private final Strings strings = new Strings();
     private final Iterable<Plugin> plugins;
 
@@ -15,7 +15,7 @@ public class DefaultPluginTransformations implements PluginTransformations {
     }
 
     @Override
-    public void drop(Plugin toDrop) {
+    public void execute(Plugin toDrop) {
         Iterator<Plugin> pluginIterator = plugins.iterator();
         while (pluginIterator.hasNext()){
             Plugin plugin = pluginIterator.next();

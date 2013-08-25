@@ -1,20 +1,21 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
 import com.github.signed.maven.sanitizer.pom.Strings;
+import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Dependency;
 
 import java.util.Iterator;
 
-public class DefaultDependencyTransformations implements DependencyTransformations {
+public class DropDependency implements Transformation<Dependency> {
     private final Iterable<Dependency> dependencies;
     private final Strings strings = new Strings();
 
-    public DefaultDependencyTransformations(Iterable<Dependency> dependencies) {
+    public DropDependency(Iterable<Dependency> dependencies) {
         this.dependencies = dependencies;
     }
 
     @Override
-    public void drop(Dependency toDrop) {
+    public void execute(Dependency toDrop) {
         Iterator<Dependency> dependencyIterator = dependencies.iterator();
         while (dependencyIterator.hasNext()) {
             Dependency dependency = dependencyIterator.next();
@@ -41,23 +42,23 @@ public class DefaultDependencyTransformations implements DependencyTransformatio
         }
     }
 
-    private boolean matchingVersion(Dependency dependency, Dependency toDrop) {
-        return strings.matching(dependency.getVersion(), toDrop.getVersion());
-    }
-
-    private boolean matchingType(Dependency dependency, Dependency toDrop) {
-        return strings.matching(dependency.getType(), toDrop.getType());
-    }
-
-    private boolean matchingClassifier(Dependency dependency, Dependency toDrop) {
-        return strings.matching(dependency.getClassifier(), toDrop.getClassifier());
+    private boolean sameGroupId(Dependency dependency, Dependency toDrop) {
+        return dependency.getGroupId().equals(toDrop.getGroupId());
     }
 
     private boolean sameArtifactId(Dependency dependency, Dependency toDrop) {
         return dependency.getArtifactId().equals(toDrop.getArtifactId());
     }
 
-    private boolean sameGroupId(Dependency dependency, Dependency toDrop) {
-        return dependency.getGroupId().equals(toDrop.getGroupId());
+    private boolean matchingVersion(Dependency dependency, Dependency toDrop) {
+        return strings.matching(dependency.getVersion(), toDrop.getVersion());
+    }
+
+    private boolean matchingClassifier(Dependency dependency, Dependency toDrop) {
+        return strings.matching(dependency.getClassifier(), toDrop.getClassifier());
+    }
+
+    private boolean matchingType(Dependency dependency, Dependency toDrop) {
+        return strings.matching(dependency.getType(), toDrop.getType());
     }
 }

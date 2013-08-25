@@ -1,12 +1,11 @@
 package com.github.signed.maven.sanitizer.pom;
 
+import com.github.signed.maven.sanitizer.ModelSerializer;
+import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
+import com.github.signed.maven.sanitizer.pom.dependencies.DefaultPluginTransformations;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagment;
-import com.github.signed.maven.sanitizer.ModelSerializer;
-import com.github.signed.maven.sanitizer.pom.dependencies.DefaultDependencyTransformations;
-import com.github.signed.maven.sanitizer.pom.dependencies.DefaultPluginTransformations;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyCritic;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependencyTransformations;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependenciesInTestScope;
 import com.github.signed.maven.sanitizer.pom.plugins.DropPluginByGroupIdArtifactId;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginCritic;
@@ -46,7 +45,7 @@ public class CopyPom {
     }
 
     private void criticiseDependencies(Model model, Model targetModelToWrite, Extractor<Dependency> extractor, DependencyCritic dropDependenciesInTestScope) {
-        DependencyTransformations transformations = new DefaultDependencyTransformations(extractor.elements(targetModelToWrite));
+        Transformation<Dependency> transformations = new DropDependency(extractor.elements(targetModelToWrite));
         for (Dependency dependency : extractor.elements(model)) {
             dropDependenciesInTestScope.criticise(dependency, transformations);
         }
@@ -60,7 +59,7 @@ public class CopyPom {
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite, Extractor<Plugin> pluginsFromBuild, PluginCritic pluginCritic) {
-        DefaultPluginTransformations transformations = new DefaultPluginTransformations(pluginsFromBuild.elements(targetModelToWrite));
+        Transformation<Plugin> transformations = new DefaultPluginTransformations(pluginsFromBuild.elements(targetModelToWrite));
         for (Plugin plugin : pluginsFromBuild.elements(model)) {
             pluginCritic.criticise(plugin, transformations);
         }
