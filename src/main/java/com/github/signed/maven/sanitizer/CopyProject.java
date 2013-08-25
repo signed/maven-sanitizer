@@ -1,5 +1,6 @@
 package com.github.signed.maven.sanitizer;
 
+import com.github.signed.maven.sanitizer.pom.CopyPom;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 

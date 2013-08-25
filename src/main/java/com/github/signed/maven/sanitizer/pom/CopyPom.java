@@ -1,6 +1,9 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.sanitizer.pom;
 
-import com.github.signed.maven.sanitizer.pom.Extractor;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagment;
+import com.github.signed.maven.sanitizer.FileSystem;
+import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DefaultDependencyTransformations;
 import com.github.signed.maven.sanitizer.pom.dependencies.DefaultPluginTransformations;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyCritic;
@@ -35,10 +38,17 @@ public class CopyPom {
     }
 
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
-        DropDependenciesInTestScope dropDependenciesInTestScope = new DropDependenciesInTestScope();
+        DependencyCritic dependencyCritic = new DropDependenciesInTestScope();
 
-        criticiseAListOfDependencies(model, dropDependenciesInTestScope, new DependenciesFromDependencies().elements(targetModelToWrite));
-        criticiseAListOfDependencies(model, dropDependenciesInTestScope, new DependenciesFromDependencyManagment().elements(targetModelToWrite));
+        criticiseDependencies(model, targetModelToWrite, new DependenciesFromDependencies(), dependencyCritic);
+        criticiseDependencies(model, targetModelToWrite, new DependenciesFromDependencyManagment(), dependencyCritic);
+    }
+
+    private void criticiseDependencies(Model model, Model targetModelToWrite, Extractor<Dependency> extractor, DependencyCritic dropDependenciesInTestScope) {
+        DependencyTransformations transformations = new DefaultDependencyTransformations(extractor.elements(targetModelToWrite));
+        for (Dependency dependency : extractor.elements(model)) {
+            dropDependenciesInTestScope.criticise(dependency, transformations);
+        }
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite) {
@@ -46,13 +56,6 @@ public class CopyPom {
 
         criticisePlugins(model, targetModelToWrite, new PluginsFromBuild(), pluginCritic);
         criticisePlugins(model, targetModelToWrite, new PluginsFromPluginManagment(), pluginCritic);
-    }
-
-    private void criticiseAListOfDependencies(Model model, DependencyCritic critic, Iterable<Dependency> dependencies) {
-        DependencyTransformations transformations = new DefaultDependencyTransformations(dependencies);
-        for (Dependency dependency : model.getDependencyManagement().getDependencies()) {
-            critic.criticise(dependency, transformations);
-        }
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite, Extractor<Plugin> pluginsFromBuild, PluginCritic pluginCritic) {

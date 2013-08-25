@@ -1,4 +1,4 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.sanitizer.pom.dependencies;
 
 import com.github.signed.maven.sanitizer.pom.Extractor;
 import org.apache.maven.model.Dependency;
