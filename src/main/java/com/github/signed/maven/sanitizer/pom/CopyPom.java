@@ -3,10 +3,10 @@ package com.github.signed.maven.sanitizer.pom;
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
-import com.github.signed.maven.sanitizer.pom.dependencies.DropDependenciesInTestScope;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInTestScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
-import com.github.signed.maven.sanitizer.pom.plugins.DropPluginByGroupIdArtifactId;
+import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement;
 import org.apache.maven.model.Dependency;
@@ -36,7 +36,7 @@ public class CopyPom {
     }
 
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
-        Critic<Dependency> dependencyCritic = new DropDependenciesInTestScope();
+        Critic<Dependency> dependencyCritic = new DependenciesInTestScope();
 
         DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
         criticise(model, dependenciesFromDependencies, dependencyCritic, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
@@ -45,7 +45,7 @@ public class CopyPom {
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite) {
-        Critic<Plugin> pluginCritic = new DropPluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin");
+        Critic<Plugin> pluginCritic = new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin");
 
         PluginsFromBuild pluginsFromBuild = new PluginsFromBuild();
         criticise(model, pluginsFromBuild, pluginCritic, new DropPlugin(pluginsFromBuild.elements(targetModelToWrite)));

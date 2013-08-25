@@ -4,12 +4,12 @@ import com.github.signed.maven.sanitizer.pom.Critic;
 import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Plugin;
 
-public class DropPluginByGroupIdArtifactId implements Critic<Plugin> {
+public class PluginByGroupIdArtifactId implements Critic<Plugin> {
 
     private final String groupId;
     private final String artifactId;
 
-    public DropPluginByGroupIdArtifactId(String groupId, String artifactId) {
+    public PluginByGroupIdArtifactId(String groupId, String artifactId) {
         this.groupId = groupId;
         this.artifactId = artifactId;
     }

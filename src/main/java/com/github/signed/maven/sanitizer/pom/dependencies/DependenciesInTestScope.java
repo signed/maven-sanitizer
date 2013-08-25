@@ -4,7 +4,7 @@ import com.github.signed.maven.sanitizer.pom.Critic;
 import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Dependency;
 
-public class DropDependenciesInTestScope implements Critic<Dependency> {
+public class DependenciesInTestScope implements Critic<Dependency> {
     @Override
     public void criticise(Dependency dependency, Transformation<Dependency> transformations) {
         if("test".equals(dependency.getScope())){
