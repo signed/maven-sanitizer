@@ -22,4 +22,11 @@ public class FileSystem {
         }
     }
 
+    public void writeStringTo(Path targetPom, String content) {
+        try {
+            Files.write(targetPom, content.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
