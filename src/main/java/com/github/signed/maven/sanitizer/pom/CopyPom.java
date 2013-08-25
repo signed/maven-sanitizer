@@ -38,29 +38,23 @@ public class CopyPom {
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
         Critic<Dependency> dependencyCritic = new DropDependenciesInTestScope();
 
-        final DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
-        criticiseDependencies(model, dependenciesFromDependencies, dependencyCritic, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
-        final DependenciesFromDependencyManaegment dependenciesFromDependencyManaegment = new DependenciesFromDependencyManaegment();
-        criticiseDependencies(model, dependenciesFromDependencyManaegment, dependencyCritic, new DropDependency(dependenciesFromDependencyManaegment.elements(targetModelToWrite)));
-    }
-
-    private void criticiseDependencies(Model model, Extractor<Dependency> extractor, Critic<Dependency> dropDependenciesInTestScope, Transformation<Dependency> transformation) {
-        for (Dependency dependency : extractor.elements(model)) {
-            dropDependenciesInTestScope.criticise(dependency, transformation);
-        }
+        DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
+        criticise(model, dependenciesFromDependencies, dependencyCritic, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
+        DependenciesFromDependencyManaegment dependenciesFromDependencyManaegment = new DependenciesFromDependencyManaegment();
+        criticise(model, dependenciesFromDependencyManaegment, dependencyCritic, new DropDependency(dependenciesFromDependencyManaegment.elements(targetModelToWrite)));
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite) {
         Critic<Plugin> pluginCritic = new DropPluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin");
 
-        final PluginsFromBuild pluginsFromBuild = new PluginsFromBuild();
-        criticisePlugins(model, pluginsFromBuild, pluginCritic, new DropPlugin(pluginsFromBuild.elements(targetModelToWrite)));
-        final PluginsFromPluginManagement pluginsFromPluginManagement = new PluginsFromPluginManagement();
-        criticisePlugins(model, pluginsFromPluginManagement, pluginCritic, new DropPlugin(pluginsFromPluginManagement.elements(targetModelToWrite)));
+        PluginsFromBuild pluginsFromBuild = new PluginsFromBuild();
+        criticise(model, pluginsFromBuild, pluginCritic, new DropPlugin(pluginsFromBuild.elements(targetModelToWrite)));
+        PluginsFromPluginManagement pluginsFromPluginManagement = new PluginsFromPluginManagement();
+        criticise(model, pluginsFromPluginManagement, pluginCritic, new DropPlugin(pluginsFromPluginManagement.elements(targetModelToWrite)));
     }
 
-    private void criticisePlugins(Model model, Extractor<Plugin> pluginsFromBuild, Critic<Plugin> pluginCritic, Transformation<Plugin> transformation) {
-        for (Plugin plugin : pluginsFromBuild.elements(model)) {
+    private <MavenModelElement> void criticise(Model model, Extractor<MavenModelElement> pluginsFromBuild, Critic<MavenModelElement> pluginCritic, Transformation<MavenModelElement> transformation) {
+        for (MavenModelElement plugin : pluginsFromBuild.elements(model)) {
             pluginCritic.criticise(plugin, transformation);
         }
     }
