@@ -4,13 +4,12 @@ import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Dependency;
 
 import java.util.Iterator;
-import java.util.List;
 
 public class DefaultDependencyTransformations implements DependencyTransformations {
-    private final List<Dependency> dependencies;
+    private final Iterable<Dependency> dependencies;
     private final Strings strings = new Strings();
 
-    public DefaultDependencyTransformations(List<Dependency> dependencies) {
+    public DefaultDependencyTransformations(Iterable<Dependency> dependencies) {
         this.dependencies = dependencies;
     }
 

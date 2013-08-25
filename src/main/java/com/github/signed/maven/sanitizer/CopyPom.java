@@ -11,13 +11,11 @@ import com.github.signed.maven.sanitizer.pom.plugins.PluginCritic;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagment;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;
-import java.util.List;
 
 public class CopyPom {
 
@@ -39,8 +37,8 @@ public class CopyPom {
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
         DropDependenciesInTestScope dropDependenciesInTestScope = new DropDependenciesInTestScope();
 
-        criticiseDependencies(model, targetModelToWrite, dropDependenciesInTestScope);
-        criticiseDependencyManagement(model, targetModelToWrite, dropDependenciesInTestScope);
+        criticiseAListOfDependencies(model, dropDependenciesInTestScope, new DependenciesFromDependencies().elements(targetModelToWrite));
+        criticiseAListOfDependencies(model, dropDependenciesInTestScope, new DependenciesFromDependencyManagment().elements(targetModelToWrite));
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite) {
@@ -50,23 +48,7 @@ public class CopyPom {
         criticisePlugins(model, targetModelToWrite, new PluginsFromPluginManagment(), pluginCritic);
     }
 
-    private void criticiseDependencies(Model model, Model targetModelToWrite, DependencyCritic critic) {
-        criticiseAListOfDependencies(model, critic, targetModelToWrite.getDependencies());
-    }
-
-    private void criticiseDependencyManagement(Model model, Model targetModelToWrite, DependencyCritic critic) {
-        DependencyManagement dependencyManagement = targetModelToWrite.getDependencyManagement();
-        if (dependencyManagement == null) {
-            return;
-        }
-        List<Dependency> dependencies = dependencyManagement.getDependencies();
-        if (dependencies == null) {
-            return;
-        }
-        criticiseAListOfDependencies(model, critic, dependencies);
-    }
-
-    private void criticiseAListOfDependencies(Model model, DependencyCritic critic, List<Dependency> dependencies) {
+    private void criticiseAListOfDependencies(Model model, DependencyCritic critic, Iterable<Dependency> dependencies) {
         DependencyTransformations transformations = new DefaultDependencyTransformations(dependencies);
         for (Dependency dependency : model.getDependencyManagement().getDependencies()) {
             critic.criticise(dependency, transformations);
