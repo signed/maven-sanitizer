@@ -1,4 +1,4 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.sanitizer.path;
 
 import com.github.signed.maven.sanitizer.path.PathsProvider;
 import org.apache.maven.model.Plugin;

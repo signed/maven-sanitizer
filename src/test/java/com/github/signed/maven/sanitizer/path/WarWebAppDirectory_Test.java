@@ -2,7 +2,6 @@ package com.github.signed.maven.sanitizer.path;
 
 import com.github.signed.maven.model.MavenProjectBuilder;
 import com.github.signed.maven.model.PluginExecutionBuilder;
-import com.github.signed.maven.sanitizer.WarWebAppDirectory;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;

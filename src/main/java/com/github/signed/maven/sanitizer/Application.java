@@ -3,6 +3,7 @@ package com.github.signed.maven.sanitizer;
 import com.github.signed.maven.sanitizer.path.AssemblyDescriptors;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
+import com.github.signed.maven.sanitizer.path.WarWebAppDirectory;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
 import org.apache.maven.cli.MavenFacade;
