@@ -1,6 +1,7 @@
 package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.model.MavenProjectBuilder;
+import com.github.signed.maven.model.PluginExecutionBuilder;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +50,19 @@ public class WarWebAppDirectory_Test {
         assertThat(soleReturnedPath(), is(projectBaseDirectory("theWebApplication")));
     }
 
+    @Test
+    public void aWarPluginExecutionWithoutConfigurationUsesDefaultWarSourceDirectory() throws Exception {
+        apacheMavenWarPluginExecutionWithoutConfiguration();
+
+        assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webapp")));
+    }
 
     private void setWarSourceDirectoryTo(Path absolutePath) {
-        projectBuilder.buildSection().addPlugin("org.apache.maven.plugins", "maven-war-plugin").withExecution().withConfiguration().addElement("warSourceDirectory", absolutePath);
+        apacheMavenWarPluginExecutionWithoutConfiguration().withConfiguration().addElement("warSourceDirectory", absolutePath);
+    }
+
+    private PluginExecutionBuilder apacheMavenWarPluginExecutionWithoutConfiguration() {
+        return projectBuilder.buildSection().addPlugin("org.apache.maven.plugins", "maven-war-plugin").withExecution();
     }
 
     private Path projectBaseDirectory(String relative) {
