@@ -16,6 +16,7 @@
         <module>parent</module>
         <module>artifact</module>
         <module>war</module>
+        <module>assembly</module>
     </modules>
 
 </project>
