@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 public class WarWebAppDirectory_Test {
 
-    private final WarWebAppDirectory pathsProvider = new WarWebAppDirectory();
+    private final WarWebAppDirectory pathsProvider = new WarWebAppDirectory(new ExecutionsProbe("org.apache.maven.plugins", "maven-war-plugin"));
     private final MavenProjectBuilder projectBuilder = MavenProjectBuilder.hire();
     private final Path baseDirectory = Paths.get("/tmp/").toAbsolutePath();
 

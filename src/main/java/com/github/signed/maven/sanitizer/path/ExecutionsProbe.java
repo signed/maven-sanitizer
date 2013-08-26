@@ -4,8 +4,11 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.project.MavenProject;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class ExecutionsProbe {
@@ -27,5 +30,9 @@ public class ExecutionsProbe {
         }else {
             return Collections.emptyList();
         }
+    }
+
+    public List<Path> defaultsForMissingConfigurationInExecution() {
+        return Collections.singletonList(Paths.get("src/main/webapp"));
     }
 }

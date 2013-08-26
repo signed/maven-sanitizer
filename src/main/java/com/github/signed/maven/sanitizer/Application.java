@@ -1,6 +1,7 @@
 package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.path.AssemblyDescriptors;
+import com.github.signed.maven.sanitizer.path.ExecutionsProbe;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.path.WarWebAppDirectory;
@@ -36,7 +37,7 @@ public class Application {
     public void configure(){
         copyProject.addPathsToCopy(new SourceRoots());
         copyProject.addPathsToCopy(new ResourceRoots());
-        copyProject.addPathsToCopy(new WarWebAppDirectory());
+        copyProject.addPathsToCopy(new WarWebAppDirectory(new ExecutionsProbe("org.apache.maven.plugins", "maven-war-plugin")));
         copyProject.addPathsToCopy(new AssemblyDescriptors());
     }
 
