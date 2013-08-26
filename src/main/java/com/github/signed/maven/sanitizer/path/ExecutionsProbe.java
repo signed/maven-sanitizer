@@ -4,19 +4,21 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.project.MavenProject;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
-public class PathsMavenProject {
+public class ExecutionsProbe {
 
-    private final MavenProject mavenProject;
+    private final String groupId;
+    private final String artifactId;
 
-    public PathsMavenProject(MavenProject mavenProject) {
-        this.mavenProject = mavenProject;
+    public ExecutionsProbe(String groupId, String artifactId) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
     }
 
-    public List<PluginExecution> executionsFor(String groupId, String artifactId) {
+    public Collection<PluginExecution> probeIn(MavenProject mavenProject) {
         Map<String, Plugin> plugins = mavenProject.getBuild().getPluginsAsMap();
         String warPluginKey = Plugin.constructKey(groupId, artifactId);
         if (plugins.containsKey(warPluginKey)) {

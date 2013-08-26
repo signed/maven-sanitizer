@@ -6,17 +6,18 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public class WarWebAppDirectory implements PathsProvider {
     @Override
     public Iterable<Path> paths(MavenProject mavenProject) {
-        List<PluginExecution> executions = new PathsMavenProject(mavenProject).executionsFor("org.apache.maven.plugins", "maven-war-plugin");
+        String groupId = "org.apache.maven.plugins";
+        String artifactId = "maven-war-plugin";
+        Collection<PluginExecution> executions = new ExecutionsProbe(groupId, artifactId).probeIn(mavenProject);
         if (executions.isEmpty()) {
             return Collections.emptyList();
         }
-
         Path webAppDirectory = Paths.get("src/main/webapp");
         for (PluginExecution execution : executions) {
             Xpp3Dom configuration = (Xpp3Dom) execution.getConfiguration();
