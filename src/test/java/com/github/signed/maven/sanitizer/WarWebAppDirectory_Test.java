@@ -1,9 +1,9 @@
 package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.model.BuildBuilder;
+import com.github.signed.maven.model.MavenProjectBuilder;
 import com.github.signed.maven.model.PluginBuilder;
 import com.github.signed.maven.model.PluginExecutionBuilder;
-import org.apache.maven.project.MavenProject;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,19 +17,18 @@ import static org.hamcrest.Matchers.is;
 public class WarWebAppDirectory_Test {
 
     private final WarWebAppDirectory pathsProvider = new WarWebAppDirectory();
-    private final MavenProject project = new MavenProject();
+    private final MavenProjectBuilder projectBuilder = MavenProjectBuilder.hire();
     private final Path baseDirectory = Paths.get("").toAbsolutePath();
 
     @Before
     public void setBaseDirectoryOnMavenProject() throws Exception {
-        project.setPackaging("war");
-        project.setFile(baseDirectory.resolve("pom.xml").toFile());
+        projectBuilder.packaging("war").pomAt(baseDirectory.resolve("pom.xml"));
     }
 
     @Test
     public void noPathsIfPackagingTypeIsNotWar() throws Exception {
-        project.setPackaging("jar");
-        assertThat(pathsProvider.paths(project), Matchers.<Path>iterableWithSize(0));
+        projectBuilder.packaging("jar");
+        assertThat(pathsProvider.paths(projectBuilder.build()), Matchers.<Path>iterableWithSize(0));
     }
 
     @Test
@@ -39,11 +38,10 @@ public class WarWebAppDirectory_Test {
 
     @Test
     public void explicitlyConfiguredPathIfPresent() throws Exception {
-        BuildBuilder buildBuilder = BuildBuilder.hire();
+        BuildBuilder buildBuilder = projectBuilder.withBuildSection();
         PluginBuilder pluginBuilder = buildBuilder.addPlugin("org.apache.maven.plugins", "maven-war-plugin");
         PluginExecutionBuilder pluginExecutionBuilder = pluginBuilder.withExecution();
         pluginExecutionBuilder.withConfiguration().addElement("warSourceDirectory", projectBaseDirectory("src/main/webContent").toString());
-        project.setBuild(buildBuilder.build());
 
         assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webContent")));
     }
@@ -53,6 +51,6 @@ public class WarWebAppDirectory_Test {
     }
 
     private Path soleReturnedPath() {
-        return pathsProvider.paths(project).iterator().next();
+        return pathsProvider.paths(projectBuilder.build()).iterator().next();
     }
 }
