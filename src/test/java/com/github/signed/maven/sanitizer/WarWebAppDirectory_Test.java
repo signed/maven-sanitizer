@@ -1,8 +1,8 @@
 package com.github.signed.maven.sanitizer;
 
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.PluginExecution;
+import com.github.signed.maven.model.BuildBuilder;
+import com.github.signed.maven.model.PluginBuilder;
+import com.github.signed.maven.model.PluginExecutionBuilder;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,18 +39,11 @@ public class WarWebAppDirectory_Test {
 
     @Test
     public void explicitlyConfiguredPathIfPresent() throws Exception {
-        Build build = project.getBuild();
-        Plugin plugin = new Plugin();
-        plugin.setGroupId("org.apache.maven.plugins");
-        plugin.setArtifactId("maven-war-plugin");
-        build.addPlugin(plugin);
-
-
-        PluginExecutionBuilder pluginExecutionBuilder = PluginExecutionBuilder.hire();
+        BuildBuilder buildBuilder = BuildBuilder.hire();
+        PluginBuilder pluginBuilder = buildBuilder.addPlugin("org.apache.maven.plugins", "maven-war-plugin");
+        PluginExecutionBuilder pluginExecutionBuilder = pluginBuilder.withExecution();
         pluginExecutionBuilder.withConfiguration().addElement("warSourceDirectory", projectBaseDirectory("src/main/webContent").toString());
-
-        List<PluginExecution> executions = plugin.getExecutions();
-        executions.add(pluginExecutionBuilder.build());
+        project.setBuild(buildBuilder.build());
 
         assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webContent")));
     }

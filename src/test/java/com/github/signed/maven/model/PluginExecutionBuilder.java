@@ -1,4 +1,4 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.model;
 
 import com.google.common.base.Optional;
 import org.apache.maven.model.PluginExecution;

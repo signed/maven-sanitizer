@@ -1,4 +1,4 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.model;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
