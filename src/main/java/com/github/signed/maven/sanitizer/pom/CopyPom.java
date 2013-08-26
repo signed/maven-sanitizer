@@ -1,9 +1,5 @@
 package com.github.signed.maven.sanitizer.pom;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
@@ -17,6 +13,10 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CopyPom {
 
@@ -50,13 +50,15 @@ public class CopyPom {
         critics.add(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"));
 
         for (Critic<Plugin> critic : critics) {
-            criticises(model, targetModelToWrite, critic, new PluginsFromBuild());
-            criticises(model, targetModelToWrite, critic, new PluginsFromPluginManagement());
+            final PluginsFromBuild extractor = new PluginsFromBuild();
+            criticises(model, critic, extractor, new DropPlugin(extractor.elements(targetModelToWrite)));
+            DropPlugin transformation = new DropPlugin(new PluginsFromPluginManagement().elements(targetModelToWrite));
+            criticises(model, critic, new PluginsFromPluginManagement(), transformation);
         }
     }
 
-    private void criticises(Model model, Model targetModelToWrite, Critic<Plugin> pluginCritic, Extractor<Plugin> extractor) {
-        criticise(model, extractor, pluginCritic, new DropPlugin(extractor.elements(targetModelToWrite)));
+    private void criticises(Model model, Critic<Plugin> pluginCritic, Extractor<Plugin> extractor, Transformation<Plugin> transformation) {
+        criticise(model, extractor, pluginCritic, transformation);
     }
 
     private void criticise(Model model, Model targetModelToWrite, Critic<Dependency> dependencyCritic, Extractor<Dependency> extractor) {
