@@ -1,5 +1,6 @@
 package com.github.signed.maven.sanitizer;
 
+import com.github.signed.maven.model.AssemblyDescriptors;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
@@ -35,7 +36,7 @@ public class Application {
         copyProject.addPathsToCopy(new SourceRoots());
         copyProject.addPathsToCopy(new ResourceRoots());
         copyProject.addPathsToCopy(new WarWebAppDirectory());
-
+        copyProject.addPathsToCopy(new AssemblyDescriptors());
     }
 
     public void sanitize() {
