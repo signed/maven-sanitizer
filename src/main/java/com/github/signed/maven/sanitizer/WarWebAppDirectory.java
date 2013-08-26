@@ -15,7 +15,7 @@ public class WarWebAppDirectory implements PathsProvider {
     @Override
     public Iterable<Path> paths(MavenProject mavenProject) {
         if ("war".equals(mavenProject.getPackaging())) {
-            Path webAppDirectory = mavenProject.getBasedir().toPath().resolve("src/main/webapp");
+            Path webAppDirectory = Paths.get("src/main/webapp");
             Map<String, Plugin> plugins = mavenProject.getBuild().getPluginsAsMap();
             String warPluginKey = Plugin.constructKey("org.apache.maven.plugins", "maven-war-plugin");
             if (plugins.containsKey(warPluginKey)) {
@@ -30,6 +30,8 @@ public class WarWebAppDirectory implements PathsProvider {
                     }
                 }
             }
+
+            webAppDirectory = mavenProject.getBasedir().toPath().resolve(webAppDirectory);
             return Collections.singletonList(webAppDirectory);
         } else {
             return Collections.emptyList();

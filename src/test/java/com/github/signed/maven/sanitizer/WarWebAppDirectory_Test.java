@@ -1,9 +1,6 @@
 package com.github.signed.maven.sanitizer;
 
-import com.github.signed.maven.model.BuildBuilder;
 import com.github.signed.maven.model.MavenProjectBuilder;
-import com.github.signed.maven.model.PluginBuilder;
-import com.github.signed.maven.model.PluginExecutionBuilder;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +15,7 @@ public class WarWebAppDirectory_Test {
 
     private final WarWebAppDirectory pathsProvider = new WarWebAppDirectory();
     private final MavenProjectBuilder projectBuilder = MavenProjectBuilder.hire();
-    private final Path baseDirectory = Paths.get("").toAbsolutePath();
+    private final Path baseDirectory = Paths.get("/tmp/").toAbsolutePath();
 
     @Before
     public void setBaseDirectoryOnMavenProject() throws Exception {
@@ -38,12 +35,23 @@ public class WarWebAppDirectory_Test {
 
     @Test
     public void explicitlyConfiguredPathIfPresent() throws Exception {
-        BuildBuilder buildBuilder = projectBuilder.withBuildSection();
-        PluginBuilder pluginBuilder = buildBuilder.addPlugin("org.apache.maven.plugins", "maven-war-plugin");
-        PluginExecutionBuilder pluginExecutionBuilder = pluginBuilder.withExecution();
-        pluginExecutionBuilder.withConfiguration().addElement("warSourceDirectory", projectBaseDirectory("src/main/webContent").toString());
+        Path absolutePath = projectBaseDirectory("src/main/webContent");
+        setWarSourceDirectoryTo(absolutePath);
 
         assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webContent")));
+    }
+
+    @Test
+    public void resolveRelativePathToAbsolutePath() throws Exception {
+        Path relativePath = Paths.get("theWebApplication");
+        setWarSourceDirectoryTo(relativePath);
+
+        assertThat(soleReturnedPath(), is(projectBaseDirectory("theWebApplication")));
+    }
+
+
+    private void setWarSourceDirectoryTo(Path absolutePath) {
+        projectBuilder.buildSection().addPlugin("org.apache.maven.plugins", "maven-war-plugin").withExecution().withConfiguration().addElement("warSourceDirectory", absolutePath);
     }
 
     private Path projectBaseDirectory(String relative) {

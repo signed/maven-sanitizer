@@ -13,7 +13,7 @@ public class MavenProjectBuilder {
     private MavenProject mavenProject = new MavenProject();
     private Optional<BuildBuilder> buildBuilder = Optional.absent();
 
-    public BuildBuilder withBuildSection() {
+    public BuildBuilder buildSection() {
         BuildBuilder buildBuilder = BuildBuilder.hire();
         this.buildBuilder = Optional.of(buildBuilder);
         return buildBuilder;

@@ -4,6 +4,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import static java.lang.String.format;
 public class ConfigurationBuilder {
     private final List<String> elements = new ArrayList<>();
 
+    public ConfigurationBuilder addElement(String element, Path path){
+        return addElement(element, path.toString());
+    }
 
     public ConfigurationBuilder addElement(String element, String value) {
         StringBuilder builder = new StringBuilder();
