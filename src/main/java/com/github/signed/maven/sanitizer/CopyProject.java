@@ -1,12 +1,14 @@
 package com.github.signed.maven.sanitizer;
 
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
-
-import java.nio.file.Path;
-import java.util.List;
 
 public class CopyProject {
     private final CopyPom copyPom;
@@ -35,9 +37,13 @@ public class CopyProject {
 
     private void copyResourcesOf(MavenProject mavenProject) {
         List<Resource> resources = mavenProject.getResources();
+        Set<Path> alreadyProcessed = new HashSet<>();
         for (Resource resource : resources) {
             Path sourceResource = baseDirectoryOf(mavenProject).resolve(resource.getDirectory());
-            cleanRoom.copyContentBelowInAssociatedDirectory(sourceResource);
+            if( !alreadyProcessed.contains(sourceResource)) {
+                alreadyProcessed.add(sourceResource);
+                cleanRoom.copyContentBelowInAssociatedDirectory(sourceResource);
+            }
         }
     }
 
