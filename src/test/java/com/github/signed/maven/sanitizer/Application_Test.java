@@ -24,7 +24,9 @@ public class Application_Test {
 
     @Test
     public void copyTheStuff() throws Exception {
-        new Application(fixture.multiModule.containingDirectory, folder.getRoot().toPath()).sanitize();
+        Application application = new Application(fixture.multiModule.containingDirectory, folder.getRoot().toPath());
+        application.configure();
+        application.sanitize();
         System.out.println("done");
     }
 

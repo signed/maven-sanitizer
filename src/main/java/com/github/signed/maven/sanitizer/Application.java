@@ -32,8 +32,9 @@ public class Application {
     }
 
     public void configure(){
-        copyProject.add(new SourceRoots());
-        copyProject.add(new ResourceRoots());
+        copyProject.addPathsToCopy(new SourceRoots());
+        copyProject.addPathsToCopy(new ResourceRoots());
+        copyProject.addPathsToCopy(new WarWebAppDirectory());
 
     }
 
@@ -43,4 +44,5 @@ public class Application {
             copyProject.copy(mavenProject);
         }
     }
+
 }

@@ -24,7 +24,7 @@ public class CopyProject {
         this.copyPom = copyPom;
     }
 
-    public void add(PathsProvider provider) {
+    public void addPathsToCopy(PathsProvider provider) {
         this.pathsProviders.add(provider);
     }
 
