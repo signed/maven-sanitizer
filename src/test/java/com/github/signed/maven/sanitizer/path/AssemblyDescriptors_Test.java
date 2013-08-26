@@ -1,5 +1,7 @@
-package com.github.signed.maven.model;
+package com.github.signed.maven.sanitizer.path;
 
+import com.github.signed.maven.model.MavenProjectBuilder;
+import com.github.signed.maven.sanitizer.path.AssemblyDescriptors;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

@@ -1,6 +1,5 @@
-package com.github.signed.maven.model;
+package com.github.signed.maven.sanitizer.path;
 
-import com.github.signed.maven.sanitizer.path.PathsProvider;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;

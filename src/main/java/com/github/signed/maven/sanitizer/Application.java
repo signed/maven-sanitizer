@@ -1,6 +1,6 @@
 package com.github.signed.maven.sanitizer;
 
-import com.github.signed.maven.model.AssemblyDescriptors;
+import com.github.signed.maven.sanitizer.path.AssemblyDescriptors;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
