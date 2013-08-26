@@ -13,7 +13,7 @@ public class ConfigurationBuilder {
     private final List<String> elements = new ArrayList<>();
 
 
-    public ConfigurationBuilder add(String element, String value) {
+    public ConfigurationBuilder addElement(String element, String value) {
         StringBuilder builder = new StringBuilder();
         builder.append(format("<%s>", element));
         builder.append(value);

@@ -4,7 +4,6 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,11 +46,12 @@ public class WarWebAppDirectory_Test {
         plugin.setArtifactId("maven-war-plugin");
         build.addPlugin(plugin);
 
-        Xpp3Dom warSourceDirectory = new ConfigurationBuilder().add("warSourceDirectory", projectBaseDirectory("src/main/webContent").toString()).toConfiguration();
-        PluginExecution execution = new PluginExecution();
-        execution.setConfiguration(warSourceDirectory);
+
+        PluginExecutionBuilder pluginExecutionBuilder = PluginExecutionBuilder.hire();
+        pluginExecutionBuilder.withConfiguration().addElement("warSourceDirectory", projectBaseDirectory("src/main/webContent").toString());
+
         List<PluginExecution> executions = plugin.getExecutions();
-        executions.add(execution);
+        executions.add(pluginExecutionBuilder.build());
 
         assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webContent")));
     }
