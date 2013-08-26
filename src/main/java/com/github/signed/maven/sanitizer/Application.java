@@ -1,5 +1,7 @@
 package com.github.signed.maven.sanitizer;
 
+import com.github.signed.maven.sanitizer.path.ResourceRoots;
+import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
 import org.apache.maven.cli.MavenFacade;
@@ -14,7 +16,9 @@ public class Application {
     public static void main(String [] args){
         Path source = Paths.get("source");
         Path destination = Paths.get("destionation");
-        new Application(source, destination).sanitize();
+        Application application = new Application(source, destination);
+        application.configure();
+        application.sanitize();
     }
 
     private final Path source;
@@ -25,6 +29,12 @@ public class Application {
         final SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
         final CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
         copyProject = new CopyProject(cleanRoom, new CopyPom(cleanRoom));
+    }
+
+    public void configure(){
+        copyProject.add(new SourceRoots());
+        copyProject.add(new ResourceRoots());
+
     }
 
     public void sanitize() {

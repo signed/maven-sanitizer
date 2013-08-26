@@ -1,54 +1,51 @@
 package com.github.signed.maven.sanitizer;
 
-import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.github.signed.maven.sanitizer.path.PathsProvider;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
-import org.apache.maven.model.Resource;
+import com.google.common.collect.Iterables;
 import org.apache.maven.project.MavenProject;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 
 public class CopyProject {
     private final CopyPom copyPom;
     private final CleanRoom cleanRoom;
+    private final Collection<PathsProvider> pathsProviders = new ArrayList<>();
 
     public CopyProject(CleanRoom cleanRoom, CopyPom copyPom) {
         this.cleanRoom = cleanRoom;
         this.copyPom = copyPom;
     }
 
+    public void add(PathsProvider provider) {
+        this.pathsProviders.add(provider);
+    }
+
     void copy(MavenProject mavenProject) {
         cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(mavenProject));
-
         copyPom.from(mavenProject);
-        copySourceRootsOf(mavenProject);
-        copyResourcesOf(mavenProject);
+        copyToCleanRoom(allPathsCollectedFrom(mavenProject));
     }
 
-    private void copySourceRootsOf(MavenProject mavenProject) {
-        List<String> compileSourceRoots = mavenProject.getCompileSourceRoots();
-        for (String compileSourceRoot : compileSourceRoots) {
-            Path sourceCompileSourceRoot = baseDirectoryOf(mavenProject).resolve(compileSourceRoot);
-            cleanRoom.copyContentBelowInAssociatedDirectory(sourceCompileSourceRoot);
+    private Set<Path> allPathsCollectedFrom(MavenProject mavenProject) {
+        Set<Path> pathsToCopy = new HashSet<>();
+        for (PathsProvider pathsProvider : pathsProviders) {
+            Iterables.addAll(pathsToCopy, pathsProvider.paths(mavenProject));
+        }
+        return pathsToCopy;
+    }
+
+
+    private void copyToCleanRoom(Iterable<Path> sourceDirectoryToCopy) {
+        for (Path path : sourceDirectoryToCopy) {
+            cleanRoom.copyContentBelowInAssociatedDirectory(path);
         }
     }
-
-    private void copyResourcesOf(MavenProject mavenProject) {
-        List<Resource> resources = mavenProject.getResources();
-        Set<Path> alreadyProcessed = new HashSet<>();
-        for (Resource resource : resources) {
-            Path sourceResource = baseDirectoryOf(mavenProject).resolve(resource.getDirectory());
-            if( !alreadyProcessed.contains(sourceResource)) {
-                alreadyProcessed.add(sourceResource);
-                cleanRoom.copyContentBelowInAssociatedDirectory(sourceResource);
-            }
-        }
-    }
-
-    private Path baseDirectoryOf(MavenProject mavenProject) {
-        return mavenProject.getBasedir().toPath();
-    }
-
 }
