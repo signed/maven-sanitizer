@@ -5,20 +5,23 @@ import org.apache.maven.model.PluginExecution;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ExecutionsProbe {
+public class ExecutionProbe {
 
     private final String groupId;
     private final String artifactId;
+    private final List<Path> defaults;
+    private final String configurationElement;
 
-    public ExecutionsProbe(String groupId, String artifactId) {
+    public ExecutionProbe(String groupId, String artifactId, List<Path> defaults, String configurationElement) {
         this.groupId = groupId;
         this.artifactId = artifactId;
+        this.defaults = defaults;
+        this.configurationElement = configurationElement;
     }
 
     public Collection<PluginExecution> probeIn(MavenProject mavenProject) {
@@ -33,6 +36,10 @@ public class ExecutionsProbe {
     }
 
     public List<Path> defaultsForMissingConfigurationInExecution() {
-        return Collections.singletonList(Paths.get("src/main/webapp"));
+        return defaults;
+    }
+
+    public String configurationElement() {
+        return configurationElement;
     }
 }

@@ -24,6 +24,7 @@ public class CopyRecursively implements FileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         Path targetFile = mapper.map(file);
+        preVisitDirectory(file.getParent(), null);
         Files.copy(file, targetFile);
         return FileVisitResult.CONTINUE;
     }

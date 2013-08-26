@@ -12,11 +12,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class WarWebAppDirectory implements PathsProvider {
+public class PathsInPluginConfiguration implements PathsProvider {
 
-    private final ExecutionsProbe probe;
+    private final ExecutionProbe probe;
 
-    public WarWebAppDirectory(ExecutionsProbe probe) {
+    public PathsInPluginConfiguration(ExecutionProbe probe) {
         this.probe = probe;
     }
 
@@ -42,7 +42,7 @@ public class WarWebAppDirectory implements PathsProvider {
     private List<Path> retrieveExplicitConfiguration(PluginExecution execution) {
         Xpp3Dom configuration = (Xpp3Dom) execution.getConfiguration();
         if (null != configuration) {
-            Xpp3Dom element = configuration.getChild(configurationElement());
+            Xpp3Dom element = configuration.getChild(probe.configurationElement());
             if (null != element) {
                 if (element.getChildCount() > 0) {
                     List<Path> found = new ArrayList<>();
@@ -57,9 +57,5 @@ public class WarWebAppDirectory implements PathsProvider {
             }
         }
         return Collections.emptyList();
-    }
-
-    private String configurationElement() {
-        return "warSourceDirectory";
     }
 }

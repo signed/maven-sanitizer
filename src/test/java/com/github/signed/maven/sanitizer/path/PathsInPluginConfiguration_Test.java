@@ -8,13 +8,14 @@ import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class WarWebAppDirectory_Test {
+public class PathsInPluginConfiguration_Test {
 
-    private final WarWebAppDirectory pathsProvider = new WarWebAppDirectory(new ExecutionsProbe("org.apache.maven.plugins", "maven-war-plugin"));
+    private final PathsInPluginConfiguration pathsProvider = new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", Collections.singletonList(Paths.get("src/main/webapp")), "warSourceDirectory"));
     private final MavenProjectBuilder projectBuilder = MavenProjectBuilder.hire();
     private final Path baseDirectory = Paths.get("/tmp/").toAbsolutePath();
 
