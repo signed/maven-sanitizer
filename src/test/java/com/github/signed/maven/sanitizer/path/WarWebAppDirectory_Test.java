@@ -20,18 +20,19 @@ public class WarWebAppDirectory_Test {
 
     @Before
     public void setBaseDirectoryOnMavenProject() throws Exception {
-        projectBuilder.packaging("war").pomAt(baseDirectory.resolve("pom.xml"));
+        projectBuilder.pomAt(baseDirectory.resolve("pom.xml"));
     }
 
     @Test
-    public void noPathsIfPackagingTypeIsNotWar() throws Exception {
-        projectBuilder.packaging("jar");
-        assertThat(pathsProvider.paths(projectBuilder.build()), Matchers.<Path>iterableWithSize(0));
-    }
+    public void aWarPluginExecutionWithoutConfigurationUsesDefaultWarSourceDirectory() throws Exception {
+        apacheMavenWarPluginExecutionWithoutConfiguration();
 
-    @Test
-    public void defaultPathIfThereIsNoExplicitConfiguration() throws Exception {
         assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webapp")));
+    }
+
+    @Test
+    public void noPathsIfNoWarPluginExecutionIsConfigured() throws Exception {
+        assertThat(pathsProvider.paths(projectBuilder.build()), Matchers.<Path>iterableWithSize(0));
     }
 
     @Test
@@ -48,13 +49,6 @@ public class WarWebAppDirectory_Test {
         setWarSourceDirectoryTo(relativePath);
 
         assertThat(soleReturnedPath(), is(projectBaseDirectory("theWebApplication")));
-    }
-
-    @Test
-    public void aWarPluginExecutionWithoutConfigurationUsesDefaultWarSourceDirectory() throws Exception {
-        apacheMavenWarPluginExecutionWithoutConfiguration();
-
-        assertThat(soleReturnedPath(), is(projectBaseDirectory("src/main/webapp")));
     }
 
     private void setWarSourceDirectoryTo(Path absolutePath) {
