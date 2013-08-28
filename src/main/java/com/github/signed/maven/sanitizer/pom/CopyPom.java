@@ -68,7 +68,7 @@ public class CopyPom {
         criticise(model, extractor, pluginCritic, transformation);
     }
 
-    private void criticise(Model model, Critic<Dependency> dependencyCritic, Extractor<Dependency> extractor, DropDependency transformation) {
+    private void criticise(Model model, Critic<Dependency> dependencyCritic, Extractor<Dependency> extractor, Transformation<Dependency> transformation) {
         criticise(model, extractor, dependencyCritic, transformation);
     }
 
