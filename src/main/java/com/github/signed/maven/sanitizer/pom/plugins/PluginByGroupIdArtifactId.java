@@ -1,7 +1,7 @@
 package com.github.signed.maven.sanitizer.pom.plugins;
 
 import com.github.signed.maven.sanitizer.pom.Critic;
-import com.github.signed.maven.sanitizer.pom.Transformation;
+import com.github.signed.maven.sanitizer.pom.Action;
 import org.apache.maven.model.Plugin;
 
 public class PluginByGroupIdArtifactId implements Critic<Plugin> {
@@ -15,7 +15,7 @@ public class PluginByGroupIdArtifactId implements Critic<Plugin> {
     }
 
     @Override
-    public void criticise(Plugin plugin, Transformation<Plugin> transformations) {
+    public void criticise(Plugin plugin, Action<Plugin> transformations) {
         if(groupId.equals(plugin.getGroupId()) && artifactId.equals(plugin.getArtifactId()) ){
             transformations.execute(plugin);
         }

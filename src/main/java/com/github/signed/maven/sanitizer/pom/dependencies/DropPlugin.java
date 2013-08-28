@@ -1,12 +1,12 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
+import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.Strings;
-import com.github.signed.maven.sanitizer.pom.Transformation;
 import org.apache.maven.model.Plugin;
 
 import java.util.Iterator;
 
-public class DropPlugin implements Transformation<Plugin> {
+public class DropPlugin implements Action<Plugin> {
     private final Strings strings = new Strings();
     private Iterable<Plugin> plugins;
 

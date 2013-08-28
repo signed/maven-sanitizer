@@ -1,6 +1,6 @@
 package com.github.signed.maven.sanitizer.pom;
 
-public interface Transformation<T> {
+public interface Action<T> {
 
     void performOn(Iterable<T> elements);
 
