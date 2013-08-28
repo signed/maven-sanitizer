@@ -3,6 +3,7 @@ package com.github.signed.maven.sanitizer.pom;
 import com.github.signed.maven.sanitizer.FileSystem;
 import com.github.signed.maven.sanitizer.SourceToDestinationTreeMapper;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class CleanRoom {
@@ -24,8 +25,12 @@ public class CleanRoom {
         fileSystem.createDirectory(targetBaseDir);
     }
 
-    public void copyContentBelowInAssociatedDirectory(Path sourceCompileSourceRoot) {
-        Path targetCompileSourceRoot = mapper.map(sourceCompileSourceRoot);
-        fileSystem.copyDirectoryContentInto(sourceCompileSourceRoot, targetCompileSourceRoot);
+    public void copyContentBelowInAssociatedDirectory(Path source) {
+        Path destination = mapper.map(source);
+        if (Files.isRegularFile(source)) {
+            fileSystem.copyFile(source, destination);
+        } else {
+            fileSystem.copyDirectoryContentInto(source, destination);
+        }
     }
 }
