@@ -8,10 +8,11 @@ import java.util.Iterator;
 
 public class DropPlugin implements Transformation<Plugin> {
     private final Strings strings = new Strings();
-    private final Iterable<Plugin> plugins;
+    private Iterable<Plugin> plugins;
 
-    public DropPlugin(Iterable<Plugin> plugins) {
-        this.plugins = plugins;
+    @Override
+    public void performOn(Iterable<Plugin> elements) {
+        plugins = elements;
     }
 
     @Override

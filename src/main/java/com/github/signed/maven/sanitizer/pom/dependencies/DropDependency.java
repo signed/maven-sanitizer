@@ -7,11 +7,12 @@ import org.apache.maven.model.Dependency;
 import java.util.Iterator;
 
 public class DropDependency implements Transformation<Dependency> {
-    private final Iterable<Dependency> dependencies;
+    private Iterable<Dependency> dependencies;
     private final Strings strings = new Strings();
 
-    public DropDependency(Iterable<Dependency> dependencies) {
-        this.dependencies = dependencies;
+    @Override
+    public void performOn(Iterable<Dependency> elements) {
+        dependencies = elements;
     }
 
     @Override

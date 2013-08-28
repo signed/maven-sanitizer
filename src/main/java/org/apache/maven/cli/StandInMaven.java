@@ -79,7 +79,7 @@ public class StandInMaven implements Maven{
 
     private List<MavenProject> getProjectsForMavenReactor(MavenExecutionRequest request, ProjectBuilder projectBuilder)
             throws ProjectBuildingException {
-        List<MavenProject> projects = new ArrayList<MavenProject>();
+        List<MavenProject> projects = new ArrayList<>();
 
         // We have no POM file.
         //
