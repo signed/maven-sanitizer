@@ -48,9 +48,9 @@ public class CopyPom {
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
         for (Critic<Dependency> critic : dependencyCritics) {
             DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
-            criticise(model, critic, dependenciesFromDependencies, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
+            criticises(model, critic, dependenciesFromDependencies, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
             DependenciesFromDependencyManagement dependenciesFromDependencyManagement = new DependenciesFromDependencyManagement();
-            criticise(model, critic, dependenciesFromDependencyManagement, new DropDependency(dependenciesFromDependencyManagement.elements(targetModelToWrite)));
+            criticises(model, critic, dependenciesFromDependencyManagement, new DropDependency(dependenciesFromDependencyManagement.elements(targetModelToWrite)));
         }
     }
 
@@ -64,17 +64,11 @@ public class CopyPom {
         }
     }
 
-    private void criticises(Model model, Critic<Plugin> pluginCritic, Extractor<Plugin> extractor, Transformation<Plugin> transformation) {
-        criticise(model, extractor, pluginCritic, transformation);
-    }
-
-    private void criticise(Model model, Critic<Dependency> dependencyCritic, Extractor<Dependency> extractor, Transformation<Dependency> transformation) {
-        criticise(model, extractor, dependencyCritic, transformation);
-    }
-
-    private <MavenModelElement> void criticise(Model model, Extractor<MavenModelElement> extractor, Critic<MavenModelElement> pluginCritic, Transformation<MavenModelElement> transformation) {
+    private <MavenModelElement> void criticises(Model model, Critic<MavenModelElement> pluginCritic, Extractor<MavenModelElement> extractor, Transformation<MavenModelElement> transformation) {
         for (MavenModelElement plugin : extractor.elements(model)) {
             pluginCritic.criticise(plugin, transformation);
         }
     }
+
+
 }
