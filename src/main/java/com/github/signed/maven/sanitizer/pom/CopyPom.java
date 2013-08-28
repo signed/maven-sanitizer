@@ -3,10 +3,8 @@ package com.github.signed.maven.sanitizer.pom;
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInTestScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
-import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement;
 import org.apache.maven.model.Dependency;
@@ -22,9 +20,19 @@ public class CopyPom {
 
     private final ModelSerializer serializer = new ModelSerializer();
     private final CleanRoom cleanRoom;
+    private final List<Critic<Dependency>> dependencyCritics = new ArrayList<>();
+    private final List<Critic<Plugin>> pluginCritics = new ArrayList<>();
 
     public CopyPom(CleanRoom cleanRoom) {
         this.cleanRoom = cleanRoom;
+    }
+
+    public void addPluginCritic(Critic<Plugin> pluginCritic) {
+        pluginCritics.add(pluginCritic);
+    }
+
+    public void addDependencyCritic(Critic<Dependency> dependencyCritic) {
+        dependencyCritics.add(dependencyCritic);
     }
 
     public void from(MavenProject mavenProject) {
@@ -38,20 +46,16 @@ public class CopyPom {
     }
 
     private void criticiseDependencies(Model model, Model targetModelToWrite) {
-        Critic<Dependency> dependencyCritic = new DependenciesInTestScope();
-        DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
-        criticise(model, dependencyCritic, dependenciesFromDependencies, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
-        DependenciesFromDependencyManagement dependenciesFromDependencyManagement = new DependenciesFromDependencyManagement();
-        criticise(model, dependencyCritic, dependenciesFromDependencyManagement, new DropDependency(dependenciesFromDependencyManagement.elements(targetModelToWrite)));
+        for (Critic<Dependency> critic : dependencyCritics) {
+            DependenciesFromDependencies dependenciesFromDependencies = new DependenciesFromDependencies();
+            criticise(model, critic, dependenciesFromDependencies, new DropDependency(dependenciesFromDependencies.elements(targetModelToWrite)));
+            DependenciesFromDependencyManagement dependenciesFromDependencyManagement = new DependenciesFromDependencyManagement();
+            criticise(model, critic, dependenciesFromDependencyManagement, new DropDependency(dependenciesFromDependencyManagement.elements(targetModelToWrite)));
+        }
     }
 
     private void criticisePlugins(Model model, Model targetModelToWrite) {
-        List<Critic<Plugin>> critics = new ArrayList<>();
-        critics.add(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"));
-        critics.add(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"));
-        critics.add(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"));
-
-        for (Critic<Plugin> critic : critics) {
+        for (Critic<Plugin> critic : pluginCritics) {
             final PluginsFromBuild extractor = new PluginsFromBuild();
             criticises(model, critic, extractor, new DropPlugin(extractor.elements(targetModelToWrite)));
             PluginsFromPluginManagement pluginsFromPluginManagement = new PluginsFromPluginManagement();
