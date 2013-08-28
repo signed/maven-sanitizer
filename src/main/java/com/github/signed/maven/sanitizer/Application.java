@@ -7,6 +7,8 @@ import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInTestScope;
+import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
+import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
 import org.apache.maven.cli.MavenFacade;
 import org.apache.maven.project.MavenProject;
@@ -48,11 +50,11 @@ public class Application {
         copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", Collections.singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
         copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
 
-        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"));
-        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"));
-        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"));
+        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
+        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
+        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
 
-        copyPom.addDependencyCritic(new DependenciesInTestScope());
+        copyPom.addDependencyCritic(new DependenciesInTestScope(), new DropDependency());
     }
 
     public void sanitize() {

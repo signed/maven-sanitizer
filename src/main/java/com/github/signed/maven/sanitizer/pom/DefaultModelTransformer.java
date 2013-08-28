@@ -1,12 +1,12 @@
 package com.github.signed.maven.sanitizer.pom;
 
 public class DefaultModelTransformer<MavenModelElement> implements ModelTransformer {
-    private final Critic<MavenModelElement> critic;
+    private final Selector<MavenModelElement> selector;
     private final Extractor<MavenModelElement> extractor;
     private final Action<MavenModelElement> action;
 
-    public DefaultModelTransformer(Critic<MavenModelElement> critic, Extractor<MavenModelElement> extractor, Action<MavenModelElement> action) {
-        this.critic = critic;
+    public DefaultModelTransformer(Selector<MavenModelElement> selector, Extractor<MavenModelElement> extractor, Action<MavenModelElement> action) {
+        this.selector = selector;
         this.extractor = extractor;
         this.action = action;
     }
@@ -15,7 +15,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     public void transform(TheModels models) {
         for (MavenModelElement element : extractor.elements(models.fullyPopulatedModel)) {
             action.performOn(extractor.elements(models.targetModelToWrite));
-            critic.criticise(element, action);
+            selector.criticise(element, action);
         }
     }
 }

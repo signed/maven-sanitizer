@@ -1,5 +1,5 @@
 package com.github.signed.maven.sanitizer.pom;
 
-public interface Critic<T> {
+public interface Selector<T> {
     void criticise(T element, Action<T> action);
 }

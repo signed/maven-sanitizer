@@ -1,10 +1,10 @@
 package com.github.signed.maven.sanitizer.pom.plugins;
 
-import com.github.signed.maven.sanitizer.pom.Critic;
+import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.Action;
 import org.apache.maven.model.Plugin;
 
-public class PluginByGroupIdArtifactId implements Critic<Plugin> {
+public class PluginByGroupIdArtifactId implements Selector<Plugin> {
 
     private final String groupId;
     private final String artifactId;

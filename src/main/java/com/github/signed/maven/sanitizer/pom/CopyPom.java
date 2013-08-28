@@ -3,8 +3,6 @@ package com.github.signed.maven.sanitizer.pom;
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
-import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
-import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement;
 import org.apache.maven.model.Dependency;
@@ -26,14 +24,14 @@ public class CopyPom {
         this.cleanRoom = cleanRoom;
     }
 
-    public void addPluginCritic(Critic<Plugin> pluginCritic) {
-        modelTransformers.add(new DefaultModelTransformer<>(pluginCritic, new PluginsFromBuild(), new DropPlugin()));
-        modelTransformers.add(new DefaultModelTransformer<>(pluginCritic, new PluginsFromPluginManagement(), new DropPlugin()));
+    public void addPluginCritic(Selector<Plugin> pluginSelector, Action<Plugin> action) {
+        modelTransformers.add(new DefaultModelTransformer<>(pluginSelector, new PluginsFromBuild(), action));
+        modelTransformers.add(new DefaultModelTransformer<>(pluginSelector, new PluginsFromPluginManagement(), action));
     }
 
-    public void addDependencyCritic(Critic<Dependency> dependencyCritic) {
-        modelTransformers.add(new DefaultModelTransformer<>(dependencyCritic, new DependenciesFromDependencies(), new DropDependency()));
-        modelTransformers.add(new DefaultModelTransformer<>(dependencyCritic, new DependenciesFromDependencyManagement(), new DropDependency()));
+    public void addDependencyCritic(Selector<Dependency> dependencySelector, Action<Dependency> action) {
+        modelTransformers.add(new DefaultModelTransformer<>(dependencySelector, new DependenciesFromDependencies(), action));
+        modelTransformers.add(new DefaultModelTransformer<>(dependencySelector, new DependenciesFromDependencyManagement(), action));
     }
 
     public void from(MavenProject mavenProject) {
