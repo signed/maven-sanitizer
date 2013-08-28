@@ -29,4 +29,13 @@ public class FileSystem {
             throw new RuntimeException(e);
         }
     }
+
+    public void copyFile(Path source, Path destination) {
+        try {
+            createDirectory(destination.getParent());
+            Files.copy(source, destination);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
