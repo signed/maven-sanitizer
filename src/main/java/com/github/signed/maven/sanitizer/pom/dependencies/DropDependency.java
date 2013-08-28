@@ -16,7 +16,7 @@ public class DropDependency implements Action<Dependency> {
     }
 
     @Override
-    public void execute(Dependency toDrop) {
+    public void perform(Dependency toDrop) {
         Iterator<Dependency> dependencyIterator = dependencies.iterator();
         while (dependencyIterator.hasNext()) {
             Dependency dependency = dependencyIterator.next();

@@ -15,9 +15,9 @@ public class PluginByGroupIdArtifactId implements Selector<Plugin> {
     }
 
     @Override
-    public void criticise(Plugin plugin, Action<Plugin> transformations) {
+    public void executeActionOnMatch(Plugin plugin, Action<Plugin> action) {
         if(groupId.equals(plugin.getGroupId()) && artifactId.equals(plugin.getArtifactId()) ){
-            transformations.execute(plugin);
+            action.perform(plugin);
         }
     }
 }

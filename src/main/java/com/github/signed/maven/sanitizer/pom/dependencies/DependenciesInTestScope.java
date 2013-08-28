@@ -6,9 +6,9 @@ import org.apache.maven.model.Dependency;
 
 public class DependenciesInTestScope implements Selector<Dependency> {
     @Override
-    public void criticise(Dependency dependency, Action<Dependency> transformations) {
+    public void executeActionOnMatch(Dependency dependency, Action<Dependency> action) {
         if("test".equals(dependency.getScope())){
-            transformations.execute(dependency);
+            action.perform(dependency);
         }
     }
 }

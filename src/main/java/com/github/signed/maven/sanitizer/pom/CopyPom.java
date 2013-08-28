@@ -24,14 +24,14 @@ public class CopyPom {
         this.cleanRoom = cleanRoom;
     }
 
-    public void addPluginCritic(Selector<Plugin> pluginSelector, Action<Plugin> action) {
-        modelTransformers.add(new DefaultModelTransformer<>(pluginSelector, new PluginsFromBuild(), action));
-        modelTransformers.add(new DefaultModelTransformer<>(pluginSelector, new PluginsFromPluginManagement(), action));
+    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromBuild(), action));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromPluginManagement(), action));
     }
 
-    public void addDependencyCritic(Selector<Dependency> dependencySelector, Action<Dependency> action) {
-        modelTransformers.add(new DefaultModelTransformer<>(dependencySelector, new DependenciesFromDependencies(), action));
-        modelTransformers.add(new DefaultModelTransformer<>(dependencySelector, new DependenciesFromDependencyManagement(), action));
+    public void addDependencyTransformation(Selector<Dependency> selector, Action<Dependency> action) {
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencies(), action));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action));
     }
 
     public void from(MavenProject mavenProject) {

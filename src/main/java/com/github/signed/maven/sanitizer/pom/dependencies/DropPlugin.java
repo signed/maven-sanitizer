@@ -16,7 +16,7 @@ public class DropPlugin implements Action<Plugin> {
     }
 
     @Override
-    public void execute(Plugin toDrop) {
+    public void perform(Plugin toDrop) {
         Iterator<Plugin> pluginIterator = plugins.iterator();
         while (pluginIterator.hasNext()){
             Plugin plugin = pluginIterator.next();

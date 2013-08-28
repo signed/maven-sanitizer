@@ -4,5 +4,5 @@ public interface Action<T> {
 
     void performOn(Iterable<T> elements);
 
-    void execute(T element);
+    void perform(T element);
 }

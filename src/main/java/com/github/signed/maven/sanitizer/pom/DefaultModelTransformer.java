@@ -15,7 +15,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     public void transform(TheModels models) {
         for (MavenModelElement element : extractor.elements(models.fullyPopulatedModel)) {
             action.performOn(extractor.elements(models.targetModelToWrite));
-            selector.criticise(element, action);
+            selector.executeActionOnMatch(element, action);
         }
     }
 }

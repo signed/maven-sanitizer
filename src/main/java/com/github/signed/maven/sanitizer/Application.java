@@ -50,11 +50,11 @@ public class Application {
         copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", Collections.singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
         copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
 
-        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
-        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
-        copyPom.addPluginCritic(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
+        copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
+        copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
+        copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
 
-        copyPom.addDependencyCritic(new DependenciesInTestScope(), new DropDependency());
+        copyPom.addDependencyTransformation(new DependenciesInTestScope(), new DropDependency());
     }
 
     public void sanitize() {
