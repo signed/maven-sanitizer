@@ -2,7 +2,6 @@ package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.path.PathsProvider;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
-import com.github.signed.maven.sanitizer.pom.CopyPom;
 import com.google.common.collect.Iterables;
 import org.apache.maven.project.MavenProject;
 
@@ -12,16 +11,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
-
-public class CopyProject {
-    private final CopyPom copyPom;
+public class CopyProjectFiles {
     private final CleanRoom cleanRoom;
     private final Collection<PathsProvider> pathsProviders = new ArrayList<>();
 
-    public CopyProject(CleanRoom cleanRoom, CopyPom copyPom) {
+    public CopyProjectFiles(CleanRoom cleanRoom) {
         this.cleanRoom = cleanRoom;
-        this.copyPom = copyPom;
     }
 
     public void addPathsToCopy(PathsProvider provider) {
@@ -29,8 +24,6 @@ public class CopyProject {
     }
 
     void copy(MavenProject mavenProject) {
-        cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(mavenProject));
-        copyPom.from(mavenProject);
         copyToCleanRoom(allPathsCollectedFrom(mavenProject));
     }
 

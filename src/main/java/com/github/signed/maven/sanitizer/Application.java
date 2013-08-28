@@ -14,7 +14,12 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
+
 public class Application {
+
+    private final CopyPom copyPom;
+    private final CleanRoom cleanRoom;
 
     public static void main(String [] args){
         Path source = Paths.get("source");
@@ -25,26 +30,29 @@ public class Application {
     }
 
     private final Path source;
-    private final CopyProject copyProject;
+    private final CopyProjectFiles copyProjectFiles;
 
     public Application(Path source, Path destination) {
         this.source = source;
         final SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
-        final CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
-        copyProject = new CopyProject(cleanRoom, new CopyPom(cleanRoom));
+        cleanRoom = new CleanRoom(new FileSystem(), mapper);
+        copyPom = new CopyPom(cleanRoom);
+        copyProjectFiles = new CopyProjectFiles(cleanRoom);
     }
 
     public void configure(){
-        copyProject.addPathsToCopy(new SourceRoots());
-        copyProject.addPathsToCopy(new ResourceRoots());
-        copyProject.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", Collections.singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
-        copyProject.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
+        copyProjectFiles.addPathsToCopy(new SourceRoots());
+        copyProjectFiles.addPathsToCopy(new ResourceRoots());
+        copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", Collections.singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
+        copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
     }
 
     public void sanitize() {
         List<MavenProject> mavenProjects = new MavenFacade().getMavenProjects(source);
         for (MavenProject mavenProject : mavenProjects) {
-            copyProject.copy(mavenProject);
+            cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(mavenProject));
+            copyPom.from(mavenProject);
+            copyProjectFiles.copy(mavenProject);
         }
     }
 

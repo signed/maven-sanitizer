@@ -2,7 +2,6 @@ package com.github.signed.maven.sanitizer;
 
 import com.github.signed.matcher.file.IsFile;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
-import com.github.signed.maven.sanitizer.pom.CopyPom;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
@@ -59,9 +58,9 @@ public class CopyProject_Test {
 
 
 
-    private CopyProject copyProject() {
+    private CopyProjectFiles copyProject() {
         SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source.getRoot().toPath(), destination.getRoot().toPath());
         final CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
-        return new CopyProject(cleanRoom, new CopyPom(cleanRoom));
+        return new CopyProjectFiles(cleanRoom);
     }
 }
