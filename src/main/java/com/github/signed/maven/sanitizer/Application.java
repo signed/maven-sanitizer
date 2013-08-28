@@ -23,7 +23,7 @@ public class Application {
 
     public static void main(String [] args){
         Path source = Paths.get("source");
-        Path destination = Paths.get("destionation");
+        Path destination = Paths.get("destination");
         Application application = new Application(source, destination);
         application.configure();
         application.sanitize();
