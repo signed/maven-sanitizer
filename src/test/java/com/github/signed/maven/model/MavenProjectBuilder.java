@@ -19,13 +19,6 @@ public class MavenProjectBuilder {
         return buildBuilder;
     }
 
-    public MavenProject build() {
-        if (buildBuilder.isPresent()) {
-            mavenProject.setBuild(buildBuilder.get().build());
-        }
-        return mavenProject;
-    }
-
     public MavenProjectBuilder packaging(String packaging) {
         mavenProject.setPackaging(packaging);
         return this;
@@ -33,6 +26,23 @@ public class MavenProjectBuilder {
 
     public MavenProjectBuilder pomAt(Path pomLocation) {
         mavenProject.setFile(pomLocation.toFile());
+        return this;
+    }
+
+    public MavenProjectBuilder withGroupId(String groupId) {
+        mavenProject.setGroupId(groupId);
+        return this;
+    }
+
+    public MavenProject build() {
+        if (buildBuilder.isPresent()) {
+            mavenProject.setBuild(buildBuilder.get().build());
+        }
+        return mavenProject;
+    }
+
+    public MavenProjectBuilder withArtifactId(String artifact) {
+        mavenProject.setArtifactId(artifact);
         return this;
     }
 }

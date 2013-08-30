@@ -2,6 +2,7 @@ package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
+import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
+import static java.util.Collections.singletonList;
 
 public class Application {
 
@@ -47,8 +49,9 @@ public class Application {
     public void configure(){
         copyProjectFiles.addPathsToCopy(new SourceRoots());
         copyProjectFiles.addPathsToCopy(new ResourceRoots());
-        copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", Collections.singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
+        copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
         copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
+        copyProjectFiles.addPathsToCopy(new ProjectSubdirectory("org.example", "parent", "important"));
 
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
