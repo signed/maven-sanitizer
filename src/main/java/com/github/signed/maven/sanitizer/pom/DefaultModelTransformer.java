@@ -1,15 +1,15 @@
 package com.github.signed.maven.sanitizer.pom;
 
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.model.Model;
 import org.hamcrest.Matcher;
 
 public class DefaultModelTransformer<MavenModelElement> implements ModelTransformer {
     private final Selector<MavenModelElement> selector;
     private final Extractor<MavenModelElement> extractor;
     private final Action<MavenModelElement> action;
-    private final Matcher<MavenProject> projectMatcher;
+    private final Matcher<Model> projectMatcher;
 
-    public DefaultModelTransformer(Selector<MavenModelElement> selector, Extractor<MavenModelElement> extractor, Action<MavenModelElement> action, Matcher<MavenProject> projectMatcher) {
+    public DefaultModelTransformer(Selector<MavenModelElement> selector, Extractor<MavenModelElement> extractor, Action<MavenModelElement> action, Matcher<Model> projectMatcher) {
         this.selector = selector;
         this.extractor = extractor;
         this.action = action;

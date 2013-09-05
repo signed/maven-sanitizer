@@ -27,17 +27,17 @@ public class CopyPom {
     }
 
     public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
-        addPluginTransformation(selector, action, MavenMatchers.<MavenProject>anything());
+        addPluginTransformation(selector, action, MavenMatchers.<Model>anything());
     }
 
-    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action, Matcher<MavenProject> matcher) {
+    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action, Matcher<Model> matcher) {
         modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromBuild(), action, matcher));
         modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromPluginManagement(), action, matcher));
     }
 
     public void addDependencyTransformation(Selector<Dependency> selector, Action<Dependency> action) {
-        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencies(), action, MavenMatchers.<MavenProject>anything()));
-        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action, MavenMatchers.<MavenProject>anything()));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencies(), action, MavenMatchers.<Model>anything()));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action, MavenMatchers.<Model>anything()));
     }
 
     public void from(MavenProject mavenProject) {
