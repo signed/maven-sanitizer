@@ -1,5 +1,10 @@
 package com.github.signed.maven.sanitizer.pom;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.github.signed.maven.sanitizer.MavenMatchers;
 import com.github.signed.maven.sanitizer.ModelSerializer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
@@ -9,10 +14,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import org.hamcrest.Matcher;
 
 public class CopyPom {
 
@@ -25,13 +27,17 @@ public class CopyPom {
     }
 
     public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
-        modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromBuild(), action));
-        modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromPluginManagement(), action));
+        addPluginTransformation(selector, action, MavenMatchers.<MavenProject>anything());
+    }
+
+    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action, Matcher<MavenProject> matcher) {
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromBuild(), action, matcher));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new PluginsFromPluginManagement(), action, matcher));
     }
 
     public void addDependencyTransformation(Selector<Dependency> selector, Action<Dependency> action) {
-        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencies(), action));
-        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencies(), action, MavenMatchers.<MavenProject>anything()));
+        modelTransformers.add(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action, MavenMatchers.<MavenProject>anything()));
     }
 
     public void from(MavenProject mavenProject) {
