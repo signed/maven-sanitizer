@@ -1,10 +1,10 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
+import java.util.Iterator;
+
 import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Dependency;
-
-import java.util.Iterator;
 
 public class DropDependency implements Action<Dependency> {
     private Iterable<Dependency> dependencies;
@@ -52,7 +52,9 @@ public class DropDependency implements Action<Dependency> {
     }
 
     private boolean matchingVersion(Dependency dependency, Dependency toDrop) {
-        return strings.matching(dependency.getVersion(), toDrop.getVersion());
+        String vanillaVersion = dependency.getVersion();
+
+        return vanillaVersion.startsWith("${") || strings.matching(vanillaVersion, toDrop.getVersion());
     }
 
     private boolean matchingClassifier(Dependency dependency, Dependency toDrop) {
