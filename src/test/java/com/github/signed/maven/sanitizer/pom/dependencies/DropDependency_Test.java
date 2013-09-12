@@ -40,4 +40,19 @@ public class DropDependency_Test {
 
         assertThat(target.size(), CoreMatchers.is(0));
     }
+
+    @Test
+    public void dropDependencyEvenIfScopeIsAProperty() throws Exception {
+        Dependency resolved = base.withScope("runtime").build();
+        Dependency vanillaPomWithoutResolvedProperties = base.withScopeAsProperty("a.maven.property.with.the.scope").build();
+
+        List<Dependency> target = Lists.newArrayList(vanillaPomWithoutResolvedProperties);
+
+        dropDependency.performOn(target);
+        dropDependency.perform(resolved);
+
+        assertThat(target.size(), CoreMatchers.is(0));
+    }
+
+
 }
