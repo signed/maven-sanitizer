@@ -21,7 +21,7 @@ public class PathsInPluginConfiguration implements PathsProvider {
     }
 
     @Override
-    public Iterable<Path> paths(final MavenProject mavenProject) {
+    public Iterable<Path> paths(MavenProject mavenProject) {
         Collection<PluginExecution> executions = probe.probeIn(mavenProject);
         if (executions.isEmpty()) {
             return Collections.emptyList();

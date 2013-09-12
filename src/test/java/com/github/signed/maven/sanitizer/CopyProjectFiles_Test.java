@@ -1,6 +1,6 @@
 package com.github.signed.maven.sanitizer;
 
-import com.github.signed.matcher.file.IsFile;
+import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
@@ -12,16 +12,16 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.util.List;
 
+import static com.github.signed.matcher.file.IsFile.isAFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class CopyProject_Test {
+public class CopyProjectFiles_Test {
     private final Fixture fixture = new Fixture();
 
     @Rule
     public final TemporaryFolder source = new TemporaryFolder();
     @Rule
     public final TemporaryFolder destination = new TemporaryFolder();
-
     private final MavenProject mavenProject = new MavenProject();
 
 
@@ -31,17 +31,9 @@ public class CopyProject_Test {
         fileSystem.copyDirectoryContentInto(fixture.multiModule.containingDirectory, source.getRoot().toPath());
     }
 
-
     @Before
     public void setPomFileOnMavenProject() throws Exception {
         mavenProject.setFile(new File(source.getRoot(), "artifact/pom.xml"));
-    }
-
-    @Test
-    public void copyPomToDestinationDirectory() throws Exception {
-        copyProject().copy(mavenProject);
-
-        assertThat(new File(destination.getRoot(), "artifact/pom.xml"), IsFile.isAFile());
     }
 
     @Test
@@ -53,14 +45,14 @@ public class CopyProject_Test {
 
         copyProject().copy(mavenProject);
 
-        assertThat(new File(destination.getRoot(), "artifact/src/main/resources/aResource.txt"), IsFile.isAFile());
+        assertThat(new File(destination.getRoot(), "artifact/src/main/resources/aResource.txt"), isAFile());
     }
-
-
 
     private CopyProjectFiles copyProject() {
         SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source.getRoot().toPath(), destination.getRoot().toPath());
         final CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
-        return new CopyProjectFiles(cleanRoom);
+        CopyProjectFiles copyProjectFiles = new CopyProjectFiles(cleanRoom);
+        copyProjectFiles.addPathsToCopy(new ResourceRoots());
+        return copyProjectFiles;
     }
 }
