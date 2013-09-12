@@ -6,6 +6,10 @@ import org.apache.maven.model.Dependency;
 
 public class DependencyBuilder {
 
+    private static String propertyWith(String propertyName) {
+        return format("${%s}", propertyName);
+    }
+
     public static DependencyBuilder anyDependency(){
         DependencyBuilder dependencyBuilder = new DependencyBuilder();
         dependencyBuilder.withGroupId("org.example");
@@ -16,6 +20,7 @@ public class DependencyBuilder {
     private String groupId;
     private String artifact;
     private String version;
+    private String scope;
 
     private DependencyBuilder withArtifactId(String artifact) {
         this.artifact = artifact;
@@ -33,7 +38,16 @@ public class DependencyBuilder {
     }
 
     public DependencyBuilder withVersionAsProperty(String propertyName){
-        return withVersion(format("${%s}", propertyName));
+        return withVersion(propertyWith(propertyName));
+    }
+
+    public DependencyBuilder withScope(String scope) {
+        this.scope = scope;
+        return this;
+    }
+
+    public DependencyBuilder withScopeAsProperty(String propertyName) {
+        return withScope(propertyWith(propertyName));
     }
 
     public Dependency build(){
@@ -41,6 +55,7 @@ public class DependencyBuilder {
         dependency.setGroupId(groupId);
         dependency.setArtifactId(artifact);
         dependency.setVersion(version);
+        dependency.setScope(scope);
         return dependency;
     }
 }
