@@ -1,21 +1,21 @@
 package com.github.signed.maven.sanitizer;
 
+import static java.util.Collections.singletonList;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
 import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInTestScope;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-
-import static java.util.Collections.singletonList;
 
 class IntegrationTestConfiguration implements Configuration {
 
@@ -33,6 +33,6 @@ class IntegrationTestConfiguration implements Configuration {
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
-        copyPom.addDependencyTransformation(new DependenciesInTestScope(), new DropDependency());
+        copyPom.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
     }
 }
