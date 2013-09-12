@@ -6,6 +6,7 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.DefaultModelWriter;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -15,6 +16,7 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 
+@Ignore("do not run on command line")
 public class Application_Test {
     public final Fixture fixture = new Fixture();
 
