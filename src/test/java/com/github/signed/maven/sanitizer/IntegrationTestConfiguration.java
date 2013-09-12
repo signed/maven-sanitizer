@@ -12,6 +12,7 @@ import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
@@ -34,5 +35,7 @@ class IntegrationTestConfiguration implements Configuration {
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
         copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
         copyPom.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
+        copyPom.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"),new DropDependency());
     }
+
 }
