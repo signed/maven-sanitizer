@@ -53,8 +53,8 @@ public class DropDependency implements Action<Dependency> {
 
     private boolean matchingVersion(Dependency dependency, Dependency toDrop) {
         String vanillaVersion = dependency.getVersion();
-
-        return vanillaVersion.startsWith("${") || strings.matching(vanillaVersion, toDrop.getVersion());
+        boolean versionIsAMavenPropertyReference = null != vanillaVersion && vanillaVersion.startsWith("${");
+        return versionIsAMavenPropertyReference || strings.matching(vanillaVersion, toDrop.getVersion());
     }
 
     private boolean matchingClassifier(Dependency dependency, Dependency toDrop) {
