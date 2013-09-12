@@ -1,24 +1,24 @@
 package com.github.signed.maven.sanitizer;
 
-import static java.util.Collections.singletonList;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
 import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
 
-class IntegrationTestConfiguration implements Configuration {
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+
+import static java.util.Collections.singletonList;
+
+class DefaultConfiguration implements Configuration {
 
     @Override
     public void configure(CopyProjectFiles copyProjectFiles) {

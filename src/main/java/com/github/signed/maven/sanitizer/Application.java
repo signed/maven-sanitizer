@@ -13,18 +13,23 @@ import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 
 public class Application {
 
-    private final CopyPom copyPom;
-    private final CleanRoom cleanRoom;
-    private final Configuration configuration;
-
     public static void main(String[] args) {
-        Path source = Paths.get("source");
-        Path destination = Paths.get("destination");
-        Application application = new Application(source, destination, new NullConfiguration());
+        Path source = Paths.get(args[0]).toAbsolutePath();
+        Path destination = Paths.get(args[1]).toAbsolutePath();
+        System.out.println("source: "+source);
+        System.out.println("destination: " + destination);
+        Application application = new Application(source, destination, readConfiguration());
         application.configure();
         application.sanitize();
     }
 
+    private static Configuration readConfiguration() {
+        return new DefaultConfiguration();
+    }
+
+    private final CopyPom copyPom;
+    private final CleanRoom cleanRoom;
+    private final Configuration configuration;
     private final Path source;
     private final CopyProjectFiles copyProjectFiles;
 
