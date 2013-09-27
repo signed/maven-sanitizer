@@ -7,6 +7,10 @@
     <version>2.1</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <version.test.support>5.4</version.test.support>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -41,6 +45,17 @@
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
+                <version>2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>artifact-test-support</artifactId>
+                <version>${version.test.support}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>artifact</artifactId>
                 <version>2.1</version>
             </dependency>
         </dependencies>

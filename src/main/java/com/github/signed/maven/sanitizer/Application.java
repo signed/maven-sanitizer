@@ -13,6 +13,8 @@ import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 
 public class Application {
 
+    public static String juhu = "Find me";
+
     public static void main(String[] args) {
         Path source = Paths.get(args[0]).toAbsolutePath();
         Path destination = Paths.get(args[1]).toAbsolutePath();
