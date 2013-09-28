@@ -3,6 +3,7 @@ package com.github.signed.maven.sanitizer.pom;
 import com.github.signed.maven.sanitizer.MavenMatchers;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
+import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.google.common.collect.Lists;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -31,7 +32,7 @@ public class ForDependencyReferences {
         return this;
     }
 
-    public ForDependencyReferences focusOn(Selector<Dependency> selector) {
+    public ForDependencyReferences referencesTo(Selector<Dependency> selector) {
         this.selector = selector;
         return this;
     }
@@ -41,16 +42,16 @@ public class ForDependencyReferences {
         return this;
     }
 
-    public void theMethod(Selector<Dependency> selector, Action<Dependency> action, CopyPom copyPom) {
-        copyPom.addTransformer(focusOnActualDependencies().focusOn(selector).perform(action).build());
-    }
-
-    public void theOtherMethod(Selector<Dependency> selector, Action<Dependency> action, CopyPom copyPom) {
-        copyPom.addTransformer(focusOnDependenciesInDependencyManagment().focusOn(selector).perform(action).build());
-    }
-
     public ForDependencyReferences focusOnDependenciesInDependencyManagment() {
         this.extractors.add(new DependenciesFromDependencyManagement());
         return this;
+    }
+
+    public ForDependencyReferences focusOnActualDependenciesAndDependencyManagment() {
+        return focusOnDependenciesInDependencyManagment().focusOnActualDependencies();
+    }
+
+    public ForDependencyReferences drop() {
+        return perform(new DropDependency());
     }
 }

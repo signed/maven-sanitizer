@@ -33,7 +33,7 @@ public class ForPluginReferences {
         return this;
     }
 
-    public ForPluginReferences targetPluginsMatching(Selector<Plugin> selector) {
+    public ForPluginReferences referencesTo(Selector<Plugin> selector) {
         this.selector = selector;
         return this;
     }
@@ -59,8 +59,8 @@ public class ForPluginReferences {
         return new DefaultModelTransformer<>(selector, action, modelMatcher, extractors);
     }
 
-    public ForPluginReferences pluginReferencesTo(String groupId, String artifactId) {
-        return targetPluginsMatching(new PluginByGroupIdArtifactId(groupId, artifactId));
+    public ForPluginReferences referencesTo(String groupId, String artifactId) {
+        return referencesTo(new PluginByGroupIdArtifactId(groupId, artifactId));
     }
 
     public ForPluginReferences drop() {
