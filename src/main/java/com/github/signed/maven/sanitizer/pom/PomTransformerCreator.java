@@ -8,7 +8,6 @@ import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
-import org.hamcrest.Matcher;
 
 public class PomTransformerCreator {
 
@@ -24,11 +23,8 @@ public class PomTransformerCreator {
     }
 
     public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
-        addPluginTransformation(selector, action, MavenMatchers.<Model>anything());
-    }
-
-    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action, Matcher<Model> matcher) {
-        copyPom.addTransformer(new DefaultModelTransformer<>(selector, new PluginsFromBuild(), action, matcher));
-        copyPom.addTransformer(new DefaultModelTransformer<>(selector, new PluginsFromPluginManagement(), action, matcher));
+        PomTransformationBuilder builder = new PomTransformationBuilder().targetElementsMatching(selector).andPerform(action);
+        copyPom.addTransformer(builder.extract(new PluginsFromBuild()).create());
+        copyPom.addTransformer(builder.extract(new PluginsFromPluginManagement()).create());
     }
 }
