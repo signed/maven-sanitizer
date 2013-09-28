@@ -1,6 +1,8 @@
 package com.github.signed.maven.sanitizer.pom;
 
 import com.github.signed.maven.sanitizer.MavenMatchers;
+import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
+import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement;
 import com.google.common.collect.Lists;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -33,6 +35,18 @@ public class PomTransformationBuilder {
     public PomTransformationBuilder andPerform(Action<Plugin> action) {
         this.action = action;
         return this;
+    }
+
+    public PomTransformationBuilder focusOnPluginsInBuildSection() {
+        return extract(new PluginsFromBuild());
+    }
+
+    public PomTransformationBuilder focusOnPluginsInPluginManagmentSection() {
+        return extract(new PluginsFromPluginManagement());
+    }
+
+    public PomTransformationBuilder focusOnPluginsInBuildAndPluginManagmentSection() {
+        return focusOnPluginsInBuildSection().focusOnPluginsInPluginManagmentSection();
     }
 
     public ModelTransformer create() {
