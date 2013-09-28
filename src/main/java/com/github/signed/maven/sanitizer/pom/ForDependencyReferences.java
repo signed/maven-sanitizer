@@ -11,47 +11,37 @@ import org.hamcrest.Matcher;
 
 import java.util.List;
 
-public class ForDependencyReferences {
+import static com.github.signed.maven.sanitizer.pom.NoAction.noAction;
+import static com.github.signed.maven.sanitizer.pom.NoSelection.nothing;
 
-    private final Matcher<Model> moduleMatcher = MavenMatchers.<Model>anything();
-    private Selector<Dependency> selector;
-    private Action<Dependency> action;
+public class ForDependencyReferences {
 
     public static ForDependencyReferences inAllModules() {
         return new ForDependencyReferences();
     }
 
+    private final Matcher<Model> moduleMatcher = MavenMatchers.<Model>anything();
     private final List<Extractor<Dependency>> extractors = Lists.newArrayList();
-
-    public ModelTransformer build() {
-        return new DefaultModelTransformer<>(this.selector, this.action, moduleMatcher, this.extractors);
-    }
-
-    public ForDependencyReferences perform(Action<Dependency> action) {
-        this.action = action;
-        return this;
-    }
+    private Selector<Dependency> selector = nothing();
+    private Action<Dependency> action = noAction();
 
     public ForDependencyReferences referencesTo(Selector<Dependency> selector) {
         this.selector = selector;
         return this;
     }
 
-    public ForDependencyReferences focusOnActualDependencies() {
+    public ForDependencyReferences focusOnActualDependenciesAndDependencyManagement() {
+        this.extractors.add(new DependenciesFromDependencyManagement());
         this.extractors.add(new DependenciesFromDependencies());
         return this;
     }
 
-    public ForDependencyReferences focusOnDependenciesInDependencyManagment() {
-        this.extractors.add(new DependenciesFromDependencyManagement());
+    public ForDependencyReferences drop() {
+        this.action = new DropDependency();
         return this;
     }
 
-    public ForDependencyReferences focusOnActualDependenciesAndDependencyManagment() {
-        return focusOnDependenciesInDependencyManagment().focusOnActualDependencies();
-    }
-
-    public ForDependencyReferences drop() {
-        return perform(new DropDependency());
+    public ModelTransformer build() {
+        return new DefaultModelTransformer<>(this.selector, this.action, moduleMatcher, this.extractors);
     }
 }

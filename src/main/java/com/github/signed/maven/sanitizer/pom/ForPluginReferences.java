@@ -12,24 +12,22 @@ import org.hamcrest.Matcher;
 
 import java.util.List;
 
-public class ForPluginReferences {
+import static com.github.signed.maven.sanitizer.pom.NoAction.noAction;
+import static com.github.signed.maven.sanitizer.pom.NoSelection.nothing;
 
-    private Selector<Plugin> selector;
-    private Action<Plugin> action;
-    private Matcher<Model> modelMatcher = MavenMatchers.anything();
-    private List<Extractor<Plugin>> extractors = Lists.newArrayList();
+public class ForPluginReferences {
 
     public static ForPluginReferences inAllModules() {
         return new ForPluginReferences();
     }
 
+    private Selector<Plugin> selector = nothing();
+    private Action<Plugin> action = noAction();
+    private Matcher<Model> modelMatcher = MavenMatchers.anything();
+    private List<Extractor<Plugin>> extractors = Lists.newArrayList();
+
     public ForPluginReferences onlyTargetModulesMatching(Matcher<Model> modelMatcher) {
         this.modelMatcher = modelMatcher;
-        return this;
-    }
-
-    public ForPluginReferences extract(Extractor<Plugin> extractor) {
-        this.extractors.add(extractor);
         return this;
     }
 
@@ -38,25 +36,10 @@ public class ForPluginReferences {
         return this;
     }
 
-    public ForPluginReferences andPerform(Action<Plugin> action) {
-        this.action = action;
+    public ForPluginReferences focusOnPluginsInBuildAndPluginManagementSection() {
+        this.extractors.add(new PluginsFromBuild());
+        this.extractors.add(new PluginsFromPluginManagement());
         return this;
-    }
-
-    public ForPluginReferences focusOnPluginsInBuildSection() {
-        return extract(new PluginsFromBuild());
-    }
-
-    public ForPluginReferences focusOnPluginsInPluginManagmentSection() {
-        return extract(new PluginsFromPluginManagement());
-    }
-
-    public ForPluginReferences focusOnPluginsInBuildAndPluginManagmentSection() {
-        return focusOnPluginsInBuildSection().focusOnPluginsInPluginManagmentSection();
-    }
-
-    public ModelTransformer create() {
-        return new DefaultModelTransformer<>(selector, action, modelMatcher, extractors);
     }
 
     public ForPluginReferences referencesTo(String groupId, String artifactId) {
@@ -64,6 +47,11 @@ public class ForPluginReferences {
     }
 
     public ForPluginReferences drop() {
-        return andPerform(new DropPlugin());
+        this.action = new DropPlugin();
+        return this;
+    }
+
+    public ModelTransformer create() {
+        return new DefaultModelTransformer<>(selector, action, modelMatcher, extractors);
     }
 }

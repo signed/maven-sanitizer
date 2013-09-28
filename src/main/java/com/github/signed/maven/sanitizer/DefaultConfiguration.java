@@ -30,12 +30,12 @@ class DefaultConfiguration implements Configuration {
 
     @Override
     public void configure(CopyPom copyingThePom) {
-        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().referencesTo("org.apache.maven.plugins", "maven-antrun-plugin"));
-        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().referencesTo("com.code54.mojo", "buildversion-plugin"));
-        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().referencesTo("org.codehaus.mojo", "properties-maven-plugin"));
+        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.apache.maven.plugins", "maven-antrun-plugin"));
+        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("com.code54.mojo", "buildversion-plugin"));
+        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.codehaus.mojo", "properties-maven-plugin"));
 
-        during(copyingThePom, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagment().drop().referencesTo(DependenciesInScope.Test()));
-        during(copyingThePom, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagment().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")));
+        during(copyingThePom, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
+        during(copyingThePom, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")));
     }
 
     private void during(CopyPom copyingThePom, ForDependencyReferences perform) {
