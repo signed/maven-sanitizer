@@ -22,7 +22,7 @@ public class PomTransformerCreator {
         copyPom.addTransformer(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action, MavenMatchers.<Model>anything()));
     }
 
-    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
+    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action, CopyPom copyPom) {
         PomTransformationBuilder builder = new PomTransformationBuilder().targetElementsMatching(selector).andPerform(action);
         copyPom.addTransformer(builder.extract(new PluginsFromBuild()).create());
         copyPom.addTransformer(builder.extract(new PluginsFromPluginManagement()).create());

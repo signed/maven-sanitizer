@@ -33,9 +33,10 @@ class DefaultConfiguration implements Configuration {
     @Override
     public void configure(CopyPom copyPom) {
         PomTransformerCreator pomTransformerCreator = new PomTransformerCreator(copyPom);
-        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
-        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
-        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
+        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin(), copyPom);
+        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin(), copyPom);
+        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin(), copyPom);
+
         pomTransformerCreator.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
         pomTransformerCreator.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"), new DropDependency());
     }
