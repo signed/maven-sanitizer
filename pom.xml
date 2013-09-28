@@ -26,7 +26,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.signed.maven.sanitizer.Application</mainClass>
+                            <mainClass>com.github.signed.maven.sanitizer.MavenSanitizer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

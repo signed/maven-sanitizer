@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class Application_Test {
+public class MavenSanitizer_Test {
     public final Fixture fixture = new Fixture();
 
     @Rule
@@ -28,7 +28,7 @@ public class Application_Test {
     @Ignore("do not run on command line")
     public void copyTheStuff() throws Exception {
         String [] args = {fixture.multiModule.containingDirectory.toString(), folder.getRoot().toPath().toString()};
-        Application.main(args);
+        MavenSanitizer.main(args);
         System.out.println("done");
     }
 

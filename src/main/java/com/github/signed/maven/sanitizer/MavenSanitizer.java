@@ -11,18 +11,16 @@ import java.util.List;
 
 import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 
-public class Application {
-
-    public static String juhu = "Find me";
+public class MavenSanitizer {
 
     public static void main(String[] args) {
         Path source = Paths.get(args[0]).toAbsolutePath();
         Path destination = Paths.get(args[1]).toAbsolutePath();
         System.out.println("source: "+source);
         System.out.println("destination: " + destination);
-        Application application = new Application(source, destination, readConfiguration());
-        application.configure();
-        application.sanitize();
+        MavenSanitizer mavenSanitizer = new MavenSanitizer(source, destination, readConfiguration());
+        mavenSanitizer.configure();
+        mavenSanitizer.sanitize();
     }
 
     private static Configuration readConfiguration() {
@@ -35,7 +33,7 @@ public class Application {
     private final Path source;
     private final CopyProjectFiles copyProjectFiles;
 
-    public Application(Path source, Path destination, Configuration configuration) {
+    public MavenSanitizer(Path source, Path destination, Configuration configuration) {
         this.source = source;
         final SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
         cleanRoom = new CleanRoom(new FileSystem(), mapper);

@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 public class Fixture {
-    public final String testClassTargetRoot = Application_Test.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+    public final String testClassTargetRoot = MavenSanitizer_Test.class.getProtectionDomain().getCodeSource().getLocation().getFile();
     public final File singleModule = new File(testClassTargetRoot, "sample/pom.xml").getAbsoluteFile();
 
 
