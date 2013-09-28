@@ -1,6 +1,8 @@
 package com.github.signed.maven.sanitizer.pom;
 
 import com.github.signed.maven.sanitizer.MavenMatchers;
+import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
+import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement;
 import com.google.common.collect.Lists;
@@ -17,6 +19,10 @@ public class PomTransformationBuilder {
     private Matcher<Model> modelMatcher = MavenMatchers.anything();
     private List<Extractor<Plugin>> extractors = Lists.newArrayList();
 
+    public static PomTransformationBuilder forAllModules() {
+        return new PomTransformationBuilder();
+    }
+
     public PomTransformationBuilder onlyTargetModulesMatching(Matcher<Model> modelMatcher) {
         this.modelMatcher = modelMatcher;
         return this;
@@ -27,7 +33,7 @@ public class PomTransformationBuilder {
         return this;
     }
 
-    public PomTransformationBuilder targetElementsMatching(Selector<Plugin> selector) {
+    public PomTransformationBuilder targetPluginsMatching(Selector<Plugin> selector) {
         this.selector = selector;
         return this;
     }
@@ -51,5 +57,13 @@ public class PomTransformationBuilder {
 
     public ModelTransformer create() {
         return new DefaultModelTransformer<>(selector, action, modelMatcher, extractors);
+    }
+
+    public PomTransformationBuilder pluginReferencesTo(String groupId, String artifactId) {
+        return targetPluginsMatching(new PluginByGroupIdArtifactId(groupId, artifactId));
+    }
+
+    public PomTransformationBuilder drop() {
+        return andPerform(new DropPlugin());
     }
 }
