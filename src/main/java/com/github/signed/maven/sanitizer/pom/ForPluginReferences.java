@@ -12,46 +12,46 @@ import org.hamcrest.Matcher;
 
 import java.util.List;
 
-public class PomTransformationBuilder {
+public class ForPluginReferences {
 
     private Selector<Plugin> selector;
     private Action<Plugin> action;
     private Matcher<Model> modelMatcher = MavenMatchers.anything();
     private List<Extractor<Plugin>> extractors = Lists.newArrayList();
 
-    public static PomTransformationBuilder forAllModules() {
-        return new PomTransformationBuilder();
+    public static ForPluginReferences inAllModules() {
+        return new ForPluginReferences();
     }
 
-    public PomTransformationBuilder onlyTargetModulesMatching(Matcher<Model> modelMatcher) {
+    public ForPluginReferences onlyTargetModulesMatching(Matcher<Model> modelMatcher) {
         this.modelMatcher = modelMatcher;
         return this;
     }
 
-    public PomTransformationBuilder extract(Extractor<Plugin> extractor) {
+    public ForPluginReferences extract(Extractor<Plugin> extractor) {
         this.extractors.add(extractor);
         return this;
     }
 
-    public PomTransformationBuilder targetPluginsMatching(Selector<Plugin> selector) {
+    public ForPluginReferences targetPluginsMatching(Selector<Plugin> selector) {
         this.selector = selector;
         return this;
     }
 
-    public PomTransformationBuilder andPerform(Action<Plugin> action) {
+    public ForPluginReferences andPerform(Action<Plugin> action) {
         this.action = action;
         return this;
     }
 
-    public PomTransformationBuilder focusOnPluginsInBuildSection() {
+    public ForPluginReferences focusOnPluginsInBuildSection() {
         return extract(new PluginsFromBuild());
     }
 
-    public PomTransformationBuilder focusOnPluginsInPluginManagmentSection() {
+    public ForPluginReferences focusOnPluginsInPluginManagmentSection() {
         return extract(new PluginsFromPluginManagement());
     }
 
-    public PomTransformationBuilder focusOnPluginsInBuildAndPluginManagmentSection() {
+    public ForPluginReferences focusOnPluginsInBuildAndPluginManagmentSection() {
         return focusOnPluginsInBuildSection().focusOnPluginsInPluginManagmentSection();
     }
 
@@ -59,11 +59,11 @@ public class PomTransformationBuilder {
         return new DefaultModelTransformer<>(selector, action, modelMatcher, extractors);
     }
 
-    public PomTransformationBuilder pluginReferencesTo(String groupId, String artifactId) {
+    public ForPluginReferences pluginReferencesTo(String groupId, String artifactId) {
         return targetPluginsMatching(new PluginByGroupIdArtifactId(groupId, artifactId));
     }
 
-    public PomTransformationBuilder drop() {
+    public ForPluginReferences drop() {
         return andPerform(new DropPlugin());
     }
 }

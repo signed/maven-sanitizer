@@ -6,7 +6,7 @@ import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
-import com.github.signed.maven.sanitizer.pom.PomTransformationBuilder;
+import com.github.signed.maven.sanitizer.pom.ForPluginReferences;
 import com.github.signed.maven.sanitizer.pom.PomTransformerCreator;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-import static com.github.signed.maven.sanitizer.pom.PomTransformationBuilder.forAllModules;
 import static java.util.Collections.singletonList;
 
 class DefaultConfiguration implements Configuration {
@@ -32,16 +31,16 @@ class DefaultConfiguration implements Configuration {
 
     @Override
     public void configure(CopyPom copyingThePom) {
-        during(copyingThePom, forAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("org.apache.maven.plugins", "maven-antrun-plugin"));
-        during(copyingThePom, forAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("com.code54.mojo", "buildversion-plugin"));
-        during(copyingThePom, forAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("org.codehaus.mojo", "properties-maven-plugin"));
+        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("org.apache.maven.plugins", "maven-antrun-plugin"));
+        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("com.code54.mojo", "buildversion-plugin"));
+        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("org.codehaus.mojo", "properties-maven-plugin"));
 
         PomTransformerCreator pomTransformerCreator = new PomTransformerCreator(copyingThePom);
         pomTransformerCreator.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
         pomTransformerCreator.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"), new DropDependency());
     }
 
-    private void during(CopyPom copyPom, PomTransformationBuilder pomTransformationBuilder) {
-        copyPom.addTransformer(pomTransformationBuilder.create());
+    private void during(CopyPom copyPom, ForPluginReferences forPluginReferences) {
+        copyPom.addTransformer(forPluginReferences.create());
     }
 }
