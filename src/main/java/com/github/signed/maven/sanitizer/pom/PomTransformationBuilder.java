@@ -1,16 +1,19 @@
 package com.github.signed.maven.sanitizer.pom;
 
 import com.github.signed.maven.sanitizer.MavenMatchers;
+import com.google.common.collect.Lists;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.hamcrest.Matcher;
 
+import java.util.List;
+
 public class PomTransformationBuilder {
 
     private Selector<Plugin> selector;
-    private Extractor<Plugin> extractor;
     private Action<Plugin> action;
     private Matcher<Model> modelMatcher = MavenMatchers.anything();
+    private List<Extractor<Plugin>> extractors = Lists.newArrayList();
 
     public PomTransformationBuilder onlyTargetModulesMatching(Matcher<Model> modelMatcher) {
         this.modelMatcher = modelMatcher;
@@ -18,7 +21,7 @@ public class PomTransformationBuilder {
     }
 
     public PomTransformationBuilder extract(Extractor<Plugin> extractor) {
-        this.extractor = extractor;
+        this.extractors.add(extractor);
         return this;
     }
 
@@ -33,6 +36,6 @@ public class PomTransformationBuilder {
     }
 
     public ModelTransformer create() {
-        return new DefaultModelTransformer<>(selector, extractor, action, modelMatcher);
+        return new DefaultModelTransformer<>(selector, action, modelMatcher, extractors);
     }
 }

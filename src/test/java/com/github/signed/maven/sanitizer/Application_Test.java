@@ -16,7 +16,7 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 
-@Ignore("do not run on command line")
+
 public class Application_Test {
     public final Fixture fixture = new Fixture();
 
@@ -25,6 +25,7 @@ public class Application_Test {
 
 
     @Test
+    @Ignore("do not run on command line")
     public void copyTheStuff() throws Exception {
         String [] args = {fixture.multiModule.containingDirectory.toString(), folder.getRoot().toPath().toString()};
         Application.main(args);
@@ -32,6 +33,7 @@ public class Application_Test {
     }
 
     @Test
+    @Ignore("do not run on command line")
     public void testName() throws Exception {
         MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model = reader.read(new FileReader(fixture.singleModule));
@@ -61,6 +63,7 @@ public class Application_Test {
     }
 
     @Test
+    @Ignore("do not run on command line")
     public void embedder() throws Exception {
         System.setProperty("user.dir", fixture.multiModule.containingDirectory.toAbsolutePath().toString());
         MavenCli.main(new String[]{"compile"});

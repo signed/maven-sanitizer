@@ -5,6 +5,7 @@ import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
 import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
+import com.github.signed.maven.sanitizer.pom.PomTransformationBuilder;
 import com.github.signed.maven.sanitizer.pom.PomTransformerCreator;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
@@ -12,6 +13,8 @@ import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
+import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;
+import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromPluginManagement;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,11 +35,16 @@ class DefaultConfiguration implements Configuration {
 
     @Override
     public void configure(CopyPom copyPom) {
-        PomTransformerCreator pomTransformerCreator = new PomTransformerCreator(copyPom);
-        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin(), copyPom);
-        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin(), copyPom);
-        pomTransformerCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin(), copyPom);
+        PomTransformationBuilder builder2 = new PomTransformationBuilder().targetElementsMatching(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin")).andPerform(new DropPlugin());
+        copyPom.addTransformer(builder2.extract(new PluginsFromBuild()).extract(new PluginsFromPluginManagement()).create());
 
+        PomTransformationBuilder builder1 = new PomTransformationBuilder().targetElementsMatching(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin")).andPerform(new DropPlugin());
+        copyPom.addTransformer(builder1.extract(new PluginsFromBuild()).extract(new PluginsFromPluginManagement()).create());
+
+        PomTransformationBuilder builder = new PomTransformationBuilder().targetElementsMatching(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin")).andPerform(new DropPlugin());
+        copyPom.addTransformer(builder.extract(new PluginsFromBuild()).extract(new PluginsFromPluginManagement()).create());
+
+        PomTransformerCreator pomTransformerCreator = new PomTransformerCreator(copyPom);
         pomTransformerCreator.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
         pomTransformerCreator.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"), new DropDependency());
     }
