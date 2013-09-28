@@ -5,12 +5,15 @@ import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
 import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
+import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
+import com.github.signed.maven.sanitizer.pom.ForDependencyReferences;
 import com.github.signed.maven.sanitizer.pom.ForPluginReferences;
-import com.github.signed.maven.sanitizer.pom.PomTransformerCreator;
+import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
+import org.apache.maven.model.Dependency;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,9 +38,16 @@ class DefaultConfiguration implements Configuration {
         during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("com.code54.mojo", "buildversion-plugin"));
         during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagmentSection().drop().pluginReferencesTo("org.codehaus.mojo", "properties-maven-plugin"));
 
-        PomTransformerCreator pomTransformerCreator = new PomTransformerCreator(copyingThePom);
-        pomTransformerCreator.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
-        pomTransformerCreator.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"), new DropDependency());
+
+        Selector<Dependency> scopeTest = DependenciesInScope.Test();
+        Action<Dependency> action1 = new DropDependency();
+        ForDependencyReferences.inAllModules().theMethod(scopeTest, action1, copyingThePom);
+        ForDependencyReferences.inAllModules().theOtherMethod(scopeTest, action1, copyingThePom);
+
+        Selector<Dependency> gatCoordinates = new DependencyMatching("org.example", "artifact", "zip");
+        Action<Dependency> action = new DropDependency();
+        ForDependencyReferences.inAllModules().theMethod(gatCoordinates, action, copyingThePom);
+        ForDependencyReferences.inAllModules().theOtherMethod(gatCoordinates, action, copyingThePom);
     }
 
     private void during(CopyPom copyPom, ForPluginReferences forPluginReferences) {
