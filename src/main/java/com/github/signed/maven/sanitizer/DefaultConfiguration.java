@@ -5,6 +5,7 @@ import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
 import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
+import com.github.signed.maven.sanitizer.pom.ConfigurationCreator;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
@@ -31,11 +32,11 @@ class DefaultConfiguration implements Configuration {
 
     @Override
     public void configure(CopyPom copyPom) {
-        copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
-        copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
-        copyPom.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
-        copyPom.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
-        copyPom.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"),new DropDependency());
+        ConfigurationCreator configurationCreator = new ConfigurationCreator(copyPom);
+        configurationCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.apache.maven.plugins", "maven-antrun-plugin"), new DropPlugin());
+        configurationCreator.addPluginTransformation(new PluginByGroupIdArtifactId("com.code54.mojo", "buildversion-plugin"), new DropPlugin());
+        configurationCreator.addPluginTransformation(new PluginByGroupIdArtifactId("org.codehaus.mojo", "properties-maven-plugin"), new DropPlugin());
+        configurationCreator.addDependencyTransformation(DependenciesInScope.Test(), new DropDependency());
+        configurationCreator.addDependencyTransformation(new DependencyMatching("org.example", "artifact", "zip"), new DropDependency());
     }
-
 }
