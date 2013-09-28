@@ -10,21 +10,21 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.hamcrest.Matcher;
 
-public class ConfigurationCreator {
+public class PomTransformerCreator {
 
     private final CopyPom copyPom;
 
-    public ConfigurationCreator(CopyPom copyPom) {
+    public PomTransformerCreator(CopyPom copyPom) {
         this.copyPom = copyPom;
-    }
-
-    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
-        addPluginTransformation(selector, action, MavenMatchers.<Model>anything());
     }
 
     public void addDependencyTransformation(Selector<Dependency> selector, Action<Dependency> action) {
         copyPom.addTransformer(new DefaultModelTransformer<>(selector, new DependenciesFromDependencies(), action, MavenMatchers.<Model>anything()));
         copyPom.addTransformer(new DefaultModelTransformer<>(selector, new DependenciesFromDependencyManagement(), action, MavenMatchers.<Model>anything()));
+    }
+
+    public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action) {
+        addPluginTransformation(selector, action, MavenMatchers.<Model>anything());
     }
 
     public void addPluginTransformation(Selector<Plugin> selector, Action<Plugin> action, Matcher<Model> matcher) {
