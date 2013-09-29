@@ -61,7 +61,7 @@ public class DropModuleSteps {
         nameOfModuleToBeDropped = moduleName;
         this.configuration = new Configuration() {
             @Override
-            public void configure(CopyProjectFiles projectFiles) {
+            public void configure(CollectPathsToCopy projectFiles) {
                 //nothing to do in this case
             }
 

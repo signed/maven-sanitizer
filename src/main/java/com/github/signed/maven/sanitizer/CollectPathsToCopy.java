@@ -10,14 +10,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CopyProjectFiles {
+public class CollectPathsToCopy {
     private final Collection<PathsProvider> pathsProviders = new ArrayList<>();
 
     public void addPathsToCopy(PathsProvider provider) {
         this.pathsProviders.add(provider);
     }
 
-    public Set<Path> allPathsCollectedFrom(MavenProject mavenProject) {
+    public Set<Path> from(MavenProject mavenProject) {
         Set<Path> pathsToCopy = new HashSet<>();
         for (PathsProvider pathsProvider : pathsProviders) {
             Iterables.addAll(pathsToCopy, pathsProvider.paths(mavenProject));

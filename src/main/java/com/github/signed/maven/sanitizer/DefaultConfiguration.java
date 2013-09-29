@@ -20,12 +20,12 @@ import static java.util.Collections.singletonList;
 class DefaultConfiguration implements Configuration {
 
     @Override
-    public void configure(CopyProjectFiles copyProjectFiles) {
-        copyProjectFiles.addPathsToCopy(new SourceRoots());
-        copyProjectFiles.addPathsToCopy(new ResourceRoots());
-        copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
-        copyProjectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
-        copyProjectFiles.addPathsToCopy(new ProjectSubdirectory("org.example", "parent", "important"));
+    public void configure(CollectPathsToCopy collectPathsToCopy) {
+        collectPathsToCopy.addPathsToCopy(new SourceRoots());
+        collectPathsToCopy.addPathsToCopy(new ResourceRoots());
+        collectPathsToCopy.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
+        collectPathsToCopy.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
+        collectPathsToCopy.addPathsToCopy(new ProjectSubdirectory("org.example", "parent", "important"));
     }
 
     @Override

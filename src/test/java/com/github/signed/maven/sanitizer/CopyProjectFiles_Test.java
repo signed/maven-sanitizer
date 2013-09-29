@@ -22,11 +22,11 @@ public class CopyProjectFiles_Test {
     public final TemporaryFolder destination = new TemporaryFolder();
 
     private final MavenProjectBuilder mavenProject = MavenProjectBuilder.hire();
-    private final CopyProjectFiles copyProjectFiles = new CopyProjectFiles();
+    private final CollectPathsToCopy collectPathsToCopy = new CollectPathsToCopy();
 
     @Before
     public void searchForResourceRoots(){
-        copyProjectFiles.addPathsToCopy(new ResourceRoots());
+        collectPathsToCopy.addPathsToCopy(new ResourceRoots());
     }
 
     @Before
@@ -43,7 +43,7 @@ public class CopyProjectFiles_Test {
     @Test
     public void copyEntireResourceDirectoryToTarget() throws Exception {
         mavenProject.buildSection().addResource("src/main/resources");
-        cleanRoomGuard().copyToCleanRoom(copyProjectFiles.allPathsCollectedFrom(mavenProject.build()));
+        cleanRoomGuard().copyToCleanRoom(collectPathsToCopy.from(mavenProject.build()));
 
         assertThat(new File(destination.getRoot(), "artifact/src/main/resources/aResource.txt"), isAFile());
     }

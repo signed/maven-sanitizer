@@ -4,7 +4,7 @@ import com.github.signed.maven.sanitizer.pom.CopyPom;
 
 public interface Configuration {
 
-    void configure(CopyProjectFiles projectFiles);
+    void configure(CollectPathsToCopy projectFiles);
 
     void configure(CopyPom copyPom);
 }
