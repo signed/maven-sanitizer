@@ -34,15 +34,20 @@ public class MavenProjectBuilder {
         return this;
     }
 
-    public MavenProject build() {
-        if (buildBuilder.isPresent()) {
-            mavenProject.setBuild(buildBuilder.get().build());
-        }
-        return mavenProject;
+    public MavenProjectBuilder withModule(String moduleName) {
+        mavenProject.getModules().add(moduleName);
+        return this;
     }
 
     public MavenProjectBuilder withArtifactId(String artifact) {
         mavenProject.setArtifactId(artifact);
         return this;
+    }
+
+    public MavenProject build() {
+        if (buildBuilder.isPresent()) {
+            mavenProject.setBuild(buildBuilder.get().build());
+        }
+        return mavenProject;
     }
 }
