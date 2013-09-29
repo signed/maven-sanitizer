@@ -22,12 +22,16 @@ public class CopyPom {
     }
 
     public void from(MavenProject mavenProject) {
-        Path pom = mavenProject.getFile().toPath();
         Model model = mavenProject.getModel();
         Model targetModelToWrite = mavenProject.getOriginalModel().clone();
         TheModels models = new TheModels(model, targetModelToWrite);
         transform(models);
-        String content = serializer.serializeModelToString(targetModelToWrite);
+        toCleanRoom(mavenProject, models.targetModelToWrite);
+    }
+
+    private void toCleanRoom(MavenProject mavenProject, Model targetModelToWrite1) {
+        String content = serializer.serializeModelToString(targetModelToWrite1);
+        Path pom = mavenProject.getFile().toPath();
         cleanRoom.writeStringToPathAssociatedWith(pom, content);
     }
 
