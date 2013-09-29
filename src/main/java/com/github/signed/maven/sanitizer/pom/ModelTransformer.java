@@ -4,5 +4,5 @@ import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 
 public interface ModelTransformer {
 
-    void transform(TheModels models, DiagnosticsWriter diagnosticsWriter);
+    void transform(infectedProject models, DiagnosticsWriter diagnosticsWriter);
 }

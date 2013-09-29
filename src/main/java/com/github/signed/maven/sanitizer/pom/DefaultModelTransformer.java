@@ -20,7 +20,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     }
 
     @Override
-    public void transform(TheModels models, DiagnosticsWriter diagnosticsWriter) {
+    public void transform(infectedProject models, DiagnosticsWriter diagnosticsWriter) {
         if( !projectMatcher.matches(models.fullyPopulatedModel)){
             return;
         }
@@ -30,7 +30,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
         }
     }
 
-    private void transform(TheModels models, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
+    private void transform(infectedProject models, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
         for (MavenModelElement element : extractor.elements(models.fullyPopulatedModel)) {
             action.performOn(extractor.elements(models.targetModelToWrite));
             selector.executeActionOnMatch(element, action, diagnosticsWriter);
