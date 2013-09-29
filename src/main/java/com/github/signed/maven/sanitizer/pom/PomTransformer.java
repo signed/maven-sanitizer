@@ -19,14 +19,10 @@ public class PomTransformer {
     }
 
     public SanitizedPom transformPomIn(MavenProject mavenProject) {
-        infectedProject infectedProject = new infectedProject(mavenProject);
-        transform(infectedProject);
-        return new SanitizedPom(mavenProject, infectedProject.targetModelToWrite);
-    }
-
-    private void transform(infectedProject models) {
+        InfectedProject infectedProject = new InfectedProject(mavenProject);
         for (ModelTransformer modelTransformer : modelTransformers) {
-            modelTransformer.transform(models, diagnosis);
+            modelTransformer.transform(infectedProject, diagnosis);
         }
+        return new SanitizedPom(mavenProject, infectedProject.targetModelToWrite);
     }
 }

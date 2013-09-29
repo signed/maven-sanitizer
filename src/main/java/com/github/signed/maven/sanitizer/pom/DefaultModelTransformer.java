@@ -20,19 +20,19 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     }
 
     @Override
-    public void transform(infectedProject models, DiagnosticsWriter diagnosticsWriter) {
-        if( !projectMatcher.matches(models.fullyPopulatedModel)){
+    public void transform(InfectedProject infectedProject, DiagnosticsWriter diagnosticsWriter) {
+        if( !projectMatcher.matches(infectedProject.fullyPopulatedModel)){
             return;
         }
 
         for (Extractor<MavenModelElement> extractor : extractors) {
-            transform(models, extractor, diagnosticsWriter);
+            transform(infectedProject, extractor, diagnosticsWriter);
         }
     }
 
-    private void transform(infectedProject models, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
-        for (MavenModelElement element : extractor.elements(models.fullyPopulatedModel)) {
-            action.performOn(extractor.elements(models.targetModelToWrite));
+    private void transform(InfectedProject infectedProject, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
+        for (MavenModelElement element : extractor.elements(infectedProject.fullyPopulatedModel)) {
+            action.performOn(extractor.elements(infectedProject.targetModelToWrite));
             selector.executeActionOnMatch(element, action, diagnosticsWriter);
         }
     }
