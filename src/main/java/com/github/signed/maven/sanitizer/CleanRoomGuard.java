@@ -29,7 +29,11 @@ public class CleanRoomGuard {
     }
 
     public void toCleanRoom(SanitizedPom sanitizedPom) {
-        cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(sanitizedPom.sourceMavenProject));
+        Path baseDir = baseDirectoryOf(sanitizedPom.sourceMavenProject);
+        if( !diagnoses.isSafeToCopy(baseDir)){
+            return;
+        }
+        cleanRoom.createDirectoryAssociatedTo(baseDir);
         String content = serializer.serializeModelToString(sanitizedPom.transformedModelToWrite);
         Path pom = sanitizedPom.sourceMavenProject.getFile().toPath();
         cleanRoom.writeStringToPathAssociatedWith(pom, content);
