@@ -29,13 +29,13 @@ class DefaultConfiguration implements Configuration {
     }
 
     @Override
-    public void configure(PomTransformer copyingThePom) {
-        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.apache.maven.plugins", "maven-antrun-plugin"));
-        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("com.code54.mojo", "buildversion-plugin"));
-        during(copyingThePom, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.codehaus.mojo", "properties-maven-plugin"));
+    public void configure(PomTransformer pomTransformation) {
+        during(pomTransformation, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.apache.maven.plugins", "maven-antrun-plugin"));
+        during(pomTransformation, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("com.code54.mojo", "buildversion-plugin"));
+        during(pomTransformation, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.codehaus.mojo", "properties-maven-plugin"));
 
-        during(copyingThePom, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
-        during(copyingThePom, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")));
+        during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
+        during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")));
     }
 
     private void during(PomTransformer copyingThePom, ForDependencyReferences perform) {

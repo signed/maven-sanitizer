@@ -6,5 +6,5 @@ public interface Configuration {
 
     void configure(CollectPathsToCopy projectFiles);
 
-    void configure(PomTransformer pomTransformer);
+    void configure(PomTransformer pomTransformation);
 }
