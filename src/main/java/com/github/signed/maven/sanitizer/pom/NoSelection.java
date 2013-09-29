@@ -7,7 +7,7 @@ public class NoSelection<T> implements Selector<T> {
     }
 
     @Override
-    public void executeActionOnMatch(T element, Action<T> action) {
+    public void executeActionOnMatch(T candidate, Action<T> action) {
         //do nothing;
     }
 }

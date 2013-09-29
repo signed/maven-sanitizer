@@ -18,19 +18,19 @@ public class DependencyMatching implements Selector<Dependency> {
     }
 
     @Override
-    public void executeActionOnMatch(Dependency element, Action<Dependency> action) {
+    public void executeActionOnMatch(Dependency candidate, Action<Dependency> action) {
         Strings strings = new Strings();
-        if( !strings.matching(element.getGroupId(), groupId)){
+        if( !strings.matching(candidate.getGroupId(), groupId)){
             return;
         }
-        if( !strings.matching(element.getArtifactId(), artifactId)){
-            return;
-        }
-
-        if( !strings.matching(element.getType(), type)){
+        if( !strings.matching(candidate.getArtifactId(), artifactId)){
             return;
         }
 
-        action.perform(element);
+        if( !strings.matching(candidate.getType(), type)){
+            return;
+        }
+
+        action.perform(candidate);
     }
 }

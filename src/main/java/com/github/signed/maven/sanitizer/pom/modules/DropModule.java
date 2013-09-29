@@ -2,14 +2,26 @@ package com.github.signed.maven.sanitizer.pom.modules;
 
 import com.github.signed.maven.sanitizer.pom.Action;
 
+import java.util.Iterator;
+
 public class DropModule implements Action<Module> {
+    private Iterable<Module> elements;
+
     @Override
     public void performOn(Iterable<Module> elements) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        this.elements = elements;
     }
 
     @Override
     public void perform(Module element) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Iterator<Module> elementIterator = elements.iterator();
+        while (elementIterator.hasNext()) {
+            Module current = elementIterator.next();
+            if (!element.equals(current)) {
+                continue;
+            }
+
+            elementIterator.remove();
+        }
     }
 }

@@ -88,12 +88,12 @@ public class DropModuleSteps {
     public void theReactorPomDoesNotContainTheModuleAnyMore() throws Throwable {
         List<MavenProject> mavenProjects = new MavenFacade().getMavenProjects(destination);
 
-
         String moduleName = "multimodule";
         for (MavenProject mavenProject : mavenProjects) {
             if(moduleName.equals(mavenProject.getName())){
                 Model originalModel = mavenProject.getOriginalModel();
                 assertThat(originalModel.getModules(), not(hasItem(nameOfModuleToBeDropped)));
+                return;
             }
         }
         Assert.fail("there was no module with the expected name "+moduleName);

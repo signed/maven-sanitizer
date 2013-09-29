@@ -11,9 +11,9 @@ public class ModuleWithName implements Selector<Module> {
     }
 
     @Override
-    public void executeActionOnMatch(Module element, Action<Module> action) {
-        if (module.equals(element)) {
-            action.perform(element);
+    public void executeActionOnMatch(Module candidate, Action<Module> action) {
+        if (module.equals(candidate)) {
+            action.perform(candidate);
         }
     }
 }

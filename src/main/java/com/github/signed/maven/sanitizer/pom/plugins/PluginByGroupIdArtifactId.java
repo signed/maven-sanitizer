@@ -15,9 +15,9 @@ public class PluginByGroupIdArtifactId implements Selector<Plugin> {
     }
 
     @Override
-    public void executeActionOnMatch(Plugin plugin, Action<Plugin> action) {
-        if(groupId.equals(plugin.getGroupId()) && artifactId.equals(plugin.getArtifactId()) ){
-            action.perform(plugin);
+    public void executeActionOnMatch(Plugin candidate, Action<Plugin> action) {
+        if(groupId.equals(candidate.getGroupId()) && artifactId.equals(candidate.getArtifactId()) ){
+            action.perform(candidate);
         }
     }
 }

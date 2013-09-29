@@ -20,9 +20,9 @@ public class DependenciesInScope implements Selector<Dependency> {
     }
 
     @Override
-    public void executeActionOnMatch(Dependency dependency, Action<Dependency> action) {
-        if (scope.equals(dependency.getScope())) {
-            action.perform(dependency);
+    public void executeActionOnMatch(Dependency candidate, Action<Dependency> action) {
+        if (scope.equals(candidate.getScope())) {
+            action.perform(candidate);
         }
     }
 }
