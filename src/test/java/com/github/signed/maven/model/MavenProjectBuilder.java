@@ -3,6 +3,7 @@ package com.github.signed.maven.model;
 import com.google.common.base.Optional;
 import org.apache.maven.project.MavenProject;
 
+import java.io.File;
 import java.nio.file.Path;
 
 public class MavenProjectBuilder {
@@ -25,7 +26,11 @@ public class MavenProjectBuilder {
     }
 
     public MavenProjectBuilder pomAt(Path pomLocation) {
-        mavenProject.setFile(pomLocation.toFile());
+        return pomAt(pomLocation.toFile());
+    }
+
+    public MavenProjectBuilder pomAt(File pomLocation) {
+        mavenProject.setFile(pomLocation);
         return this;
     }
 

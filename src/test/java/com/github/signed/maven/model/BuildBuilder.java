@@ -2,6 +2,7 @@ package com.github.signed.maven.model;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,14 @@ public class BuildBuilder {
         PluginBuilder pluginBuilder = PluginBuilder.hire().groupId(groupId).artifactId(artifactId);
         pluginBuilders.add(pluginBuilder);
         return pluginBuilder;
+    }
+
+    public BuildBuilder addResource(String relativeResourcePath) {
+        List<Resource> resources = build.getResources();
+        Resource resource = new Resource();
+        resource.setDirectory("src/main/resources");
+        resources.add(resource);
+        return this;
     }
 
     public Build build() {
