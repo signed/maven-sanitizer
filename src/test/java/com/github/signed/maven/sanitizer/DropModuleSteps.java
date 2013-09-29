@@ -6,6 +6,7 @@ import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Extractor;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
 import com.github.signed.maven.sanitizer.pom.modules.DropModule;
+import com.github.signed.maven.sanitizer.pom.modules.Module;
 import com.github.signed.maven.sanitizer.pom.modules.ModuleWithName;
 import com.github.signed.maven.sanitizer.pom.modules.ModulesFromReactor;
 import cucumber.api.java.After;
@@ -15,7 +16,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.maven.cli.MavenFacade;
 import org.apache.maven.model.Model;
-import com.github.signed.maven.sanitizer.pom.modules.Module;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -97,5 +98,12 @@ public class DropModuleSteps {
             }
         }
         Assert.fail("there was no module with the expected name "+moduleName);
+    }
+
+    @Then("^the dropped module does not exist in the destination directory$")
+    public void theDroppedModuleDoesNotExistInTheDestinationDirectory() throws Throwable {
+        SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
+        Path expectedLocationIfModuleWouldBeCopied = mapper.map(source.resolve(nameOfModuleToBeDropped));
+        assertThat(expectedLocationIfModuleWouldBeCopied.toFile().exists(),  is(false));
     }
 }
