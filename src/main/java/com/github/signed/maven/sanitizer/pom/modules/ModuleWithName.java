@@ -4,12 +4,16 @@ import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.Selector;
 
 public class ModuleWithName implements Selector<Module> {
+    private final Module module;
+
     public ModuleWithName(Module module) {
-        //To change body of created methods use File | Settings | File Templates.
+        this.module = module;
     }
 
     @Override
     public void executeActionOnMatch(Module element, Action<Module> action) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (module.equals(element)) {
+            action.perform(element);
+        }
     }
 }
