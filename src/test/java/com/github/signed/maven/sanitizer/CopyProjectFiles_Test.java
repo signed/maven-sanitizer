@@ -24,6 +24,12 @@ public class CopyProjectFiles_Test {
     public final TemporaryFolder destination = new TemporaryFolder();
     private final MavenProject mavenProject = new MavenProject();
 
+    private final CopyProjectFiles copyProjectFiles = new CopyProjectFiles();
+
+    @Before
+    public void searchForResourceRoots(){
+        copyProjectFiles.addPathsToCopy(new ResourceRoots());
+    }
 
     @Before
     public void copySampleProjectToTemporaryFolder() throws Exception {
@@ -43,16 +49,14 @@ public class CopyProjectFiles_Test {
         resource.setDirectory("src/main/resources");
         resources.add(resource);
 
-        copyProject().copy(mavenProject);
+        cleanRoomGuard().copyToCleanRoom(copyProjectFiles.allPathsCollectedFrom(mavenProject));
 
         assertThat(new File(destination.getRoot(), "artifact/src/main/resources/aResource.txt"), isAFile());
     }
 
-    private CopyProjectFiles copyProject() {
+    private CleanRoomGuard cleanRoomGuard() {
         SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source.getRoot().toPath(), destination.getRoot().toPath());
-        final CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
-        CopyProjectFiles copyProjectFiles = new CopyProjectFiles(cleanRoom);
-        copyProjectFiles.addPathsToCopy(new ResourceRoots());
-        return copyProjectFiles;
+        CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
+        return new CleanRoomGuard(cleanRoom);
     }
 }

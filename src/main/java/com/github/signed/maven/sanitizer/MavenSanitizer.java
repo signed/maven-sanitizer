@@ -13,6 +13,8 @@ import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 
 public class MavenSanitizer {
 
+    private final CleanRoomGuard cleanRoomGuard;
+
     public static void main(String[] args) {
         Path source = Paths.get(args[0]).toAbsolutePath();
         Path destination = Paths.get(args[1]).toAbsolutePath();
@@ -38,7 +40,8 @@ public class MavenSanitizer {
         final SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
         cleanRoom = new CleanRoom(new FileSystem(), mapper);
         copyPom = new CopyPom(cleanRoom);
-        copyProjectFiles = new CopyProjectFiles(cleanRoom);
+        cleanRoomGuard = new CleanRoomGuard(cleanRoom);
+        copyProjectFiles = new CopyProjectFiles();
         this.configuration = configuration;
     }
 
@@ -52,7 +55,7 @@ public class MavenSanitizer {
         for (MavenProject mavenProject : mavenProjects) {
             cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(mavenProject));
             copyPom.from(mavenProject);
-            copyProjectFiles.copy(mavenProject);
+            cleanRoomGuard.copyToCleanRoom(copyProjectFiles.allPathsCollectedFrom(mavenProject));
         }
     }
 
