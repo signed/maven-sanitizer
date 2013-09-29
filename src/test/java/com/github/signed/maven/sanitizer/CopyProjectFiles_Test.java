@@ -43,7 +43,9 @@ public class CopyProjectFiles_Test {
     @Test
     public void copyEntireResourceDirectoryToTarget() throws Exception {
         mavenProject.buildSection().addResource("src/main/resources");
-        cleanRoomGuard().copyToCleanRoom(collectPathsToCopy.from(mavenProject.build()));
+        CleanRoomApplication cleanRoomApplication = new CleanRoomApplication();
+        cleanRoomApplication.addAll(collectPathsToCopy.from(mavenProject.build()));
+        cleanRoomGuard().copyToCleanRoom(cleanRoomApplication);
 
         assertThat(new File(destination.getRoot(), "artifact/src/main/resources/aResource.txt"), isAFile());
     }

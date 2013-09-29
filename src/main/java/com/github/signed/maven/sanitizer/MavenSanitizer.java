@@ -2,14 +2,12 @@ package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.pom.CleanRoom;
 import com.github.signed.maven.sanitizer.pom.CopyPom;
-import com.google.common.collect.Sets;
 import org.apache.maven.cli.MavenFacade;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
 
 import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 
@@ -54,14 +52,13 @@ public class MavenSanitizer {
 
     public void sanitize() {
         List<MavenProject> mavenProjects = new MavenFacade().getMavenProjects(source);
-        Set<Path> pathsToCopy = Sets.newHashSet();
+        CleanRoomApplication cleanRoomApplication = new CleanRoomApplication();
         for (MavenProject mavenProject : mavenProjects) {
             cleanRoom.createDirectoryAssociatedTo(baseDirectoryOf(mavenProject));
             copyPom.from(mavenProject);
-            pathsToCopy.addAll(collectPathsToCopy.from(mavenProject));
+            cleanRoomApplication.addAll(collectPathsToCopy.from(mavenProject));
         }
 
-        cleanRoomGuard.copyToCleanRoom(pathsToCopy);
+        cleanRoomGuard.copyToCleanRoom(cleanRoomApplication);
     }
-
 }

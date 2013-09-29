@@ -12,8 +12,8 @@ public class CleanRoomGuard {
         this.cleanRoom = cleanRoom;
     }
 
-    public void copyToCleanRoom(Iterable<Path> sourceDirectoryToCopy) {
-        for (Path path : sourceDirectoryToCopy) {
+    public void copyToCleanRoom(CleanRoomApplication cleanRoomApplication) {
+        for (Path path : cleanRoomApplication.pathsToCopy()) {
             cleanRoom.copyContentBelowInAssociatedDirectory(path);
         }
     }
