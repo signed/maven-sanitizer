@@ -53,6 +53,6 @@ public class CopyProjectFiles_Test {
     private CleanRoomGuard cleanRoomGuard() {
         SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source.getRoot().toPath(), destination.getRoot().toPath());
         CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
-        return new CleanRoomGuard(cleanRoom);
+        return new CleanRoomGuard(cleanRoom, new TransformationDiagnostics());
     }
 }

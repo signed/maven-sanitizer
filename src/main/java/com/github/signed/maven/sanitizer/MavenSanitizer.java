@@ -35,9 +35,10 @@ public class MavenSanitizer {
     public MavenSanitizer(Path source, Path destination, Configuration configuration) {
         this.source = source;
         final SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
-        pomTransformer = new PomTransformer();
+        TransformationDiagnostics transformationDiagnostics = new TransformationDiagnostics();
+        pomTransformer = new PomTransformer(transformationDiagnostics);
         CleanRoom cleanRoom = new CleanRoom(new FileSystem(), mapper);
-        cleanRoomGuard = new CleanRoomGuard(cleanRoom);
+        cleanRoomGuard = new CleanRoomGuard(cleanRoom, transformationDiagnostics);
         collectPathsToCopy = new CollectPathsToCopy();
         this.configuration = configuration;
     }

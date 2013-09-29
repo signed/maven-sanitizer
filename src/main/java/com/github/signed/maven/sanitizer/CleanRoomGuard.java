@@ -11,7 +11,7 @@ public class CleanRoomGuard {
     private final ModelSerializer serializer = new ModelSerializer();
     private final CleanRoom cleanRoom;
 
-    public CleanRoomGuard(CleanRoom cleanRoom) {
+    public CleanRoomGuard(CleanRoom cleanRoom, TransformationDiagnostics transformationDiagnostics) {
         this.cleanRoom = cleanRoom;
     }
 
