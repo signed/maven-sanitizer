@@ -30,9 +30,9 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
         }
     }
 
-    private void transform(TheModels models, Extractor<MavenModelElement> currentExtractor, DiagnosticsWriter diagnosticsWriter) {
-        for (MavenModelElement element : currentExtractor.elements(models.fullyPopulatedModel)) {
-            action.performOn(currentExtractor.elements(models.targetModelToWrite));
+    private void transform(TheModels models, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
+        for (MavenModelElement element : extractor.elements(models.fullyPopulatedModel)) {
+            action.performOn(extractor.elements(models.targetModelToWrite));
             selector.executeActionOnMatch(element, action, diagnosticsWriter);
         }
     }
