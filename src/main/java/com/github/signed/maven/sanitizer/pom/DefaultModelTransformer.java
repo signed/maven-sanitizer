@@ -1,6 +1,6 @@
 package com.github.signed.maven.sanitizer.pom;
 
-import com.github.signed.maven.sanitizer.TransformationDiagnostics;
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import org.apache.maven.model.Model;
 import org.hamcrest.Matcher;
 
@@ -20,7 +20,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     }
 
     @Override
-    public void transform(TheModels models, TransformationDiagnostics transformationDiagnostics) {
+    public void transform(TheModels models, DiagnosticsWriter diagnosticsWriter) {
         if( !projectMatcher.matches(models.fullyPopulatedModel)){
             return;
         }

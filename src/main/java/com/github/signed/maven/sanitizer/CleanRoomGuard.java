@@ -10,9 +10,11 @@ import static com.github.signed.maven.sanitizer.path.BasePath.baseDirectoryOf;
 public class CleanRoomGuard {
     private final ModelSerializer serializer = new ModelSerializer();
     private final CleanRoom cleanRoom;
+    private final DiagnosticsReader diagnoses;
 
-    public CleanRoomGuard(CleanRoom cleanRoom, TransformationDiagnostics transformationDiagnostics) {
+    public CleanRoomGuard(CleanRoom cleanRoom, DiagnosticsReader diagnoses) {
         this.cleanRoom = cleanRoom;
+        this.diagnoses = diagnoses;
     }
 
     public void process(CleanRoomApplication cleanRoomApplication) {
@@ -20,7 +22,9 @@ public class CleanRoomGuard {
             toCleanRoom(sanitizedPom);
         }
         for (Path path : cleanRoomApplication.pathsToCopy()) {
-            cleanRoom.copyContentBelowInAssociatedDirectory(path);
+            if( diagnoses.isSafeToCopy(path)){
+                cleanRoom.copyContentBelowInAssociatedDirectory(path);
+            }
         }
     }
 

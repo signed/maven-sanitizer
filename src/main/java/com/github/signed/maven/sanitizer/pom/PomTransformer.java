@@ -1,6 +1,6 @@
 package com.github.signed.maven.sanitizer.pom;
 
-import com.github.signed.maven.sanitizer.TransformationDiagnostics;
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import org.apache.maven.project.MavenProject;
 
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class PomTransformer {
     private final List<ModelTransformer> modelTransformers = new ArrayList<>();
-    private final TransformationDiagnostics transformationDiagnostics;
+    private final DiagnosticsWriter diagnosis;
 
-    public PomTransformer(TransformationDiagnostics transformationDiagnostics) {
-        this.transformationDiagnostics = transformationDiagnostics;
+    public PomTransformer(DiagnosticsWriter diagnosis) {
+        this.diagnosis = diagnosis;
     }
 
     public void addTransformer(ModelTransformer transformer) {
@@ -26,7 +26,7 @@ public class PomTransformer {
 
     private void transform(TheModels models) {
         for (ModelTransformer modelTransformer : modelTransformers) {
-            modelTransformer.transform(models, transformationDiagnostics);
+            modelTransformer.transform(models, diagnosis);
         }
     }
 }
