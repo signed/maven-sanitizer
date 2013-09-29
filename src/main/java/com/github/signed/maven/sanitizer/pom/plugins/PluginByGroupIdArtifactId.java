@@ -1,5 +1,6 @@
 package com.github.signed.maven.sanitizer.pom.plugins;
 
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.Action;
 import org.apache.maven.model.Plugin;
@@ -15,7 +16,7 @@ public class PluginByGroupIdArtifactId implements Selector<Plugin> {
     }
 
     @Override
-    public void executeActionOnMatch(Plugin candidate, Action<Plugin> action) {
+    public void executeActionOnMatch(Plugin candidate, Action<Plugin> action, DiagnosticsWriter diagnosticsWriter) {
         if(groupId.equals(candidate.getGroupId()) && artifactId.equals(candidate.getArtifactId()) ){
             action.perform(candidate);
         }

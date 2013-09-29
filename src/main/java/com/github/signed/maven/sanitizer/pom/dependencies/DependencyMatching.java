@@ -1,5 +1,6 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.Strings;
@@ -18,7 +19,7 @@ public class DependencyMatching implements Selector<Dependency> {
     }
 
     @Override
-    public void executeActionOnMatch(Dependency candidate, Action<Dependency> action) {
+    public void executeActionOnMatch(Dependency candidate, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter) {
         Strings strings = new Strings();
         if( !strings.matching(candidate.getGroupId(), groupId)){
             return;
