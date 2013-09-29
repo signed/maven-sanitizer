@@ -1,7 +1,7 @@
 package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.pom.Action;
-import com.github.signed.maven.sanitizer.pom.CopyPom;
+import com.github.signed.maven.sanitizer.pom.PomTransformer;
 import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Extractor;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
@@ -66,14 +66,14 @@ public class DropModuleSteps {
             }
 
             @Override
-            public void configure(CopyPom copyPom) {
+            public void configure(PomTransformer pomTransformer) {
                 List<Extractor<Module>> moduleExtractors = Collections.<Extractor<Module>>singletonList(new ModulesFromReactor());
                 ModuleWithName moduleWithName = new ModuleWithName(new Module(nameOfModuleToBeDropped));
                 Action<Module> action = new DropModule();
                 Matcher<Model> any = MavenMatchers.anything();
                 ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors );
 
-                copyPom.addTransformer(transformer);
+                pomTransformer.addTransformer(transformer);
             }
         };
     }

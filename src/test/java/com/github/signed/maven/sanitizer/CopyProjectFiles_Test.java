@@ -45,7 +45,7 @@ public class CopyProjectFiles_Test {
         mavenProject.buildSection().addResource("src/main/resources");
         CleanRoomApplication cleanRoomApplication = new CleanRoomApplication();
         cleanRoomApplication.addAll(collectPathsToCopy.from(mavenProject.build()));
-        cleanRoomGuard().copyToCleanRoom(cleanRoomApplication);
+        cleanRoomGuard().process(cleanRoomApplication);
 
         assertThat(new File(destination.getRoot(), "artifact/src/main/resources/aResource.txt"), isAFile());
     }
