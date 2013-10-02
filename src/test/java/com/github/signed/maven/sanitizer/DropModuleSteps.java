@@ -95,7 +95,6 @@ public class DropModuleSteps {
         assertThat(sanitizedBuild().reactor().getModules(), not(hasItem(nameOfModuleToBeDropped)));
     }
 
-
     @Then("^the dropped module does not exist in the destination directory$")
     public void theDroppedModuleDoesNotExistInTheDestinationDirectory() throws Throwable {
         SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);

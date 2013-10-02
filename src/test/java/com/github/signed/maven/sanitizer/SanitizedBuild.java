@@ -15,21 +15,8 @@ public class SanitizedBuild {
         mavenProjects = new MavenFacade().getMavenProjects(destination);
     }
 
-    public List<String> getModulesDefinedIn(String moduleName) {
-        return getModelFor(moduleName).getModules();
-    }
-
     public Model warModule() {
         return getModelFor("war");
-    }
-
-    Model getModelFor(String moduleName) {
-        for (MavenProject mavenProject : this.mavenProjects) {
-            if (moduleName.equals(mavenProject.getName())) {
-                return mavenProject.getOriginalModel();
-            }
-        }
-        throw new RuntimeException("there was no module with the expected name " + moduleName);
     }
 
     public Model reactor() {
@@ -38,5 +25,14 @@ public class SanitizedBuild {
 
     public Model parent() {
         return getModelFor("parent");
+    }
+
+    private Model getModelFor(String moduleName) {
+        for (MavenProject mavenProject : this.mavenProjects) {
+            if (moduleName.equals(mavenProject.getName())) {
+                return mavenProject.getOriginalModel();
+            }
+        }
+        throw new RuntimeException("there was no module with the expected name " + moduleName);
     }
 }
