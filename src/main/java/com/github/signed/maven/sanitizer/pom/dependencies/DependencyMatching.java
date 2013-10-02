@@ -6,37 +6,57 @@ import com.github.signed.maven.sanitizer.pom.InfectedProject;
 import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Dependency;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 
 public class DependencyMatching implements Selector<Dependency> {
 
     public static DependencyMatching dependencyWith(String groupId, String artifactId, String type) {
-        return new DependencyMatching(groupId, artifactId, type);
+        return new DependencyMatching(new MavenStringMatcher(groupId), new MavenStringMatcher(artifactId), new MavenStringMatcher(type));
     }
 
-    private final String groupId;
-    private final String artifactId;
-    private final String type;
+    private final Matcher<String> groupIdMatcher;
+    private final Matcher<String> artifactIdMatcher;
+    private final Matcher<String> typeMatcher;
 
-    private DependencyMatching(String groupId, String artifactId, String type) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.type = type;
+    private DependencyMatching(Matcher<String> groupIdMatcher, Matcher<String> artifactIdMatcher, Matcher<String> typeMatcher) {
+        this.groupIdMatcher = groupIdMatcher;
+        this.artifactIdMatcher = artifactIdMatcher;
+        this.typeMatcher = typeMatcher;
     }
 
     @Override
-    public void executeActionOnMatch(Dependency candidate, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
-        Strings strings = new Strings();
-        if( !strings.matching(candidate.getGroupId(), groupId)){
+    public void executeActionOnMatch(final Dependency candidate, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
+        if( !groupIdMatcher.matches(candidate.getGroupId())){
             return;
         }
-        if( !strings.matching(candidate.getArtifactId(), artifactId)){
+        if( !artifactIdMatcher.matches(candidate.getArtifactId())){
             return;
         }
-
-        if( !strings.matching(candidate.getType(), type)){
+        if( !typeMatcher.matches(candidate.getType())){
             return;
         }
 
         action.perform(candidate);
+    }
+
+    public static class MavenStringMatcher extends TypeSafeMatcher<String> {
+        private final Strings strings = new Strings();
+        private final String expected;
+
+        public MavenStringMatcher(String expected) {
+            this.expected = expected;
+        }
+
+        @Override
+        protected boolean matchesSafely(String item) {
+            return strings.matching(item, expected);
+        }
+
+        @Override
+        public void describeTo(Description description) {
+
+        }
     }
 }
