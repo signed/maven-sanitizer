@@ -1,16 +1,15 @@
 package com.github.signed.maven.sanitizer;
 
-import org.apache.maven.model.Model;
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 public class MavenMatchers {
     public static<T> Matcher<T> anything(){
-        return new TypeSafeMatcher<T>() {
+        return new BaseMatcher<T>() {
             @Override
-            protected boolean matchesSafely(T item) {
-                return true;
+            public boolean matches(Object item) {
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
@@ -19,18 +18,4 @@ public class MavenMatchers {
             }
         };
     }
-
-   public static Matcher<Model> projectWith(final String groupId, final String artifactId){
-       return new TypeSafeMatcher<Model>() {
-           @Override
-           protected boolean matchesSafely(Model item) {
-               return groupId.equals(item.getGroupId()) && artifactId.equals(item.getArtifactId());
-           }
-
-           @Override
-           public void describeTo(Description description) {
-               description.appendText("a project model with groupId").appendValue(groupId).appendText("and artifactId").appendValue(artifactId);
-           }
-       };
-   }
 }
