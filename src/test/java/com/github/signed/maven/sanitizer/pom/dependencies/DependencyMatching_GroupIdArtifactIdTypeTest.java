@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
-public class DependencyMatching_Test {
+public class DependencyMatching_GroupIdArtifactIdTypeTest {
 
     @SuppressWarnings("unchecked")
     private final Action<Dependency> mock = mock(Action.class);

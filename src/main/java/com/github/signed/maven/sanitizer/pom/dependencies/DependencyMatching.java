@@ -1,6 +1,7 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
 import com.github.signed.maven.sanitizer.DiagnosticsWriter;
+import com.github.signed.maven.sanitizer.Matchers;
 import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.InfectedProject;
 import com.github.signed.maven.sanitizer.pom.Selector;
@@ -11,6 +12,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class DependencyMatching implements Selector<Dependency> {
+
+    public static DependencyMatching dependencyWith(String groupId, String artifactId){
+        return new DependencyMatching(new MavenStringMatcher(groupId),new MavenStringMatcher(artifactId), Matchers.<String>always());
+    }
 
     public static DependencyMatching dependencyWith(String groupId, String artifactId, String type) {
         return new DependencyMatching(new MavenStringMatcher(groupId), new MavenStringMatcher(artifactId), new MavenStringMatcher(type));
