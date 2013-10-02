@@ -2,6 +2,7 @@ package com.github.signed.maven.sanitizer.pom.modules;
 
 import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
 import com.github.signed.maven.sanitizer.pom.Selector;
 
 public class ModuleWithName implements Selector<Module> {
@@ -12,8 +13,9 @@ public class ModuleWithName implements Selector<Module> {
     }
 
     @Override
-    public void executeActionOnMatch(Module candidate, Action<Module> action, DiagnosticsWriter diagnosticsWriter) {
+    public void executeActionOnMatch(Module candidate, Action<Module> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
         if (module.equals(candidate)) {
+            diagnosticsWriter.ignorePathAndEverythingBelow(infectedProject.resolvePathFor(module));
             action.perform(candidate);
         }
     }

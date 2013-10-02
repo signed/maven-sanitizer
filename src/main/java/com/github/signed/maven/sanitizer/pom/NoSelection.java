@@ -9,7 +9,7 @@ public class NoSelection<T> implements Selector<T> {
     }
 
     @Override
-    public void executeActionOnMatch(T candidate, Action<T> action, DiagnosticsWriter diagnosticsWriter) {
+    public void executeActionOnMatch(T candidate, Action<T> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
         //do nothing;
     }
 }

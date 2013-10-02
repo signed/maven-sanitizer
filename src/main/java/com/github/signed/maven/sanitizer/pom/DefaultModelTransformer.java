@@ -33,7 +33,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     private void transform(InfectedProject infectedProject, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
         for (MavenModelElement element : extractor.elements(infectedProject.fullyPopulatedModel)) {
             action.performOn(extractor.elements(infectedProject.targetModelToWrite));
-            selector.executeActionOnMatch(element, action, diagnosticsWriter);
+            selector.executeActionOnMatch(element, action, diagnosticsWriter, infectedProject);
         }
     }
 }
