@@ -1,6 +1,11 @@
-package com.github.signed.maven.sanitizer.pom;
+package com.github.signed.maven.sanitizer.configuration;
 
 import com.github.signed.maven.sanitizer.MavenMatchers;
+import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
+import com.github.signed.maven.sanitizer.pom.Extractor;
+import com.github.signed.maven.sanitizer.pom.ModelTransformer;
+import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropPlugin;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginByGroupIdArtifactId;
 import com.github.signed.maven.sanitizer.pom.plugins.PluginsFromBuild;

@@ -1,30 +1,17 @@
 package com.github.signed.maven.sanitizer;
 
-import com.github.signed.maven.sanitizer.pom.Action;
-import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
-import com.github.signed.maven.sanitizer.pom.Extractor;
-import com.github.signed.maven.sanitizer.pom.ForDependencyReferences;
-import com.github.signed.maven.sanitizer.pom.ModelTransformer;
-import com.github.signed.maven.sanitizer.pom.PomTransformer;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
-import com.github.signed.maven.sanitizer.pom.modules.DropModule;
-import com.github.signed.maven.sanitizer.pom.modules.Module;
-import com.github.signed.maven.sanitizer.pom.modules.ModuleWithName;
-import com.github.signed.maven.sanitizer.pom.modules.ModulesFromReactor;
+import com.github.signed.maven.sanitizer.configuration.Configuration;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
 import org.hamcrest.Matcher;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -63,24 +50,7 @@ public class DropModuleSteps {
         nameOfModuleToBeDropped = moduleName;
         this.groupId = groupId;
         this.artifactId = artifactId;
-        this.configuration = new Configuration() {
-            @Override
-            public void configure(CollectPathsToCopy projectFiles) {
-                //nothing to do in this case
-            }
-
-            @Override
-            public void configure(PomTransformer pomTransformation) {
-                List<Extractor<Module>> moduleExtractors = Collections.<Extractor<Module>>singletonList(new ModulesFromReactor());
-                ModuleWithName moduleWithName = new ModuleWithName(new Module(nameOfModuleToBeDropped));
-                Action<Module> action = new DropModule();
-                Matcher<Model> any = MavenMatchers.anything();
-                ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors);
-
-                pomTransformation.addTransformer(transformer);
-                pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith(groupId, artifactId)).build());
-            }
-        };
+        this.configuration = new DropModule(nameOfModuleToBeDropped, groupId, artifactId);
     }
 
     @When("^sanitize the maven project file$")
@@ -119,4 +89,5 @@ public class DropModuleSteps {
     private SanitizedBuild sanitizedBuild() {
         return new SanitizedBuild(destination);
     }
+
 }

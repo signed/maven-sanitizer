@@ -1,6 +1,11 @@
-package com.github.signed.maven.sanitizer.pom;
+package com.github.signed.maven.sanitizer.configuration;
 
 import com.github.signed.maven.sanitizer.MavenMatchers;
+import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
+import com.github.signed.maven.sanitizer.pom.Extractor;
+import com.github.signed.maven.sanitizer.pom.ModelTransformer;
+import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
@@ -20,7 +25,7 @@ public class ForDependencyReferences {
         return new ForDependencyReferences();
     }
 
-    private final Matcher<Model> moduleMatcher = MavenMatchers.<Model>anything();
+    private final Matcher<Model> moduleMatcher = MavenMatchers.anything();
     private final List<Extractor<Dependency>> extractors = Lists.newArrayList();
     private Selector<Dependency> selector = nothing();
     private Action<Dependency> action = noAction();

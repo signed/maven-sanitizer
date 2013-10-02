@@ -1,13 +1,12 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.sanitizer.configuration;
 
+import com.github.signed.maven.sanitizer.CollectPathsToCopy;
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
 import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
-import com.github.signed.maven.sanitizer.pom.ForDependencyReferences;
-import com.github.signed.maven.sanitizer.pom.ForPluginReferences;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 
@@ -17,7 +16,7 @@ import java.util.Collections;
 
 import static java.util.Collections.singletonList;
 
-class DefaultConfiguration implements Configuration {
+public class DefaultConfiguration implements Configuration {
 
     @Override
     public void configure(CollectPathsToCopy collectPathsToCopy) {
