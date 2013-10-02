@@ -12,6 +12,13 @@
     <artifactId>war</artifactId>
     <packaging>war</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>artifact-test-support</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

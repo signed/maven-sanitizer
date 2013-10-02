@@ -1,10 +1,12 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
-import static java.lang.String.format;
-
 import org.apache.maven.model.Dependency;
 
+import static java.lang.String.format;
+
 public class DependencyBuilder {
+
+    private String type;
 
     private static String propertyWith(String propertyName) {
         return format("${%s}", propertyName);
@@ -22,7 +24,7 @@ public class DependencyBuilder {
     private String version;
     private String scope;
 
-    private DependencyBuilder withArtifactId(String artifact) {
+    public DependencyBuilder withArtifactId(String artifact) {
         this.artifact = artifact;
         return this;
     }
@@ -50,11 +52,17 @@ public class DependencyBuilder {
         return withScope(propertyWith(propertyName));
     }
 
+    public DependencyBuilder withType(String type) {
+        this.type = type;
+        return this;
+    }
+
     public Dependency build(){
         Dependency dependency = new Dependency();
         dependency.setGroupId(groupId);
         dependency.setArtifactId(artifact);
         dependency.setVersion(version);
+        dependency.setType(type);
         dependency.setScope(scope);
         return dependency;
     }

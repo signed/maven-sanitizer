@@ -13,6 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <dependency.version.cucumber>1.1.5</dependency.version.cucumber>
+        <dependency.version.maven>3.1.0</dependency.version.maven>
     </properties>
 
     <build>
@@ -81,17 +82,22 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model-builder</artifactId>
-            <version>3.1.0</version>
+            <version>${dependency.version.maven}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>3.1.0</version>
+            <version>${dependency.version.maven}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-embedder</artifactId>
-            <version>3.1.0</version>
+            <version>${dependency.version.maven}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-common-artifact-filters</artifactId>
+            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

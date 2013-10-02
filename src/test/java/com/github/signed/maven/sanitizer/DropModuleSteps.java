@@ -1,10 +1,12 @@
 package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.pom.Action;
-import com.github.signed.maven.sanitizer.pom.PomTransformer;
 import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Extractor;
+import com.github.signed.maven.sanitizer.pom.ForDependencyReferences;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
+import com.github.signed.maven.sanitizer.pom.PomTransformer;
+import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.modules.DropModule;
 import com.github.signed.maven.sanitizer.pom.modules.Module;
 import com.github.signed.maven.sanitizer.pom.modules.ModuleWithName;
@@ -14,11 +16,8 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.apache.maven.cli.MavenFacade;
 import org.apache.maven.model.Model;
-import org.apache.maven.project.MavenProject;
 import org.hamcrest.Matcher;
-import org.junit.Assert;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.signed.maven.sanitizer.DependencyMatcher.dependency;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -39,6 +39,8 @@ public class DropModuleSteps {
     private Path destination;
     private Configuration configuration;
     private String nameOfModuleToBeDropped;
+    private String groupId;
+    private String artifactId;
 
     @Before
     public void createDestinationDirectory() throws IOException {
@@ -47,7 +49,7 @@ public class DropModuleSteps {
     }
 
     @After
-    public void destroyDestinationDirectory(){
+    public void destroyDestinationDirectory() {
         folder.delete();
     }
 
@@ -56,9 +58,11 @@ public class DropModuleSteps {
         source = fixture.multiModule.containingDirectory;
     }
 
-    @When("^I configure the module (.*) to be dropped$")
-    public void iConfigureTheModuleToBeDropped(final String moduleName) throws Throwable {
+    @When("^I configure the module (.*) with groupId (.*) and artifactId (.*) to be dropped$")
+    public void iConfigureTheModuleToBeDropped(final String moduleName, final String groupId, final String artifactId) throws Throwable {
         nameOfModuleToBeDropped = moduleName;
+        this.groupId = groupId;
+        this.artifactId = artifactId;
         this.configuration = new Configuration() {
             @Override
             public void configure(CollectPathsToCopy projectFiles) {
@@ -71,9 +75,10 @@ public class DropModuleSteps {
                 ModuleWithName moduleWithName = new ModuleWithName(new Module(nameOfModuleToBeDropped));
                 Action<Module> action = new DropModule();
                 Matcher<Model> any = MavenMatchers.anything();
-                ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors );
+                ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors);
 
                 pomTransformation.addTransformer(transformer);
+                pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")).build());
             }
         };
     }
@@ -87,23 +92,23 @@ public class DropModuleSteps {
 
     @Then("^the reactor pom does not contain the module any more$")
     public void theReactorPomDoesNotContainTheModuleAnyMore() throws Throwable {
-        List<MavenProject> mavenProjects = new MavenFacade().getMavenProjects(destination);
-
-        String moduleName = "multimodule";
-        for (MavenProject mavenProject : mavenProjects) {
-            if(moduleName.equals(mavenProject.getName())){
-                Model originalModel = mavenProject.getOriginalModel();
-                assertThat(originalModel.getModules(), not(hasItem(nameOfModuleToBeDropped)));
-                return;
-            }
-        }
-        Assert.fail("there was no module with the expected name "+moduleName);
+        assertThat(sanitizedBuild().reactor().getModules(), not(hasItem(nameOfModuleToBeDropped)));
     }
+
 
     @Then("^the dropped module does not exist in the destination directory$")
     public void theDroppedModuleDoesNotExistInTheDestinationDirectory() throws Throwable {
         SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(source, destination);
         Path expectedLocationIfModuleWouldBeCopied = mapper.map(source.resolve(nameOfModuleToBeDropped));
-        assertThat(expectedLocationIfModuleWouldBeCopied.toFile().exists(),  is(false));
+        assertThat(expectedLocationIfModuleWouldBeCopied.toFile().exists(), is(false));
+    }
+
+    @Then("^the dependency to the dropped module in the war module is removed$")
+    public void the_dependency_to_the_dropped_module_in_the_war_module_is_removed() throws Throwable {
+        assertThat(sanitizedBuild().warModule().getDependencies(), not(hasItem(dependency(groupId, artifactId))));
+    }
+
+    private SanitizedBuild sanitizedBuild() {
+        return new SanitizedBuild(destination);
     }
 }
