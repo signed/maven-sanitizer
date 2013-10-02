@@ -1,10 +1,10 @@
-package com.github.signed.maven.sanitizer;
+package com.github.signed.maven.sanitizer.configuration;
 
-import com.github.signed.maven.sanitizer.configuration.Configuration;
+import com.github.signed.maven.sanitizer.CollectPathsToCopy;
+import com.github.signed.maven.sanitizer.MavenMatchers;
 import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Extractor;
-import com.github.signed.maven.sanitizer.configuration.ForDependencyReferences;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;

@@ -1,6 +1,7 @@
 package com.github.signed.maven.sanitizer;
 
 import com.github.signed.maven.sanitizer.configuration.Configuration;
+import com.github.signed.maven.sanitizer.configuration.DropModule;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
