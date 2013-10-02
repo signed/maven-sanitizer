@@ -14,7 +14,7 @@ public class DependencyMatching_Test {
 
     @SuppressWarnings("unchecked")
     private final Action<Dependency> mock = mock(Action.class);
-    private final DependencyMatching dependencyMatching = new DependencyMatching("org.example", "artifact", "zip");
+    private final DependencyMatching dependencyMatching = DependencyMatching.dependencyWith("org.example", "artifact", "zip");
 
     @Test
     public void executeActionOnExactMatch() throws Exception {

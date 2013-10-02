@@ -78,7 +78,7 @@ public class DropModuleSteps {
                 ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors);
 
                 pomTransformation.addTransformer(transformer);
-                pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")).build());
+                pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith("org.example", "artifact", "zip")).build());
             }
         };
     }

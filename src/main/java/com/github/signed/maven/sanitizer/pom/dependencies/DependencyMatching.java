@@ -9,11 +9,15 @@ import org.apache.maven.model.Dependency;
 
 public class DependencyMatching implements Selector<Dependency> {
 
-    private String groupId;
-    private String artifactId;
-    private String type;
+    public static DependencyMatching dependencyWith(String groupId, String artifactId, String type) {
+        return new DependencyMatching(groupId, artifactId, type);
+    }
 
-    public DependencyMatching(String groupId, String artifactId, String type) {
+    private final String groupId;
+    private final String artifactId;
+    private final String type;
+
+    private DependencyMatching(String groupId, String artifactId, String type) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.type = type;

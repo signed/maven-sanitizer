@@ -35,7 +35,7 @@ class DefaultConfiguration implements Configuration {
         during(pomTransformation, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.codehaus.mojo", "properties-maven-plugin"));
 
         during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
-        during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(new DependencyMatching("org.example", "artifact", "zip")));
+        during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith("org.example", "artifact", "zip")));
     }
 
     private void during(PomTransformer copyingThePom, ForDependencyReferences perform) {
