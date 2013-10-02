@@ -35,4 +35,8 @@ public class SanitizedBuild {
     public Model reactor() {
         return getModelFor("multimodule");
     }
+
+    public Model parent() {
+        return getModelFor("parent");
+    }
 }

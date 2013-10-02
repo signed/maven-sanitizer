@@ -16,6 +16,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.hamcrest.Matcher;
 import org.junit.rules.TemporaryFolder;
@@ -25,7 +26,6 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.signed.maven.sanitizer.DependencyMatcher.dependency;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -78,7 +78,7 @@ public class DropModuleSteps {
                 ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors);
 
                 pomTransformation.addTransformer(transformer);
-                pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith("org.example", "artifact", "zip")).build());
+                pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith(groupId, artifactId)).build());
             }
         };
     }
@@ -105,7 +105,16 @@ public class DropModuleSteps {
 
     @Then("^the dependency to the dropped module in the war module is removed$")
     public void the_dependency_to_the_dropped_module_in_the_war_module_is_removed() throws Throwable {
-        assertThat(sanitizedBuild().warModule().getDependencies(), not(hasItem(dependency(groupId, artifactId))));
+        assertThat(sanitizedBuild().warModule().getDependencies(), not(containsDependency(groupId, artifactId)));
+    }
+
+    @Then("^the entry in the dependency management section of the parent is removed$")
+    public void the_entry_in_the_dependency_management_section_of_the_parent_is_removed() throws Throwable {
+        assertThat(sanitizedBuild().parent().getDependencyManagement().getDependencies(), not(containsDependency(groupId, artifactId)));
+    }
+
+    private Matcher<Iterable<? super Dependency>> containsDependency(String groupId, String artifactId) {
+        return hasItem(new DependencyMatcher(groupId, artifactId));
     }
 
     private SanitizedBuild sanitizedBuild() {

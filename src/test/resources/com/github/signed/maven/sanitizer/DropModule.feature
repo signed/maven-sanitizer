@@ -15,3 +15,6 @@ Feature: As a build engineer
 
   Scenario: Remove dependency references to the dropped module from the remaining modules in the build
     Then the dependency to the dropped module in the war module is removed
+
+  Scenario: Remove dependency management references to the dropped module from the remaining modules in the build
+    Then the entry in the dependency management section of the parent is removed
