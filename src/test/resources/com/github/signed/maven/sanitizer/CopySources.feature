@@ -11,3 +11,6 @@ Feature: As a build engineer
 
   Scenario: Copy each configured resource root
     Then the resource root of the artifact module is copied to the destination directory
+
+  Scenario: Copy the warSourceDirectory for war artifacts
+    Then the configured warSourceDirectory is copied to the destination directory
