@@ -9,11 +9,11 @@ public class PluginExecutionBuilder {
         return new PluginExecutionBuilder();
     }
 
-    private Optional<ConfigurationBuilder> configurationBuilder = Optional.absent();
+    private Optional<PluginConfigurationBuilder> configurationBuilder = Optional.absent();
     private PluginExecution pluginExecution = new PluginExecution();
 
-    public ConfigurationBuilder withConfiguration() {
-        ConfigurationBuilder configuration = new ConfigurationBuilder();
+    public PluginConfigurationBuilder withConfiguration() {
+        PluginConfigurationBuilder configuration = new PluginConfigurationBuilder();
         configurationBuilder = Optional.of(configuration);
         return configuration;
     }

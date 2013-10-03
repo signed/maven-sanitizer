@@ -10,14 +10,14 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class ConfigurationBuilder {
+public class PluginConfigurationBuilder {
     private final List<String> elements = new ArrayList<>();
 
-    public ConfigurationBuilder addElement(String element, Path path){
+    public PluginConfigurationBuilder addElement(String element, Path path){
         return addElement(element, path.toString());
     }
 
-    public ConfigurationBuilder addElement(String element, String value) {
+    public PluginConfigurationBuilder addElement(String element, String value) {
         StringBuilder builder = new StringBuilder();
         builder.append(format("<%s>", element));
         builder.append(value);

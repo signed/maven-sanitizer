@@ -23,6 +23,10 @@ public class SanitizedBuild {
         return getModelFor("multimodule");
     }
 
+    public Model artifactModule() {
+        return getModelFor("artifact");
+    }
+
     public Model parent() {
         return getModelFor("parent");
     }
