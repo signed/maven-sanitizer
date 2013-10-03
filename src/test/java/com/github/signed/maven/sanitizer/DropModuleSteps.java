@@ -42,8 +42,7 @@ public class DropModuleSteps {
 
     @Then("^the dropped module does not exist in the destination directory$")
     public void theDroppedModuleDoesNotExistInTheDestinationDirectory() throws Throwable {
-        SourceToDestinationTreeMapper mapper = new SourceToDestinationTreeMapper(paths.source, paths.destination);
-        Path expectedLocationIfModuleWouldBeCopied = mapper.map(paths.source.resolve(nameOfModuleToBeDropped));
+        Path expectedLocationIfModuleWouldBeCopied = paths.sanitizedBuild().getRootOfModule(nameOfModuleToBeDropped);
         assertThat(expectedLocationIfModuleWouldBeCopied.toFile().exists(), is(false));
     }
 

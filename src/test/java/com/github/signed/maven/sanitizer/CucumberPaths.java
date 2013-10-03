@@ -7,6 +7,6 @@ public class CucumberPaths {
     public Path destination;
 
     public SanitizedBuild sanitizedBuild() {
-        return new SanitizedBuild(destination);
+        return new SanitizedBuild(source, destination);
     }
 }

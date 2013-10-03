@@ -10,9 +10,17 @@ import java.util.List;
 public class SanitizedBuild {
 
     private final List<MavenProject> mavenProjects;
+    private final SourceToDestinationTreeMapper mapper;
+    private final Path source;
 
-    public SanitizedBuild(Path destination) {
+    public SanitizedBuild(Path source, Path destination) {
+        this.source = source;
+        mapper = new SourceToDestinationTreeMapper(source, destination);
         mavenProjects = new MavenFacade().getMavenProjects(destination);
+    }
+
+    public Path getRootOfModule(String moduleName) {
+        return mapper.map(source.resolve(moduleName));
     }
 
     public Model warModule() {

@@ -3,6 +3,7 @@ package com.github.signed.maven.sanitizer;
 import com.github.signed.maven.sanitizer.configuration.ConfigurationBuilder;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import org.junit.rules.TemporaryFolder;
@@ -40,6 +41,7 @@ public class SanitizerInvocationSteps {
     }
 
     @When("^sanitize the maven project file$")
+    @And("^sanitize the maven project files$")
     public void sanitizeTheMavenProjectFile() throws Throwable {
         MavenSanitizer sanitizer = new MavenSanitizer(paths.source, paths.destination, configurationBuilder.build());
         sanitizer.configure();
