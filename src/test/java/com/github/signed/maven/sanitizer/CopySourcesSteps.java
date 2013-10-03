@@ -1,11 +1,12 @@
 package com.github.signed.maven.sanitizer;
 
-import com.github.signed.matcher.file.IsADirectory;
 import cucumber.api.java.en.Then;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
 
+import static com.github.signed.matcher.file.IsADirectory.aDirectory;
+import static com.github.signed.matcher.file.IsFile.isAFile;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -30,7 +31,12 @@ public class CopySourcesSteps {
 
     @Then("^the configured warSourceDirectory is copied to the destination directory$")
     public void the_configured_warSourceDirectory_is_copied_to_the_destination_directory() throws Throwable {
-        assertThat(paths.sanitizedBuild().getRootOfModule("war").resolve("src/main/webcontent").toFile(), IsADirectory.aDirectory());
+        assertThat(paths.sanitizedBuild().getRootOfModule("war").resolve("src/main/webcontent").toFile(), aDirectory());
+    }
+
+    @Then("^the configured assembly descriptor is copied is copied to the destination directory$")
+    public void the_configured_assembly_descriptor_is_copied_is_copied_to_the_destination_directory() throws Throwable {
+        assertThat(paths.sanitizedBuild().getRootOfModule("assembly").resolve("src/main/assembly/descriptor.xml").toFile(), isAFile());
     }
 
     private Path artifactRoot() {

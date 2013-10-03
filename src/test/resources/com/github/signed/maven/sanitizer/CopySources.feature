@@ -14,3 +14,6 @@ Feature: As a build engineer
 
   Scenario: Copy the warSourceDirectory for war artifacts
     Then the configured warSourceDirectory is copied to the destination directory
+
+  Scenario: Copy assembly descriptors that are configured for the maven assembly plugin
+    Then the configured assembly descriptor is copied is copied to the destination directory
