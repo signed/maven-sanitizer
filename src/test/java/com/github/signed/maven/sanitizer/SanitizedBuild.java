@@ -27,7 +27,7 @@ public class SanitizedBuild {
         return getModelFor("artifact");
     }
 
-    public Model parent() {
+    public Model parentModule() {
         return getModelFor("parent");
     }
 

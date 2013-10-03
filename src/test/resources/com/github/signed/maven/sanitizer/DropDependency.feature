@@ -5,7 +5,10 @@ Feature: As a build engineer
   Background:
     Given the multi module sample in src/test/resources
     When I configure to drop dependencies in test scope
-
-  Scenario: Remove references to the dependency in each pom
     And sanitize the maven project file
-    Then there are no dependencies in scope test remaining in the entire build
+
+  Scenario: Remove references to the dependency section in each pom
+    Then there are no dependencies in scope test remaining in the dependency section in the entire build
+
+  Scenario: Remove references to the dependency management section in each pom
+    Then there are no dependencies in scope test remaining in the dependency management  section in the entire build

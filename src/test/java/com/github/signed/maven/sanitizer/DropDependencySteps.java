@@ -28,8 +28,13 @@ public class DropDependencySteps {
         configurationBuilder.duringPomTransformation(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
     }
 
-    @Then("^there are no dependencies in scope test remaining in the entire build$")
+    @Then("^there are no dependencies in scope test remaining in the dependency section in the entire build$")
     public void there_are_no_dependencies_in_scope_test_remaining_in_the_entire_build() throws Throwable {
         assertThat(paths.sanitizedBuild().artifactModule().getDependencies(), not(containsDependency("org.mockito", "mockito-core")));
+    }
+
+    @Then("^there are no dependencies in scope test remaining in the dependency management  section in the entire build$")
+    public void there_are_no_dependencies_in_scope_test_remaining_in_the_dependency_management_section_in_the_entire_build() throws Throwable {
+        assertThat(paths.sanitizedBuild().parentModule().getDependencyManagement().getDependencies(), not(containsDependency("org.mockito", "mockito-core")));
     }
 }

@@ -54,6 +54,6 @@ public class DropModuleSteps {
 
     @Then("^the entry in the dependency management section of the parent is removed$")
     public void the_entry_in_the_dependency_management_section_of_the_parent_is_removed() throws Throwable {
-        assertThat(paths.sanitizedBuild().parent().getDependencyManagement().getDependencies(), not(containsDependency(groupId, artifactId)));
+        assertThat(paths.sanitizedBuild().parentModule().getDependencyManagement().getDependencies(), not(containsDependency(groupId, artifactId)));
     }
 }
