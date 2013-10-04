@@ -3,6 +3,7 @@ package com.github.signed.maven.sanitizer.configuration;
 import com.github.signed.maven.sanitizer.CollectPathsToCopy;
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
+import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
@@ -26,7 +27,6 @@ public class ConfigurationBuilder {
                 projectFiles.addPathsToCopy(new ResourceRoots());
                 projectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-war-plugin", singletonList(Paths.get("src/main/webapp")), "warSourceDirectory")));
                 projectFiles.addPathsToCopy(new PathsInPluginConfiguration(new ExecutionProbe("org.apache.maven.plugins", "maven-assembly-plugin", Collections.<Path>emptyList(), "descriptors")));
-                //projectFiles.addPathsToCopy(new ProjectSubdirectory("org.example", "parent", "important"));
             }
 
             @Override
@@ -46,8 +46,22 @@ public class ConfigurationBuilder {
         return this;
     }
 
+    public ConfigurationBuilder includeSubDirectory(final String moduleGroupId, final String moduleArtifactId, final String subdirectory) {
+        configurations.add(new Configuration() {
+            @Override
+            public void configure(CollectPathsToCopy projectFiles) {
+                projectFiles.addPathsToCopy(new ProjectSubdirectory(moduleGroupId, moduleArtifactId, subdirectory));
+            }
+
+            @Override
+            public void configure(PomTransformer pomTransformation) {
+                //nothing to do
+            }
+        });
+        return this;
+    }
+
     public Configuration build() {
         return new SplitConfigurationAggregator(configurations);
     }
-
 }
