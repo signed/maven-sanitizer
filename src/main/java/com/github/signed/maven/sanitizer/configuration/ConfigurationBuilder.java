@@ -1,5 +1,12 @@
 package com.github.signed.maven.sanitizer.configuration;
 
+import static java.util.Collections.singletonList;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+
 import com.github.signed.maven.sanitizer.CollectPathsToCopy;
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
@@ -8,13 +15,6 @@ import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
 import com.google.common.collect.Lists;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
-
-import static java.util.Collections.singletonList;
 
 public class ConfigurationBuilder {
     private List<Configuration> configurations = Lists.newArrayList();
@@ -58,6 +58,11 @@ public class ConfigurationBuilder {
                 //nothing to do
             }
         });
+        return this;
+    }
+
+    public ConfigurationBuilder apply(Configuration configuration) {
+        this.configurations.add(configuration);
         return this;
     }
 
