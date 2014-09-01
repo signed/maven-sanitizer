@@ -30,4 +30,10 @@ public class TransformationDiagnostics_Test {
     public void itIsSafeToCopyAPathThatIsAbove() throws Exception {
         assertThat(transformationDiagnostics.isSafeToCopy(Paths.get("/tmp")), is(true));
     }
+
+    @Test
+    public void copeWithPathThatContainRelativePathElements() throws Exception {
+        transformationDiagnostics.ignorePathAndEverythingBelow(Paths.get("/tmp/donotcare/../anotherunsafe/"));
+        assertThat(transformationDiagnostics.isSafeToCopy(Paths.get("/tmp/anotherunsafe")), is(false));
+    }
 }

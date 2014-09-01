@@ -21,6 +21,6 @@ public class TransformationDiagnostics implements DiagnosticsReader, Diagnostics
 
     @Override
     public void ignorePathAndEverythingBelow(Path path) {
-        unsafePaths.add(path);
+        unsafePaths.add(path.normalize());
     }
 }
