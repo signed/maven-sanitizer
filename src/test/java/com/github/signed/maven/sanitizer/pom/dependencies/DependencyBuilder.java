@@ -1,8 +1,8 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
-import org.apache.maven.model.Dependency;
-
 import static java.lang.String.format;
+
+import org.apache.maven.model.Dependency;
 
 public class DependencyBuilder {
 
@@ -16,7 +16,18 @@ public class DependencyBuilder {
         DependencyBuilder dependencyBuilder = new DependencyBuilder();
         dependencyBuilder.withGroupId("org.example");
         dependencyBuilder.withArtifactId("artifact");
+        dependencyBuilder.withVersion("43b");
         return dependencyBuilder;
+    }
+
+    public static DependencyBuilder like(Dependency dependency) {
+        DependencyBuilder builder = new DependencyBuilder();
+        builder.withGroupId(dependency.getGroupId());
+        builder.withArtifactId(dependency.getArtifactId());
+        builder.withVersion(dependency.getVersion());
+        builder.withScope(dependency.getScope());
+        builder.withType(dependency.getType());
+        return builder;
     }
 
     private String groupId;
@@ -54,6 +65,10 @@ public class DependencyBuilder {
 
     public DependencyBuilder withType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public DependencyBuilder but() {
         return this;
     }
 
