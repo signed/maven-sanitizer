@@ -2,7 +2,6 @@ Feature: As a build engineer
   I want MavenSanitizer to drop all dependencies in scope test
   because we do not ship the tests to our customer.
 
-  @implementing
   Scenario: Inherit version from dependency management
     Given a build that manages hamcrest in test scope in version 1.3
     But in one of its modules includes hamcrest in compile scope
