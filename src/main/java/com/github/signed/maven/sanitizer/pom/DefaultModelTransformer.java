@@ -28,7 +28,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
         }
 
         for (Extractor<MavenModelElement> extractor : extractors) {
-            Iterable<MavenModelElement> asWritten = extractor.elements(infectedProject.modelAsWritten);
+            Iterable<MavenModelElement> asWritten = extractor.elements(infectedProject.modelAsWritten());
             Iterable<MavenModelElement> fullyPopulated = extractor.elements(infectedProject.fullyPopulatedModel);
             Iterable<Patient<MavenModelElement>> patients = modelElementCombiner.combine(asWritten, fullyPopulated);
             transform(infectedProject, extractor, diagnosticsWriter, patients);

@@ -9,10 +9,10 @@ import com.github.signed.maven.sanitizer.pom.modules.Module;
 
 public class InfectedProject {
 
-    public final Model fullyPopulatedModel;
-    public final Model modelAsWritten;
-    public final Model targetModelToWrite;
+    private final Model modelAsWritten;
     private final MavenProject mavenProject;
+    public final Model fullyPopulatedModel;
+    public final Model targetModelToWrite;
 
     public InfectedProject(MavenProject mavenProject) {
         this.mavenProject = mavenProject;
