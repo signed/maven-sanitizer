@@ -19,24 +19,20 @@ public class SanitizerInvocationSteps {
     private final Fixture fixture = new Fixture();
     private final ConfigurationBuilder configurationBuilder;
     private final CucumberPaths paths;
-    private final DebugOutput debugOutput = new DebugOutput();
 
     @Before
     public void createDestinationDirectory() throws IOException {
-        debugOutput.logCalledMethod();
         folder.create();
         paths.destination = folder.getRoot().toPath();
     }
 
     @After
     public void destroyDestinationDirectory() {
-        debugOutput.logCalledMethod();
         folder.delete();
     }
 
     @Inject
     public SanitizerInvocationSteps(ConfigurationBuilder configurationBuilder, CucumberPaths paths){
-        debugOutput.logCalledMethod();
         this.configurationBuilder = configurationBuilder;
         this.paths = paths;
     }

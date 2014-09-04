@@ -12,7 +12,6 @@ public class HamcrestInCompileScope {
     private final List<MavenProject> mavenProjects;
 
     public HamcrestInCompileScope(Path destination) {
-        System.out.println(destination);
         mavenProjects = new MavenFacade().getMavenProjects(destination);
     }
 
