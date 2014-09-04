@@ -13,6 +13,7 @@ import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Extractor;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
+import com.github.signed.maven.sanitizer.pom.RefusingCombiner;
 import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencies;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
@@ -55,6 +56,6 @@ public class ForDependencyReferences {
     }
 
     public ModelTransformer build() {
-        return new DefaultModelTransformer<>(this.selector, this.action, moduleMatcher, this.extractors);
+        return new DefaultModelTransformer<>(this.selector, this.action, moduleMatcher, this.extractors, new RefusingCombiner<Dependency>());
     }
 }

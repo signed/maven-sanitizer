@@ -11,12 +11,14 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     private final List<Extractor<MavenModelElement>> extractors;
     private final Action<MavenModelElement> action;
     private final Matcher<Model> projectMatcher;
+    private final ModelElementCombiner<MavenModelElement> modelElementCombiner;
 
-    public DefaultModelTransformer(Selector<MavenModelElement> selector, Action<MavenModelElement> action, Matcher<Model> projectMatcher, List<Extractor<MavenModelElement>> extractors) {
+    public DefaultModelTransformer(Selector<MavenModelElement> selector, Action<MavenModelElement> action, Matcher<Model> projectMatcher, List<Extractor<MavenModelElement>> extractors, RefusingCombiner<MavenModelElement> modelElementCombiner) {
         this.selector = selector;
         this.extractors = extractors;
         this.action = action;
         this.projectMatcher = projectMatcher;
+        this.modelElementCombiner = modelElementCombiner;
     }
 
     @Override
@@ -26,16 +28,15 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
         }
 
         for (Extractor<MavenModelElement> extractor : extractors) {
-            transform(infectedProject, extractor, diagnosticsWriter);
+            Iterable<MavenModelElement> asWritten = extractor.elements(infectedProject.modelAsWritten);
+            Iterable<MavenModelElement> fullyPopulated = extractor.elements(infectedProject.fullyPopulatedModel);
+            Iterable<Patient<MavenModelElement>> patients = modelElementCombiner.combine(asWritten, fullyPopulated);
+            transform(infectedProject, extractor, diagnosticsWriter, patients);
         }
     }
 
-    private void transform(InfectedProject infectedProject, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
-        ModelElementCombiner<MavenModelElement> modelElementCombiner = new RefusingCombiner<>();
-        Iterable<MavenModelElement> asWritten = extractor.elements(infectedProject.modelAsWritten);
-        Iterable<MavenModelElement> fullyPopulated = extractor.elements(infectedProject.fullyPopulatedModel);
-
-        for (Patient<MavenModelElement> patient : modelElementCombiner.combine(asWritten, fullyPopulated)) {
+    private void transform(InfectedProject infectedProject, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter, Iterable<Patient<MavenModelElement>> patients) {
+        for (Patient<MavenModelElement> patient : patients) {
             action.performOn(extractor.elements(infectedProject.targetModelToWrite));
             selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
         }

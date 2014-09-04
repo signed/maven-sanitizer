@@ -1,5 +1,10 @@
 package com.github.signed.maven.sanitizer.configuration;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.maven.model.Model;
+import org.hamcrest.Matcher;
 import com.github.signed.maven.sanitizer.CollectPathsToCopy;
 import com.github.signed.maven.sanitizer.MavenMatchers;
 import com.github.signed.maven.sanitizer.pom.Action;
@@ -7,15 +12,11 @@ import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Extractor;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
+import com.github.signed.maven.sanitizer.pom.RefusingCombiner;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.modules.Module;
 import com.github.signed.maven.sanitizer.pom.modules.ModuleWithName;
 import com.github.signed.maven.sanitizer.pom.modules.ModulesFromReactor;
-import org.apache.maven.model.Model;
-import org.hamcrest.Matcher;
-
-import java.util.Collections;
-import java.util.List;
 
 public class DropModule implements Configuration {
     private final String moduleName;
@@ -39,7 +40,7 @@ public class DropModule implements Configuration {
         ModuleWithName moduleWithName = new ModuleWithName(new Module(moduleName));
         Action<Module> action = new com.github.signed.maven.sanitizer.pom.modules.DropModule();
         Matcher<Model> any = MavenMatchers.anything();
-        ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors);
+        ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors, new RefusingCombiner<Module>());
 
         pomTransformation.addTransformer(transformer);
         pomTransformation.addTransformer(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith(groupId, artifactId)).build());
