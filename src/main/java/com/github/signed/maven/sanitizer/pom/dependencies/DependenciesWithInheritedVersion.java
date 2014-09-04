@@ -10,10 +10,6 @@ import com.github.signed.maven.sanitizer.pom.Selector;
 public class DependenciesWithInheritedVersion implements Selector<Dependency> {
     @Override
     public boolean executeActionOnMatch(Patient<Dependency> candidate, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
-        if( null == candidate.getAsWritten().getVersion()){
-            action.perform(candidate.fullyPopulated());
-            return true;
-        }
-        return false;
+        return null == candidate.getAsWritten().getVersion();
     }
 }

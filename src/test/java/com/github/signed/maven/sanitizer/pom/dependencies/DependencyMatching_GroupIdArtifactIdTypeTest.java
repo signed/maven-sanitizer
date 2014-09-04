@@ -1,7 +1,7 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.apache.maven.model.Dependency;
@@ -20,9 +20,8 @@ public class DependencyMatching_GroupIdArtifactIdTypeTest {
     @Test
     public void executeActionOnExactMatch() throws Exception {
         Dependency dependency = DependencyBuilder.anyDependency().withGroupId("org.example").withArtifactId("artifact").withType("zip").build();
-        match(dependency);
 
-        verify(mock).perform(dependency);
+        assertThat("should be an exact match", match(dependency));
     }
 
     @Test
@@ -33,8 +32,8 @@ public class DependencyMatching_GroupIdArtifactIdTypeTest {
         verifyZeroInteractions(mock);
     }
 
-    private void match(Dependency dependency) {
+    private boolean match(Dependency dependency) {
         FullyPopulatedOnly<Dependency> patient = new FullyPopulatedOnly<>(dependency);
-        dependencyMatching.executeActionOnMatch(patient, mock, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
+        return dependencyMatching.executeActionOnMatch(patient, mock, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
     }
 }

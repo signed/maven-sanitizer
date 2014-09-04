@@ -1,7 +1,7 @@
 package com.github.signed.maven.sanitizer.pom.modules;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,11 +20,9 @@ public class ModuleWithName_Test {
     @Test
     public void executeActionIfModuleNameMatchesExpectedName() throws Exception {
         Module candidate = new Module("to-drop");
-
         FullyPopulatedOnly<Module> patient = new FullyPopulatedOnly<>(candidate);
-        selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
 
-        verify(action).perform(candidate);
+        assertThat("should signal match", selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject));
     }
 
     @Test

@@ -17,7 +17,6 @@ public class ModuleWithName implements Selector<Module> {
     public boolean executeActionOnMatch(Patient<Module> candidate, Action<Module> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
         if (module.equals(candidate.fullyPopulated())) {
             diagnosticsWriter.ignorePathAndEverythingBelow(infectedProject.resolvePathFor(module));
-            action.perform(candidate.fullyPopulated());
             return true;
         }
         return false;

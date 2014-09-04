@@ -44,7 +44,6 @@ public class DependencyMatching implements Selector<Dependency> {
             return false;
         }
 
-        action.perform(patient.fullyPopulated());
         return true;
     }
 
