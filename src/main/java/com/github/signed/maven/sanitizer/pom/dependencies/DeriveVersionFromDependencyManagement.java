@@ -30,7 +30,7 @@ public class DeriveVersionFromDependencyManagement implements Action<Dependency>
             }
         });
 
-        Dependency destinationToUpdate = Iterables.find(elements, new Predicate<Dependency>() {
+        Iterable<Dependency> toUpdate = Iterables.filter(elements, new Predicate<Dependency>() {
             @Override
             public boolean apply(Dependency dependency) {
                 return element.getGroupId().equals(dependency.getGroupId())
@@ -38,6 +38,10 @@ public class DeriveVersionFromDependencyManagement implements Action<Dependency>
             }
         });
 
-        destinationToUpdate.setVersion(managedDependency.getVersion());
+        if(Iterables.isEmpty(toUpdate)){
+            return;
+        }
+
+        Iterables.get(toUpdate, 0).setVersion(managedDependency.getVersion());
     }
 }
