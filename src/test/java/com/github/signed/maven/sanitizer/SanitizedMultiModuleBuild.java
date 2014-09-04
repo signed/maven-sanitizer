@@ -1,19 +1,19 @@
 package com.github.signed.maven.sanitizer;
 
+import java.nio.file.Path;
+import java.util.List;
+
 import org.apache.maven.cli.MavenFacade;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 
-import java.nio.file.Path;
-import java.util.List;
-
-public class SanitizedBuild {
+public class SanitizedMultiModuleBuild {
 
     private final List<MavenProject> mavenProjects;
     private final SourceToDestinationTreeMapper mapper;
     private final Path source;
 
-    public SanitizedBuild(Path source, Path destination) {
+    public SanitizedMultiModuleBuild(Path source, Path destination) {
         this.source = source;
         mapper = new SourceToDestinationTreeMapper(source, destination);
         mavenProjects = new MavenFacade().getMavenProjects(destination);

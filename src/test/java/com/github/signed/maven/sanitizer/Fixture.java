@@ -8,8 +8,18 @@ public class Fixture {
     public final File singleModule = new File(testClassTargetRoot, "sample/pom.xml").getAbsoluteFile();
 
 
+    public final DropDependencyFixture dropDependency = new DropDependencyFixture(testClassTargetRoot);
+
     public final TestData multiModule = new TestData(new File(testClassTargetRoot, "multimodule/pom.xml").getAbsoluteFile());
 
+
+    public static class DropDependencyFixture{
+        public final TestData hamcrestInCompileScope;
+
+        public DropDependencyFixture(String testClassTargetRoot) {
+            hamcrestInCompileScope = new TestData(new File(testClassTargetRoot, "droptestscopedependencies/addversiontocompilescopedependency/pom.xml").getAbsoluteFile());
+        }
+    }
 
     public static class TestData {
         public final Path pom;

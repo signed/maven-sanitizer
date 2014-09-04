@@ -37,22 +37,22 @@ public class DropModuleSteps {
 
     @Then("^the reactor pom does not contain the module any more$")
     public void theReactorPomDoesNotContainTheModuleAnyMore() throws Throwable {
-        assertThat(paths.sanitizedBuild().reactor().getModules(), not(hasItem(nameOfModuleToBeDropped)));
+        assertThat(paths.sanitizedMultiModuleBuildBuild().reactor().getModules(), not(hasItem(nameOfModuleToBeDropped)));
     }
 
     @Then("^the dropped module does not exist in the destination directory$")
     public void theDroppedModuleDoesNotExistInTheDestinationDirectory() throws Throwable {
-        Path expectedLocationIfModuleWouldBeCopied = paths.sanitizedBuild().getRootOfModule(nameOfModuleToBeDropped);
+        Path expectedLocationIfModuleWouldBeCopied = paths.sanitizedMultiModuleBuildBuild().getRootOfModule(nameOfModuleToBeDropped);
         assertThat(expectedLocationIfModuleWouldBeCopied.toFile().exists(), is(false));
     }
 
     @Then("^the dependency to the dropped module in the war module is removed$")
     public void the_dependency_to_the_dropped_module_in_the_war_module_is_removed() throws Throwable {
-        assertThat(paths.sanitizedBuild().warModule().getDependencies(), not(containsDependency(groupId, artifactId)));
+        assertThat(paths.sanitizedMultiModuleBuildBuild().warModule().getDependencies(), not(containsDependency(groupId, artifactId)));
     }
 
     @Then("^the entry in the dependency management section of the parent is removed$")
     public void the_entry_in_the_dependency_management_section_of_the_parent_is_removed() throws Throwable {
-        assertThat(paths.sanitizedBuild().parentModule().getDependencyManagement().getDependencies(), not(containsDependency(groupId, artifactId)));
+        assertThat(paths.sanitizedMultiModuleBuildBuild().parentModule().getDependencyManagement().getDependencies(), not(containsDependency(groupId, artifactId)));
     }
 }

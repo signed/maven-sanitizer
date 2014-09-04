@@ -6,7 +6,11 @@ public class CucumberPaths {
     public Path source;
     public Path destination;
 
-    public SanitizedBuild sanitizedBuild() {
-        return new SanitizedBuild(source, destination);
+    public SanitizedMultiModuleBuild sanitizedMultiModuleBuildBuild() {
+        return new SanitizedMultiModuleBuild(source, destination);
+    }
+
+    public HamcrestInCompileScope hamcrestInCompileScope(){
+        return new HamcrestInCompileScope(destination);
     }
 }
