@@ -28,4 +28,12 @@ public class InfectedProject {
     public Path resolvePathFor(Module module) {
         return baseDirectory().resolve(module.name);
     }
+
+    public Model modelAsWritten() {
+        return modelAsWritten;
+    }
+
+    public MavenProject project(){
+        return mavenProject;
+    }
 }
