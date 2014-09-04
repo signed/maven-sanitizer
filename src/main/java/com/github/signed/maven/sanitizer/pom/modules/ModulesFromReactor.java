@@ -1,13 +1,12 @@
 package com.github.signed.maven.sanitizer.pom.modules;
 
-import com.github.signed.maven.sanitizer.pom.Extractor;
-import com.google.common.base.Function;
-import org.apache.maven.model.Model;
+import static com.google.common.collect.Iterables.transform;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.google.common.collect.Iterables.transform;
+import org.apache.maven.model.Model;
+import com.github.signed.maven.sanitizer.pom.Extractor;
+import com.google.common.base.Function;
 
 public class ModulesFromReactor implements Extractor<Module> {
     @Override
@@ -15,7 +14,7 @@ public class ModulesFromReactor implements Extractor<Module> {
         List<String> modules = model.getModules();
         return transform(modules, new Function<String, Module>() {
             @Override
-            public Module apply(@Nullable String input) {
+            public Module apply(String input) {
                 return new Module(input);
             }
         });

@@ -13,7 +13,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     private final Matcher<Model> projectMatcher;
     private final ModelElementCombiner<MavenModelElement> modelElementCombiner;
 
-    public DefaultModelTransformer(Selector<MavenModelElement> selector, Action<MavenModelElement> action, Matcher<Model> projectMatcher, List<Extractor<MavenModelElement>> extractors, RefusingCombiner<MavenModelElement> modelElementCombiner) {
+    public DefaultModelTransformer(Selector<MavenModelElement> selector, Action<MavenModelElement> action, Matcher<Model> projectMatcher, List<Extractor<MavenModelElement>> extractors, ModelElementCombiner<MavenModelElement> modelElementCombiner) {
         this.selector = selector;
         this.extractors = extractors;
         this.action = action;
