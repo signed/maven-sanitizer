@@ -33,18 +33,18 @@ public class DependencyMatching implements Selector<Dependency> {
     }
 
     @Override
-    public void executeActionOnMatch(final Patient<Dependency> patient, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
-        if( !groupIdMatcher.matches(patient.fullyPouplated().getGroupId())){
+    public void executeActionOnMatch(Patient<Dependency> patient, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
+        if( !groupIdMatcher.matches(patient.fullyPopulated().getGroupId())){
             return;
         }
-        if( !artifactIdMatcher.matches(patient.fullyPouplated().getArtifactId())){
+        if( !artifactIdMatcher.matches(patient.fullyPopulated().getArtifactId())){
             return;
         }
-        if( !typeMatcher.matches(patient.fullyPouplated().getType())){
+        if( !typeMatcher.matches(patient.fullyPopulated().getType())){
             return;
         }
 
-        action.perform(patient.fullyPouplated());
+        action.perform(patient.fullyPopulated());
     }
 
     public static class MavenStringMatcher extends TypeSafeMatcher<String> {

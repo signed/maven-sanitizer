@@ -15,9 +15,9 @@ public class ModuleWithName implements Selector<Module> {
 
     @Override
     public void executeActionOnMatch(Patient<Module> candidate, Action<Module> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
-        if (module.equals(candidate.fullyPouplated())) {
+        if (module.equals(candidate.fullyPopulated())) {
             diagnosticsWriter.ignorePathAndEverythingBelow(infectedProject.resolvePathFor(module));
-            action.perform(candidate.fullyPouplated());
+            action.perform(candidate.fullyPopulated());
         }
     }
 }

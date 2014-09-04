@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.FullyPopulatedOnly;
 import com.github.signed.maven.sanitizer.pom.InfectedProject;
-import com.github.signed.maven.sanitizer.pom.Patient;
 
 public class ModuleWithName_Test {
     @SuppressWarnings("unchecked")
@@ -21,7 +21,7 @@ public class ModuleWithName_Test {
     public void executeActionIfModuleNameMatchesExpectedName() throws Exception {
         Module candidate = new Module("to-drop");
 
-        Patient<Module> patient = new Patient<>(null, candidate);
+        FullyPopulatedOnly<Module> patient = new FullyPopulatedOnly<>(candidate);
         selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
 
         verify(action).perform(candidate);
@@ -29,7 +29,7 @@ public class ModuleWithName_Test {
 
     @Test
     public void doNotExecuteActionOnDifferentModuleName() throws Exception {
-        Patient<Module> patient = new Patient<>(null, new Module("to-keep"));
+        FullyPopulatedOnly<Module> patient = new FullyPopulatedOnly<>(new Module("to-keep"));
         selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
 
         Mockito.verifyZeroInteractions(action);

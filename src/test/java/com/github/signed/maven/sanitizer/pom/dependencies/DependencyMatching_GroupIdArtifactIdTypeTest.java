@@ -8,8 +8,8 @@ import org.apache.maven.model.Dependency;
 import org.junit.Test;
 import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.FullyPopulatedOnly;
 import com.github.signed.maven.sanitizer.pom.InfectedProject;
-import com.github.signed.maven.sanitizer.pom.Patient;
 
 public class DependencyMatching_GroupIdArtifactIdTypeTest {
 
@@ -34,7 +34,7 @@ public class DependencyMatching_GroupIdArtifactIdTypeTest {
     }
 
     private void match(Dependency dependency) {
-        Patient<Dependency> patient = new Patient<>(null, dependency);
+        FullyPopulatedOnly<Dependency> patient = new FullyPopulatedOnly<>(dependency);
         dependencyMatching.executeActionOnMatch(patient, mock, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
     }
 }

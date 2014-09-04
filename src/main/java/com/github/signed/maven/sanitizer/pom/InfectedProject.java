@@ -10,13 +10,13 @@ import com.github.signed.maven.sanitizer.pom.modules.Module;
 public class InfectedProject {
 
     public final Model fullyPopulatedModel;
-    public final Model asWritten;
+    public final Model modelAsWritten;
     public final Model targetModelToWrite;
     private final MavenProject mavenProject;
 
     public InfectedProject(MavenProject mavenProject) {
         this.mavenProject = mavenProject;
-        this.asWritten = mavenProject.getOriginalModel();
+        this.modelAsWritten = mavenProject.getOriginalModel();
         this.fullyPopulatedModel = mavenProject.getModel();
         this.targetModelToWrite = mavenProject.getOriginalModel().clone();
     }

@@ -21,7 +21,7 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
 
     @Override
     public void transform(InfectedProject infectedProject, DiagnosticsWriter diagnosticsWriter) {
-        if( !projectMatcher.matches(infectedProject.fullyPopulatedModel)){
+        if (!projectMatcher.matches(infectedProject.fullyPopulatedModel)) {
             return;
         }
 
@@ -31,10 +31,11 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     }
 
     private void transform(InfectedProject infectedProject, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
+        ModelElementCombiner<MavenModelElement> modelElementCombiner = new RefusingCombiner<>();
+        Iterable<MavenModelElement> asWritten = extractor.elements(infectedProject.modelAsWritten);
+        Iterable<MavenModelElement> fullyPopulated = extractor.elements(infectedProject.fullyPopulatedModel);
 
-        Model fullyPopulatedModel = infectedProject.fullyPopulatedModel;
-        for (MavenModelElement element : extractor.elements(fullyPopulatedModel)) {
-            Patient<MavenModelElement> patient = new Patient<>(null, element);
+        for (Patient<MavenModelElement> patient : modelElementCombiner.combine(asWritten, fullyPopulated)) {
             action.performOn(extractor.elements(infectedProject.targetModelToWrite));
             selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
         }
