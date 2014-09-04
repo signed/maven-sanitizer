@@ -3,6 +3,7 @@ package com.github.signed.maven.sanitizer.pom.dependencies;
 import java.util.Iterator;
 
 import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
 import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Dependency;
 
@@ -16,7 +17,7 @@ public class DropDependency implements Action<Dependency> {
     }
 
     @Override
-    public void perform(Dependency toDrop) {
+    public void perform(Dependency toDrop, InfectedProject infectedProject) {
         Iterator<Dependency> dependencyIterator = dependencies.iterator();
         while (dependencyIterator.hasNext()) {
             Dependency dependency = dependencyIterator.next();

@@ -4,10 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import org.apache.maven.model.Dependency;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import com.google.common.collect.Lists;
 
 public class DropDependency_Test {
     private final DropDependency dropDependency = new DropDependency();
@@ -22,7 +22,7 @@ public class DropDependency_Test {
         List<Dependency> target = Lists.newArrayList(vanillaPomWithoutResolvedProperties);
 
         dropDependency.performOn(target);
-        dropDependency.perform(resolved);
+        dropDependency.perform(resolved, null);
 
         assertThat(target.size(), CoreMatchers.is(0));
     }
@@ -36,7 +36,7 @@ public class DropDependency_Test {
         List<Dependency> target = Lists.newArrayList(vanillaPomWithoutResolvedProperties);
 
         dropDependency.performOn(target);
-        dropDependency.perform(resolved);
+        dropDependency.perform(resolved, null);
 
         assertThat(target.size(), CoreMatchers.is(0));
     }
@@ -49,7 +49,7 @@ public class DropDependency_Test {
         List<Dependency> target = Lists.newArrayList(vanillaPomWithoutResolvedProperties);
 
         dropDependency.performOn(target);
-        dropDependency.perform(resolved);
+        dropDependency.perform(resolved, null);
 
         assertThat(target.size(), CoreMatchers.is(0));
     }

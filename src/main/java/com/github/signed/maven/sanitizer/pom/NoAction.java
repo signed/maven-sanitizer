@@ -11,7 +11,7 @@ public class NoAction<T> implements Action<T> {
     }
 
     @Override
-    public void perform(T element) {
+    public void perform(T element, InfectedProject infectedProject) {
         //do nothing;
     }
 }

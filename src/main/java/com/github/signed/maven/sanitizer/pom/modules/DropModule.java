@@ -1,6 +1,7 @@
 package com.github.signed.maven.sanitizer.pom.modules;
 
 import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
 
 import java.util.Iterator;
 
@@ -13,7 +14,7 @@ public class DropModule implements Action<Module> {
     }
 
     @Override
-    public void perform(Module element) {
+    public void perform(Module element, InfectedProject infectedProject) {
         Iterator<Module> elementIterator = elements.iterator();
         while (elementIterator.hasNext()) {
             Module current = elementIterator.next();

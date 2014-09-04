@@ -1,6 +1,7 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
 import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
 import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Plugin;
 
@@ -16,7 +17,7 @@ public class DropPlugin implements Action<Plugin> {
     }
 
     @Override
-    public void perform(Plugin toDrop) {
+    public void perform(Plugin toDrop, InfectedProject infectedProject) {
         Iterator<Plugin> pluginIterator = plugins.iterator();
         while (pluginIterator.hasNext()){
             Plugin plugin = pluginIterator.next();
