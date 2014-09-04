@@ -6,7 +6,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 import com.github.signed.maven.sanitizer.MavenMatchers;
-import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.InfectedProject;
 import com.github.signed.maven.sanitizer.pom.Patient;
 import com.github.signed.maven.sanitizer.pom.Selector;
@@ -33,7 +32,7 @@ public class DependencyMatching implements Selector<Dependency> {
     }
 
     @Override
-    public boolean executeActionOnMatch(Patient<Dependency> patient, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
+    public boolean executeActionOnMatch(Patient<Dependency> patient, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
         if( !groupIdMatcher.matches(patient.fullyPopulated().getGroupId())){
             return false;
         }

@@ -22,13 +22,13 @@ public class ModuleWithName_Test {
         Module candidate = new Module("to-drop");
         FullyPopulatedOnly<Module> patient = new FullyPopulatedOnly<>(candidate);
 
-        assertThat("should signal match", selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject));
+        assertThat("should signal match", selector.executeActionOnMatch(patient, diagnosticsWriter, infectedProject));
     }
 
     @Test
     public void doNotExecuteActionOnDifferentModuleName() throws Exception {
         FullyPopulatedOnly<Module> patient = new FullyPopulatedOnly<>(new Module("to-keep"));
-        selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
+        selector.executeActionOnMatch(patient, diagnosticsWriter, infectedProject);
 
         Mockito.verifyZeroInteractions(action);
     }

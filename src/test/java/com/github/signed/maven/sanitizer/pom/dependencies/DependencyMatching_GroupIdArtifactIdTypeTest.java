@@ -34,6 +34,6 @@ public class DependencyMatching_GroupIdArtifactIdTypeTest {
 
     private boolean match(Dependency dependency) {
         FullyPopulatedOnly<Dependency> patient = new FullyPopulatedOnly<>(dependency);
-        return dependencyMatching.executeActionOnMatch(patient, mock, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
+        return dependencyMatching.executeActionOnMatch(patient, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
     }
 }
