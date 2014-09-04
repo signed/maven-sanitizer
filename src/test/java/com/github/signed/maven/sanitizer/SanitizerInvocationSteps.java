@@ -21,6 +21,7 @@ public class SanitizerInvocationSteps {
 
     @After
     public void destroyDestinationDirectory() {
+        System.out.println(sanitizerFixture.paths.destination);
         sanitizerFixture.tearDown();
     }
 
