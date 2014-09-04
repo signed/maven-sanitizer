@@ -23,9 +23,11 @@ public class DependenciesInScope implements Selector<Dependency> {
     }
 
     @Override
-    public void executeActionOnMatch(Patient<Dependency> patient, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
+    public boolean executeActionOnMatch(Patient<Dependency> patient, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
         if (scope.equals(patient.fullyPopulated().getScope())) {
             action.perform(patient.fullyPopulated());
+            return true;
         }
+        return false;
     }
 }
