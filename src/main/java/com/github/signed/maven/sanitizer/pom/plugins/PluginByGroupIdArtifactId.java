@@ -1,10 +1,11 @@
 package com.github.signed.maven.sanitizer.pom.plugins;
 
-import com.github.signed.maven.sanitizer.DiagnosticsWriter;
-import com.github.signed.maven.sanitizer.pom.InfectedProject;
-import com.github.signed.maven.sanitizer.pom.Selector;
-import com.github.signed.maven.sanitizer.pom.Action;
 import org.apache.maven.model.Plugin;
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
+import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
+import com.github.signed.maven.sanitizer.pom.Patient;
+import com.github.signed.maven.sanitizer.pom.Selector;
 
 public class PluginByGroupIdArtifactId implements Selector<Plugin> {
 
@@ -17,9 +18,9 @@ public class PluginByGroupIdArtifactId implements Selector<Plugin> {
     }
 
     @Override
-    public void executeActionOnMatch(Plugin candidate, Action<Plugin> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
-        if(groupId.equals(candidate.getGroupId()) && artifactId.equals(candidate.getArtifactId()) ){
-            action.perform(candidate);
+    public void executeActionOnMatch(Patient<Plugin> patient, Action<Plugin> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
+        if(groupId.equals(patient.fullyPouplated().getGroupId()) && artifactId.equals(patient.fullyPouplated().getArtifactId()) ){
+            action.perform(patient.fullyPouplated());
         }
     }
 }

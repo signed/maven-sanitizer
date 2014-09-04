@@ -61,6 +61,11 @@ public class ConfigurationBuilder {
         return this;
     }
 
+    public ConfigurationBuilder dropDependenciesInScopeTest() {
+        configurations.add(new DropDependenciesInTestScope());
+        return this;
+    }
+
     public ConfigurationBuilder apply(Configuration configuration) {
         this.configurations.add(configuration);
         return this;

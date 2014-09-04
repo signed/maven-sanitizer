@@ -1,15 +1,16 @@
 package com.github.signed.maven.sanitizer;
 
-import com.github.signed.maven.sanitizer.configuration.Configuration;
-import com.github.signed.maven.sanitizer.configuration.DefaultConfiguration;
-import com.github.signed.maven.sanitizer.pom.CleanRoom;
-import com.github.signed.maven.sanitizer.pom.PomTransformer;
-import org.apache.maven.cli.MavenFacade;
-import org.apache.maven.project.MavenProject;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import org.apache.maven.cli.MavenFacade;
+import org.apache.maven.project.MavenProject;
+import com.github.signed.maven.sanitizer.configuration.Configuration;
+import com.github.signed.maven.sanitizer.configuration.ConfigurationBuilder;
+import com.github.signed.maven.sanitizer.configuration.DefaultConfiguration;
+import com.github.signed.maven.sanitizer.pom.CleanRoom;
+import com.github.signed.maven.sanitizer.pom.PomTransformer;
 
 public class MavenSanitizer {
 
@@ -26,7 +27,9 @@ public class MavenSanitizer {
     }
 
     private static Configuration readConfiguration() {
-        return new DefaultConfiguration();
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder().apply(new DefaultConfiguration());
+        configurationBuilder.dropDependenciesInScopeTest();
+        return configurationBuilder.build();
     }
 
     private final PomTransformer pomTransformer;

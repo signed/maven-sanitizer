@@ -1,5 +1,13 @@
 package com.github.signed.maven.sanitizer.configuration;
 
+import static com.github.signed.maven.sanitizer.pom.NoAction.noAction;
+import static com.github.signed.maven.sanitizer.pom.NoSelection.nothing;
+
+import java.util.List;
+
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.hamcrest.Matcher;
 import com.github.signed.maven.sanitizer.MavenMatchers;
 import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
@@ -10,14 +18,6 @@ import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDepend
 import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesFromDependencyManagement;
 import com.github.signed.maven.sanitizer.pom.dependencies.DropDependency;
 import com.google.common.collect.Lists;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.hamcrest.Matcher;
-
-import java.util.List;
-
-import static com.github.signed.maven.sanitizer.pom.NoAction.noAction;
-import static com.github.signed.maven.sanitizer.pom.NoSelection.nothing;
 
 public class ForDependencyReferences {
 
@@ -37,12 +37,20 @@ public class ForDependencyReferences {
 
     public ForDependencyReferences focusOnActualDependenciesAndDependencyManagement() {
         this.extractors.add(new DependenciesFromDependencyManagement());
+        return focusOnActualDependencies();
+    }
+
+    public ForDependencyReferences focusOnActualDependencies() {
         this.extractors.add(new DependenciesFromDependencies());
         return this;
     }
 
     public ForDependencyReferences drop() {
-        this.action = new DropDependency();
+        return perform(new DropDependency());
+    }
+
+    public ForDependencyReferences perform(Action<Dependency> action) {
+        this.action = action;
         return this;
     }
 

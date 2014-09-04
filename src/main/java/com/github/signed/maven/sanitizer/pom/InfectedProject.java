@@ -1,20 +1,22 @@
 package com.github.signed.maven.sanitizer.pom;
 
-import com.github.signed.maven.sanitizer.path.BasePath;
-import com.github.signed.maven.sanitizer.pom.modules.Module;
+import java.nio.file.Path;
+
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
-
-import java.nio.file.Path;
+import com.github.signed.maven.sanitizer.path.BasePath;
+import com.github.signed.maven.sanitizer.pom.modules.Module;
 
 public class InfectedProject {
 
     public final Model fullyPopulatedModel;
+    public final Model asWritten;
     public final Model targetModelToWrite;
     private final MavenProject mavenProject;
 
     public InfectedProject(MavenProject mavenProject) {
         this.mavenProject = mavenProject;
+        this.asWritten = mavenProject.getOriginalModel();
         this.fullyPopulatedModel = mavenProject.getModel();
         this.targetModelToWrite = mavenProject.getOriginalModel().clone();
     }

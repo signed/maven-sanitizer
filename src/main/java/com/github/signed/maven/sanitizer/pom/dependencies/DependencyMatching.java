@@ -1,15 +1,16 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
-import com.github.signed.maven.sanitizer.DiagnosticsWriter;
-import com.github.signed.maven.sanitizer.MavenMatchers;
-import com.github.signed.maven.sanitizer.pom.Action;
-import com.github.signed.maven.sanitizer.pom.InfectedProject;
-import com.github.signed.maven.sanitizer.pom.Selector;
-import com.github.signed.maven.sanitizer.pom.Strings;
 import org.apache.maven.model.Dependency;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
+import com.github.signed.maven.sanitizer.MavenMatchers;
+import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
+import com.github.signed.maven.sanitizer.pom.Patient;
+import com.github.signed.maven.sanitizer.pom.Selector;
+import com.github.signed.maven.sanitizer.pom.Strings;
 
 public class DependencyMatching implements Selector<Dependency> {
 
@@ -32,18 +33,18 @@ public class DependencyMatching implements Selector<Dependency> {
     }
 
     @Override
-    public void executeActionOnMatch(final Dependency candidate, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
-        if( !groupIdMatcher.matches(candidate.getGroupId())){
+    public void executeActionOnMatch(final Patient<Dependency> patient, Action<Dependency> action, DiagnosticsWriter diagnosticsWriter, InfectedProject infectedProject) {
+        if( !groupIdMatcher.matches(patient.fullyPouplated().getGroupId())){
             return;
         }
-        if( !artifactIdMatcher.matches(candidate.getArtifactId())){
+        if( !artifactIdMatcher.matches(patient.fullyPouplated().getArtifactId())){
             return;
         }
-        if( !typeMatcher.matches(candidate.getType())){
+        if( !typeMatcher.matches(patient.fullyPouplated().getType())){
             return;
         }
 
-        action.perform(candidate);
+        action.perform(patient.fullyPouplated());
     }
 
     public static class MavenStringMatcher extends TypeSafeMatcher<String> {
@@ -56,7 +57,7 @@ public class DependencyMatching implements Selector<Dependency> {
 
         @Override
         protected boolean matchesSafely(String item) {
-            return strings.matching((String)item, expected);  //To change body of implemented methods use File | Settings | File Templates.
+            return strings.matching(item, expected);  //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override

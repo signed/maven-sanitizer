@@ -1,10 +1,10 @@
 package com.github.signed.maven.sanitizer.pom;
 
-import com.github.signed.maven.sanitizer.DiagnosticsWriter;
+import java.util.List;
+
 import org.apache.maven.model.Model;
 import org.hamcrest.Matcher;
-
-import java.util.List;
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
 
 public class DefaultModelTransformer<MavenModelElement> implements ModelTransformer {
     private final Selector<MavenModelElement> selector;
@@ -31,9 +31,12 @@ public class DefaultModelTransformer<MavenModelElement> implements ModelTransfor
     }
 
     private void transform(InfectedProject infectedProject, Extractor<MavenModelElement> extractor, DiagnosticsWriter diagnosticsWriter) {
-        for (MavenModelElement element : extractor.elements(infectedProject.fullyPopulatedModel)) {
+
+        Model fullyPopulatedModel = infectedProject.fullyPopulatedModel;
+        for (MavenModelElement element : extractor.elements(fullyPopulatedModel)) {
+            Patient<MavenModelElement> patient = new Patient<>(null, element);
             action.performOn(extractor.elements(infectedProject.targetModelToWrite));
-            selector.executeActionOnMatch(element, action, diagnosticsWriter, infectedProject);
+            selector.executeActionOnMatch(patient, action, diagnosticsWriter, infectedProject);
         }
     }
 }

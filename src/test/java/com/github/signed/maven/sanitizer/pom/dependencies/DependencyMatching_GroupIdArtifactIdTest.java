@@ -1,14 +1,15 @@
 package com.github.signed.maven.sanitizer.pom.dependencies;
 
-import com.github.signed.maven.sanitizer.DiagnosticsWriter;
-import com.github.signed.maven.sanitizer.pom.Action;
-import com.github.signed.maven.sanitizer.pom.InfectedProject;
-import org.apache.maven.model.Dependency;
-import org.junit.Test;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+
+import org.apache.maven.model.Dependency;
+import org.junit.Test;
+import com.github.signed.maven.sanitizer.DiagnosticsWriter;
+import com.github.signed.maven.sanitizer.pom.Action;
+import com.github.signed.maven.sanitizer.pom.InfectedProject;
+import com.github.signed.maven.sanitizer.pom.Patient;
 
 public class DependencyMatching_GroupIdArtifactIdTest {
 
@@ -40,6 +41,7 @@ public class DependencyMatching_GroupIdArtifactIdTest {
     }
 
     private void match(Dependency dependency) {
-        dependencyMatching.executeActionOnMatch(dependency, mock, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
+        Patient<Dependency> patient = new Patient<>(null, dependency);
+        dependencyMatching.executeActionOnMatch(patient, mock, mock(DiagnosticsWriter.class), mock(InfectedProject.class));
     }
 }

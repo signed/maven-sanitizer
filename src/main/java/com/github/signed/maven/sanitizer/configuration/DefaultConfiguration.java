@@ -1,5 +1,11 @@
 package com.github.signed.maven.sanitizer.configuration;
 
+import static java.util.Collections.singletonList;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+
 import com.github.signed.maven.sanitizer.CollectPathsToCopy;
 import com.github.signed.maven.sanitizer.path.ExecutionProbe;
 import com.github.signed.maven.sanitizer.path.PathsInPluginConfiguration;
@@ -7,14 +13,7 @@ import com.github.signed.maven.sanitizer.path.ProjectSubdirectory;
 import com.github.signed.maven.sanitizer.path.ResourceRoots;
 import com.github.signed.maven.sanitizer.path.SourceRoots;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-
-import static java.util.Collections.singletonList;
 
 public class DefaultConfiguration implements Configuration {
 
@@ -33,7 +32,6 @@ public class DefaultConfiguration implements Configuration {
         during(pomTransformation, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("com.code54.mojo", "buildversion-plugin"));
         during(pomTransformation, ForPluginReferences.inAllModules().focusOnPluginsInBuildAndPluginManagementSection().drop().referencesTo("org.codehaus.mojo", "properties-maven-plugin"));
 
-        during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
         during(pomTransformation, ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependencyMatching.dependencyWith("org.example", "artifact", "zip")));
     }
 
@@ -44,4 +42,5 @@ public class DefaultConfiguration implements Configuration {
     private void during(PomTransformer pomTransformer, ForPluginReferences forPluginReferences) {
         pomTransformer.addTransformer(forPluginReferences.create());
     }
+
 }

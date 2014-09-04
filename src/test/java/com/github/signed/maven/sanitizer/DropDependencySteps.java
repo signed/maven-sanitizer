@@ -11,8 +11,6 @@ import javax.inject.Inject;
 
 import org.apache.maven.model.Dependency;
 import com.github.signed.maven.sanitizer.configuration.ConfigurationBuilder;
-import com.github.signed.maven.sanitizer.configuration.ForDependencyReferences;
-import com.github.signed.maven.sanitizer.pom.dependencies.DependenciesInScope;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -23,14 +21,14 @@ public class DropDependencySteps {
     private final CucumberPaths paths;
 
     @Inject
-    public DropDependencySteps(ConfigurationBuilder configurationBuilder, CucumberPaths paths){
+    public DropDependencySteps(ConfigurationBuilder configurationBuilder, CucumberPaths paths) {
         this.configurationBuilder = configurationBuilder;
         this.paths = paths;
     }
 
     @When("^I configure to drop dependencies in test scope$")
     public void I_configure_to_drop_dependencies_in_test_scope() throws Throwable {
-        configurationBuilder.duringPomTransformation(ForDependencyReferences.inAllModules().focusOnActualDependenciesAndDependencyManagement().drop().referencesTo(DependenciesInScope.Test()));
+        configurationBuilder.dropDependenciesInScopeTest();
     }
 
     @Then("^there are no dependencies in scope test remaining in the dependency section in the entire build$")
@@ -45,7 +43,8 @@ public class DropDependencySteps {
 
     @Then("^the managed dependencies do not include hamcrest$")
     public void the_managed_dependencies_do_not_include_hamcrest() throws Throwable {
-        assertThat(paths.hamcrestInCompileScope().managesDependencies().getDependencyManagement().getDependencies(), not(containsDependency("org.hamcrest", "hamcrest-library")));
+        HamcrestInCompileScope hamcrestInCompileScope = paths.hamcrestInCompileScope();
+        assertThat(hamcrestInCompileScope.managesDependencies().getDependencyManagement().getDependencies(), not(containsDependency("org.hamcrest", "hamcrest-library")));
     }
 
     @Then("^the hamcrest dependency in compile scope has version 1.3$")

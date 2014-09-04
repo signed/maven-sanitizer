@@ -5,10 +5,10 @@ import com.github.signed.maven.sanitizer.pom.ModelTransformer;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
 
 public class SimplePomTransformation implements Configuration {
-    private final ModelTransformer pomTransformation2;
+    private final ModelTransformer pomTransformation;
 
-    public SimplePomTransformation(ModelTransformer pomTransformation2) {
-        this.pomTransformation2 = pomTransformation2;
+    public SimplePomTransformation(ModelTransformer pomTransformation) {
+        this.pomTransformation = pomTransformation;
     }
 
     @Override
@@ -18,6 +18,6 @@ public class SimplePomTransformation implements Configuration {
 
     @Override
     public void configure(PomTransformer pomTransformation) {
-        pomTransformation.addTransformer(pomTransformation2);
+        pomTransformation.addTransformer(this.pomTransformation);
     }
 }
