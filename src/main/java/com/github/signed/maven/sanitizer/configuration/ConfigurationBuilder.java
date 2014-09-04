@@ -19,8 +19,8 @@ import com.google.common.collect.Lists;
 public class ConfigurationBuilder {
     private List<Configuration> configurations = Lists.newArrayList();
 
-    public ConfigurationBuilder() {
-        configurations.add(new Configuration() {
+    public static ConfigurationBuilder CreateConfigurationWithSomeDefaults() {
+        return new ConfigurationBuilder(new Configuration() {
             @Override
             public void configure(CollectPathsToCopy projectFiles) {
                 projectFiles.addPathsToCopy(new SourceRoots());
@@ -34,6 +34,10 @@ public class ConfigurationBuilder {
                 //nothing right now
             }
         });
+    }
+
+    private ConfigurationBuilder(Configuration defaultConfiguration) {
+        configurations.add(defaultConfiguration);
     }
 
     public ConfigurationBuilder dropModule(String moduleName, String groupId, String artifactId) {

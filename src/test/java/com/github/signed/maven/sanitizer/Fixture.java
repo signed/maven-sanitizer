@@ -15,9 +15,11 @@ public class Fixture {
 
     public static class DropDependencyFixture{
         public final TestData hamcrestInCompileScope;
+        public final TestData noDependencyInScopeTest;
 
         public DropDependencyFixture(String testClassTargetRoot) {
             hamcrestInCompileScope = new TestData(new File(testClassTargetRoot, "droptestscopedependencies/addversiontocompilescopedependency/pom.xml").getAbsoluteFile());
+            noDependencyInScopeTest = new TestData(new File(testClassTargetRoot, "droptestscopedependencies/no-dependency-in-scope-test/pom.xml").getAbsoluteFile());
         }
     }
 

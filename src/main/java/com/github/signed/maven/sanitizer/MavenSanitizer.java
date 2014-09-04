@@ -27,7 +27,7 @@ public class MavenSanitizer {
     }
 
     private static Configuration readConfiguration() {
-        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder().apply(new DefaultConfiguration());
+        ConfigurationBuilder configurationBuilder = ConfigurationBuilder.CreateConfigurationWithSomeDefaults().apply(new DefaultConfiguration());
         configurationBuilder.dropDependenciesInScopeTest();
         return configurationBuilder.build();
     }
