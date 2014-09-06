@@ -1,11 +1,16 @@
 package com.github.signed.maven.sanitizer.pom;
 
 import java.nio.file.Path;
+import java.util.List;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import com.github.signed.maven.sanitizer.path.BasePath;
 import com.github.signed.maven.sanitizer.pom.modules.Module;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 public class InfectedProject {
 
@@ -35,5 +40,28 @@ public class InfectedProject {
 
     public MavenProject project(){
         return mavenProject;
+    }
+
+    public Optional<Dependency> getEntryInDependencyManagementFor(final Dependency element) {
+        MavenProject project = project();
+        Dependency managedDependency = null;
+        while(managedDependency == null&& null != project.getParent()){
+            project = project.getParent();
+            final List<Dependency> dependencies = project.getOriginalModel().getDependencyManagement().getDependencies();
+            Iterable<Dependency> matches = Iterables.filter(dependencies, new Predicate<Dependency>() {
+                @Override
+                public boolean apply(Dependency dependency) {
+                    return element.getGroupId().equals(dependency.getGroupId())
+                            && element.getArtifactId().equals(dependency.getArtifactId())
+                            && ((null == element.getType()) ? "jar" : element.getType()).equals(dependency.getType());
+                }
+            });
+
+            if(!Iterables.isEmpty(matches)) {
+                managedDependency = Iterables.get(matches, 0);
+            }
+        }
+
+        return Optional.fromNullable(managedDependency);
     }
 }
