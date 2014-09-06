@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MavenSanitizer_DropDependenciesInScopeTestTest {
-
-
     private final SanitizerIntegrationTestFixture fixture = new SanitizerIntegrationTestFixture();
 
     @Before
