@@ -13,6 +13,7 @@ import com.github.signed.maven.sanitizer.pom.Extractor;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
 import com.github.signed.maven.sanitizer.pom.PomTransformer;
 import com.github.signed.maven.sanitizer.pom.RefusingCombiner;
+import com.github.signed.maven.sanitizer.pom.Selector;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyMatching;
 import com.github.signed.maven.sanitizer.pom.modules.Module;
 import com.github.signed.maven.sanitizer.pom.modules.ModuleWithName;
@@ -37,7 +38,7 @@ public class DropModule implements Configuration {
     @Override
     public void configure(PomTransformer pomTransformation) {
         List<Extractor<Module>> moduleExtractors = Collections.<Extractor<Module>>singletonList(new ModulesFromReactor());
-        ModuleWithName moduleWithName = new ModuleWithName(new Module(moduleName));
+        Selector<Module> moduleWithName = new ModuleWithName(new Module(moduleName));
         Action<Module> action = new com.github.signed.maven.sanitizer.pom.modules.DropModule();
         Matcher<Model> any = MavenMatchers.anything();
         ModelTransformer transformer = new DefaultModelTransformer<>(moduleWithName, action, any, moduleExtractors, new RefusingCombiner<Module>());
