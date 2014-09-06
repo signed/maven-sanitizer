@@ -13,7 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <dependency.version.cucumber>1.1.7</dependency.version.cucumber>
-        <dependency.version.maven>3.1.0</dependency.version.maven>
+        <dependency.version.maven>3.2.3</dependency.version.maven>
     </properties>
 
     <build>
