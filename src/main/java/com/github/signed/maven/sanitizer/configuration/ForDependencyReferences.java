@@ -11,6 +11,7 @@ import org.hamcrest.Matcher;
 import com.github.signed.maven.sanitizer.MavenMatchers;
 import com.github.signed.maven.sanitizer.pom.Action;
 import com.github.signed.maven.sanitizer.pom.DefaultModelTransformer;
+import com.github.signed.maven.sanitizer.pom.DependencyCombiner;
 import com.github.signed.maven.sanitizer.pom.Extractor;
 import com.github.signed.maven.sanitizer.pom.ModelTransformer;
 import com.github.signed.maven.sanitizer.pom.Selector;

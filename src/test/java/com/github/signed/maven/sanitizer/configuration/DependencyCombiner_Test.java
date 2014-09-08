@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import org.apache.maven.model.Dependency;
 import org.junit.Test;
+import com.github.signed.maven.sanitizer.pom.DependencyCombiner;
 import com.github.signed.maven.sanitizer.pom.Patient;
 import com.github.signed.maven.sanitizer.pom.dependencies.DependencyBuilder;
 

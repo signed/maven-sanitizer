@@ -1,4 +1,4 @@
-package com.github.signed.maven.sanitizer.configuration;
+package com.github.signed.maven.sanitizer.pom;
 
 import static com.github.signed.maven.sanitizer.pom.dependencies.DependencyGuava.dependenciesOfTypePom;
 import static com.google.common.base.Predicates.not;
@@ -6,6 +6,9 @@ import static com.google.common.base.Predicates.not;
 import java.util.Collection;
 
 import org.apache.maven.model.Dependency;
+import com.github.signed.maven.sanitizer.configuration.MatchingDependency;
+import com.github.signed.maven.sanitizer.configuration.PomDependencyPatient;
+import com.github.signed.maven.sanitizer.configuration.WellBehavedPatient;
 import com.github.signed.maven.sanitizer.pom.ModelElementCombiner;
 import com.github.signed.maven.sanitizer.pom.Patient;
 import com.google.common.base.Function;
