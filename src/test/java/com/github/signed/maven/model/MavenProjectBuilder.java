@@ -115,6 +115,9 @@ public class MavenProjectBuilder {
         if (buildBuilder.isPresent()) {
             mavenProject.setBuild(buildBuilder.get().build());
         }
+        if(null == mavenProject.getOriginalModel()){
+            mavenProject.setOriginalModel(mavenProject.getModel().clone());
+        }
         return mavenProject;
     }
 

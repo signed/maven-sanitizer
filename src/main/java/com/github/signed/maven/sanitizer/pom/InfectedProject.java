@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import com.github.signed.maven.sanitizer.path.BasePath;
@@ -47,7 +48,12 @@ public class InfectedProject {
         Dependency managedDependency = null;
         while(managedDependency == null&& null != project.getParent()){
             project = project.getParent();
-            final List<Dependency> dependencies = project.getOriginalModel().getDependencyManagement().getDependencies();
+            DependencyManagement dependencyManagement = project.getOriginalModel().getDependencyManagement();
+            if( null == dependencyManagement) {
+                return Optional.absent();
+            }
+
+            final List<Dependency> dependencies = dependencyManagement.getDependencies();
             Iterable<Dependency> matches = Iterables.filter(dependencies, new Predicate<Dependency>() {
                 @Override
                 public boolean apply(Dependency dependency) {
